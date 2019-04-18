@@ -1,5 +1,8 @@
 import React, {Component } from "react";
 import Home from "./Home"
+import {BrowserRouter,Switch,Route}from 'react-router-dom' 
+import SignIn from "./SignIn"
+import Navbar from './Navigation'
 
 
 
@@ -7,21 +10,12 @@ import Home from "./Home"
 class Header extends Component{
 render (){
     return(
-       <header>
-       <div>
-        <h1>CarPool</h1>
-        <ul className="header">
-          <li><a href="/">Home</a></li>
-          <li><a href="/About">About</a></li>
-          <li><a href="/">Sign In</a></li>
-          <li><a href="/">Sign Out</a></li>
-          
-        </ul>
-        <div className="content">
-        
-        </div>
+
+      <BrowserRouter>
+      <div className="Header">
+       <Navbar/>
       </div>
-      </header>
+      </BrowserRouter>
 
     );
 }
