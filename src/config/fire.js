@@ -1,6 +1,5 @@
 import firebase from 'firebase'
 
-
 <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
 
   // Initialize Firebase

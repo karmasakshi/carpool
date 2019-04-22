@@ -4,17 +4,14 @@ import * as serviceWorker from './serviceWorker';
 import Header from './Header';
 import Home from './Home';
 import "./index.css";
+import CreateProfile from "./CreateProfile"
+import './Semantic-UI-CSS-master/semantic.min.css';
 
 ReactDOM.render(
-    <Header/>, 
+    <CreateProfile/>, 
     document.getElementById("root")
   );
 
-
-ReactDOM.render(
-    <Home/>, 
-    document.getElementById("button")
-  );
 
 
 
