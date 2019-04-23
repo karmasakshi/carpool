@@ -1,7 +1,7 @@
 import firebase from 'firebase'
 
 
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+
 
   // Initialize Firebase
   const config = {
@@ -13,6 +13,7 @@ import firebase from 'firebase'
     messagingSenderId: "13033149059"
   };
   const fire=firebase.initializeApp(config);
+  
   export default fire;
   
 

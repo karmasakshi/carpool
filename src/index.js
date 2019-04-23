@@ -4,6 +4,7 @@ import * as serviceWorker from './serviceWorker';
 import Header from './Header';
 import Home from './Home';
 import "./index.css";
+import App from './App';
 
 ReactDOM.render(
     <Header/>, 
@@ -11,10 +12,6 @@ ReactDOM.render(
   );
 
 
-ReactDOM.render(
-    <Home/>, 
-    document.getElementById("button")
-  );
 
 
 
