@@ -30,16 +30,16 @@ h1{
 
 }
 
-#button{
-background-color: white;
+#style{
+background-color: White;
 display: flex; 
 justify-content: center;
 text-align:center;
 font-weight: bold;
-padding:10%;
-font-size: 200px;
+font-size: 100px;
 border-radius:10px;
-height: 50%;
+height: 10%;
+margin: auto auto;
     
 
 }
