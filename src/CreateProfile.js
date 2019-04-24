@@ -20,7 +20,7 @@ class CreateProfile extends Component{
 
   onInputChange = (user) => {
     user.preventDefault();
-    const newUser = this.state.user;
+    var newUser = this.state.user;
     // newUser[user.target.name] = user.target.value;
      newUser[user.target.name] = user.target.type === 'radio' ? user.target.checked : user.target.value;
      this.setState({
@@ -31,7 +31,6 @@ class CreateProfile extends Component{
  // handleChange = (e, { user }) => {this.setState({ user })
 
   render(){
-    //const { value } = this.state;
     const {user} = this.state;
  return(
 <div>
