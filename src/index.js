@@ -4,8 +4,8 @@ import * as serviceWorker from './serviceWorker';
 import Header from "./Header"
 import Home from './Home';
 import "./index.css";
+import '../node_modules/semantic-ui-css/semantic.min.css';
 import CreateProfile from "./CreateProfile"
-import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 
 ReactDOM.render(
     <Header />, 

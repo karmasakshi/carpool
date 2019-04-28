@@ -6,15 +6,9 @@ import CreateAccount from "./CreateAccount"
 import Navbar from './Navigation'
 import './index.css'
 import CreateProfile from './CreateProfile';
-
+import '../node_modules/semantic-ui-css/semantic.min.css';
 
 class Header extends Component{
-  constructor(props){
-    super(props);
-    this.state={
-      loggedIn: this.props.loggedIn
-  }
-  }
 
 render (){
     return(

@@ -12,9 +12,7 @@ class CreateProfile extends Component{
       firstName: '',
       lastName: '',
       email: '',
-      role: null, 
-      from: '',
-      users:[]
+      role: null
     } 
    
   }
@@ -27,27 +25,27 @@ class CreateProfile extends Component{
       firstName: this.state.user.firstName,
       lastName: this.state.user.lastName, 
       email: this.state.user.email,
-      role: this.state.user.role,
-      from: this.state.user.from
+      role: this.state.user.role
     }
     usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-    this.setState({ firstName: '', lastName: '', email: '', role: '', from: '' }); //to empty the object after use, so that an additional object can be added
+    this.setState({ firstName: '', lastName: '', email: '', role: '' }); //to empty the object after use, so that an additional object can be added
 
     console.log(this.state.user);
   }
 
   onInputChange = (user) => {
+    console.log(this.state.user);
     user.preventDefault();
     const newUser = this.state.user;
     // newUser[user.target.name] = user.target.value;
-     newUser[user.target.name] = user.target.type === 'radio' ? user.target.checked : user.target.value;
+     newUser[user.target.name] = user.target.value; //(user.target.type === 'radio') ? user.target.checked :
      this.setState({
-        newUser: user
+        user: newUser
      })
   }
 
   getLocation = ()=>{
-    
+
   }
 
 
@@ -59,7 +57,7 @@ class CreateProfile extends Component{
   <Grid>
    <Grid.Column width={6}>
      <h1> Create Profile </h1>
-     <Image src='https://source.unsplash.com/random' size='medium' centered bordered/>
+     <Image src='' size='medium' centered bordered/>
    </Grid.Column>
    <Grid.Column width={8}> 
    <br />
@@ -81,21 +79,23 @@ class CreateProfile extends Component{
             label='Host'
             value= 'host' 
             name='role'
-            type='radio'
-            checked= {this.state.role}       //{user.role === 'host'}
-            onChange={this.onInputChange}
-          />
+            type="radio"
+            id="host"
+            checked= {this.state.user.role === 'host'}       //{user.role === 'host'}
+            onChange={(e) => {// copy state, modify copy, set state to modified copy
+                              var state = this.state; state.user.role = e.target.value; this.setState(state)}}
+          ></Form.Radio>
           <Form.Radio
             label='Guest'
             value='guest'
             name='role'
-            type='radio'
-            checked= {this.state.role}     // {user.role === 'guest'}
-            onChange={this.onInputChange}
-          />
+            type="radio"
+            id="guest"
+            checked= {this.state.user.role === 'guest'}     // {user.role === 'guest'}
+            onChange={(e) => {var state = this.state; state.user.role = e.target.value; this.setState(state)}}
+          ></Form.Radio>
           </Form.Group>
 
-          <Form.TextArea name='from' onChange={this.onInputChange} value={user.from} label='From' placeholder='Tell us from where would you leave...' />
           <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
 
         <Form.Button onClick={this.onFormSubmit}>Submit</Form.Button>
