@@ -1,30 +1,32 @@
-import React, { Component} from 'react'
-import "./index.css"
-import fire from './config/fire'
-import {BrowserRouter,Switch,Route}from 'react-router-dom' 
-import Home from './Home'
+import React, {Component} from 'react';
+import Home from './Home';
+import fire from './config/fire'; 
+import firebase from 'firebase';
+import Navbar from './Navigation';
 
 
-
-
-class SignIn extends Component {
-    state = {
-        user:{
-          
-          email:'',
-          
-          password:'',
-          loggedIn:null,
-          
-        }
+class SignIn extends Component{
+constructor(){
+  super();
+  this.state = {
+    user:{
+      email:'',
+      password:'',
+      loggedIn: false
     }
+  }
+}
+
+
     componentDidMount() {
 
         fire.auth().onAuthStateChanged((user) => {
             if (user) {
-              this.setState({ loggedIn: true })
+              console.log('user has signed in');
+              this.setState({ loggedIn: true});
             } else {
-              this.setState({ loggedIn: false })
+              this.setState({ loggedIn: false});
+              console.log('user has not signed in');
             }
           })
     } 
@@ -32,8 +34,6 @@ class SignIn extends Component {
    onFormSubmit = (user) => {
 
     user.preventDefault();
-   
-    
     fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
             
             var errorCode = error.code;
@@ -42,11 +42,19 @@ class SignIn extends Component {
             
           });          
     
-   
+
           console.log(this.state.loggedIn);
 
       }
       
+      signOut =()=>{
+        firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          console.log('you are logged out successfully');
+        }).catch(function(error) {
+          // An error happened.
+        });
+      }
 
     handleChange=(user)=>{
         
@@ -62,16 +70,13 @@ class SignIn extends Component {
 
 render(){
     const {user} = this.state;
-    if (this.state.loggedIn==true) {
+
+    if (this.state.user.loggedIn==true) {
         return (
          <Home/>
         )
       } else { 
         return (
-    
-   
-   
-           
             <div className="container">
             <form className="white">
             <h5>Sign In</h5>
@@ -83,30 +88,19 @@ render(){
             <label htmlFor="password">password</label>
             <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
             </div>
+            
             <div>
-                <button onClick={this.onFormSubmit}>Login</button>
-            </div>
-
+              <button onClick={this.onFormSubmit}>Login</button>
+          </div>
+            
             </form>
-
             </div>
 
 
     );
-        }
-
-}
-renderComponent() {
-    if (this.state.loggedIn) {
-      return (
-       <Home/>
-      )
-    } else {
-      return (
-        <p>not working</p>
-      );
-    }
   }
 
 }
+}
+
 export default SignIn;

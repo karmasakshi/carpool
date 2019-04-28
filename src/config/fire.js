@@ -1,9 +1,8 @@
 import firebase from 'firebase'
 
+//<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
 
-
-
-  // Initialize Firebase
+  // Initialize Firebase web app -- refer to the web app with the name 'config'
   const config = {
     apiKey: "AIzaSyBnE0owuEH598Qd_bvJ6xTLHVY-EqXKs4M",
     authDomain: "carpool-d3255.firebaseapp.com",
@@ -14,6 +13,7 @@ import firebase from 'firebase'
   };
   const fire=firebase.initializeApp(config);
   
+  export const auth = firebase.auth();  //This exports the auth module of Firebase
   export default fire;
   
 
