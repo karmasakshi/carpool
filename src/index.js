@@ -5,7 +5,7 @@ import Header from "./Header"
 import Home from './Home';
 import "./index.css";
 import CreateProfile from "./CreateProfile"
-import './Semantic-UI-CSS-master/semantic.min.css';
+import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 
 ReactDOM.render(
     <Header />, 

@@ -46,6 +46,10 @@ class CreateProfile extends Component{
      })
   }
 
+  getLocation = ()=>{
+    
+  }
+
 
   render(){
     const {user} = this.state;
@@ -92,7 +96,8 @@ class CreateProfile extends Component{
           </Form.Group>
 
           <Form.TextArea name='from' onChange={this.onInputChange} value={user.from} label='From' placeholder='Tell us from where would you leave...' />
-        
+          <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
+
         <Form.Button onClick={this.onFormSubmit}>Submit</Form.Button>
         </Form>
         </Segment>
