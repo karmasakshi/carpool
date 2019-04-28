@@ -1,9 +1,10 @@
 import React from 'react'
-import { Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Links from './Links'
-
+import {Header} from './Header'
 
 const Navbar=()=>{
+   
 return (
 <nav className="nav-wrapper grey darken-3 " >
     

@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 import fire from './config/fire';
-//import firebase from 'firebase';
+import firebase from 'firebase';
+import {BrowserRouter,Switch,Route} from 'react-router-dom' 
+import Home from './Home';
+import ReactDOM from 'react-dom' 
 
 class CreateProfile extends Component{
   state = {
@@ -9,13 +12,15 @@ class CreateProfile extends Component{
       firstName: '',
       lastName: '',
       email: '',
-      role: '', 
-      from: ''
-    }
+      role: null, 
+      from: '',
+      users:[]
+    } 
+   
   }
 
   onFormSubmit = (user) => {
-    user.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button.
+    user.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
     const usersRef = fire.database().ref('users');//we need to carve out a space in our Firebase database where we'd like to store all of the items that people are bringing to the potluck. We do this by calling the ref method and passing in the destination we'd like them to be stored (items).
 
     const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
@@ -41,7 +46,6 @@ class CreateProfile extends Component{
      })
   }
 
- // handleChange = (e, { user }) => {this.setState({ user })
 
   render(){
     const {user} = this.state;
@@ -74,7 +78,7 @@ class CreateProfile extends Component{
             value= 'host' 
             name='role'
             type='radio'
-            //checked= {this.state.role}       //{user.role === 'host'}
+            checked= {this.state.role}       //{user.role === 'host'}
             onChange={this.onInputChange}
           />
           <Form.Radio
@@ -82,7 +86,7 @@ class CreateProfile extends Component{
             value='guest'
             name='role'
             type='radio'
-            //checked= {this.state.role}      //{user.role === 'guest'}
+            checked= {this.state.role}     // {user.role === 'guest'}
             onChange={this.onInputChange}
           />
           </Form.Group>
@@ -90,13 +94,11 @@ class CreateProfile extends Component{
           <Form.TextArea name='from' onChange={this.onInputChange} value={user.from} label='From' placeholder='Tell us from where would you leave...' />
         
         <Form.Button onClick={this.onFormSubmit}>Submit</Form.Button>
-       
         </Form>
         </Segment>
        
    </Grid.Column>
   </Grid>
-  
   </div>
  )
 }

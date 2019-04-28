@@ -1,10 +1,11 @@
 import React, { Component} from 'react'
 import "./index.css"
-import fire from './config/fire'
+import fire, {auth} from './config/fire'
 import {BrowserRouter,Switch,Route}from 'react-router-dom' 
 import Home from './Home'
-
-
+import CreateProfile from './CreateProfile';
+import SignIn from './SignIn';
+import ReactDOM from 'react-dom';
 
 
 class CreateAccount extends Component {
@@ -14,20 +15,11 @@ class CreateAccount extends Component {
           email:'',
           
           password:'',
-          loggedIn:null,
+          loggedIn:false
           
         }
     }
-    componentDidMount() {
-
-        fire.auth().onAuthStateChanged((user) => {
-            if (user) {
-              this.setState({ loggedIn: true })
-            } else {
-              this.setState({ loggedIn: false })
-            }
-          })
-    } 
+    
 
    onFormSubmit = (user) => {
 
@@ -36,11 +28,10 @@ class CreateAccount extends Component {
     
     fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
         // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        //var errorCode = error.code;
+        //var errorMessage = error.message;
         // ...
       });
-    
    
           console.log(this.state.loggedIn);
 
@@ -61,16 +52,8 @@ class CreateAccount extends Component {
 
 render(){
     const {user} = this.state;
-    if (this.state.loggedIn==true) {
-        return (
-         <Home/>
-        )
-      } else { 
-        return (
-    
    
-   
-           
+        return (         
             <div className="container">
             <form className="white">
             <h5>Sign Up</h5>
@@ -84,30 +67,17 @@ render(){
             </div>
             <div>
                 <button onClick={this.onFormSubmit}>Create Account</button>
+                
             </div>
 
             </form>
-
+              
             </div>
-
-
     );
         }
 
 }
-renderComponent() {
-    if (this.state.loggedIn) {
-      return (
-       <Home/>
-      )
-    } else {
-      return (
-        <p>not working</p>
-      );
-    }
-  }
 
-}
 
 
 
