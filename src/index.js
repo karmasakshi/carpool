@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import Header from './Header';
+import Header from "./Header"
 import Home from './Home';
 import "./index.css";
 import App from './App';
 import HomeHost from './HomeHost';
 
 ReactDOM.render(
-    <Header/>, 
+    <Header />, 
     document.getElementById("root")
   );
 

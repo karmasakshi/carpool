@@ -33,9 +33,11 @@ constructor(props){
 
         fire.auth().onAuthStateChanged((user) => {
             if (user) {
-              this.setState({ loggedIn: true })
+              console.log('user has signed in');
+              this.setState({ loggedIn: true});
             } else {
-              this.setState({ loggedIn: false })
+              this.setState({ loggedIn: false});
+              console.log('user has not signed in');
             }
                 localStorage.setItem('Logged',this.state.user.loggedIn);
 
@@ -60,6 +62,14 @@ constructor(props){
 
       }
       
+      signOut =()=>{
+        firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          console.log('you are logged out successfully');
+        }).catch(function(error) {
+          // An error happened.
+        });
+      }
 
     handleChange=(user)=>{
         
@@ -83,10 +93,6 @@ render=()=>{
        else { 
           
         return (
-    
-   
-   
-           
             <div className="container">
             <form className="white">
             <h5>Sign In</h5>
@@ -98,12 +104,12 @@ render=()=>{
             <label htmlFor="password">password</label>
             <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
             </div>
+            
             <div>
-                <button onClick={this.onFormSubmit}>Login</button>
-            </div>
-
+              <button onClick={this.onFormSubmit}>Login</button>
+          </div>
+            
             </form>
-
             </div>
 
 
@@ -114,4 +120,6 @@ render=()=>{
 
 
 }
+
+
 export default SignIn;

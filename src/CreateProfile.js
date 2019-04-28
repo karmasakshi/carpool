@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
-import Header from './Header';
-import fire from './config/fire'
+import fire from './config/fire';
+import firebase from 'firebase';
+import {BrowserRouter,Switch,Route} from 'react-router-dom' 
+import Home from './Home';
+import ReactDOM from 'react-dom' 
 
 class CreateProfile extends Component{
   state = {
@@ -9,15 +12,28 @@ class CreateProfile extends Component{
       firstName: '',
       lastName: '',
       email: '',
-      password:'',
-      role: '', 
-      from: ''
-    }
+      role: null, 
+      from: '',
+      users:[]
+    } 
+   
   }
 
   onFormSubmit = (user) => {
-    user.preventDefault();
-  
+    user.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
+    const usersRef = fire.database().ref('users');//we need to carve out a space in our Firebase database where we'd like to store all of the items that people are bringing to the potluck. We do this by calling the ref method and passing in the destination we'd like them to be stored (items).
+
+    const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
+      firstName: this.state.user.firstName,
+      lastName: this.state.user.lastName, 
+      email: this.state.user.email,
+      role: this.state.user.role,
+      from: this.state.user.from
+    }
+    usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    this.setState({ firstName: '', lastName: '', email: '', role: '', from: '' }); //to empty the object after use, so that an additional object can be added
+
+    console.log(this.state.user);
   }
 
   onInputChange = (user) => {
@@ -30,16 +46,15 @@ class CreateProfile extends Component{
      })
   }
 
- // handleChange = (e, { user }) => {this.setState({ user })
+  getLocation = ()=>{
+    
+  }
+
 
   render(){
-    //const { value } = this.state;
     const {user} = this.state;
  return(
 <div>
-  <div>
-  <Header />
-  </div>
 
   <Grid>
    <Grid.Column width={6}>
@@ -75,21 +90,20 @@ class CreateProfile extends Component{
             value='guest'
             name='role'
             type='radio'
-            checked= {this.state.role}      //{user.role === 'guest'}
+            checked= {this.state.role}     // {user.role === 'guest'}
             onChange={this.onInputChange}
           />
           </Form.Group>
 
           <Form.TextArea name='from' onChange={this.onInputChange} value={user.from} label='From' placeholder='Tell us from where would you leave...' />
-        
+          <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
+
         <Form.Button onClick={this.onFormSubmit}>Submit</Form.Button>
-       
         </Form>
         </Segment>
        
    </Grid.Column>
   </Grid>
-  
   </div>
  )
 }

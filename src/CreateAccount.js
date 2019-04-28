@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import "./index.css"
-import fire from './config/fire'
+import fire, {auth} from './config/fire'
 import {BrowserRouter,Switch,Route}from 'react-router-dom' 
 import Home from './Home'
 import HomeHost from './HomeHost'
@@ -15,20 +15,11 @@ class CreateAccount extends Component {
           email:'',
           
           password:'',
-          loggedIn:null,
+          loggedIn:false
           
         }
     }
-    componentDidMount() {
-
-        fire.auth().onAuthStateChanged((user) => {
-            if (user) {
-              this.setState({ loggedIn: true })
-            } else {
-              this.setState({ loggedIn: false })
-            }
-          })
-    } 
+    
 
    onFormSubmit = (user) => {
     var email=this.state.user.email;
@@ -38,11 +29,10 @@ class CreateAccount extends Component {
     
     fire.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        //var errorCode = error.code;
+        //var errorMessage = error.message;
         // ...
       });
-    
    
           console.log(this.state.loggedIn);
 
@@ -71,8 +61,7 @@ render(){
         return (
     
    
-   
-           
+        return (         
             <div className="container">
             <form className="white">
             <h5>Sign Up</h5>
@@ -86,30 +75,18 @@ render(){
             </div>
             <div>
                 <button onClick={this.onFormSubmit}>Create Account</button>
+                
             </div>
 
             </form>
-
+              
             </div>
-
-
     );
         }
 
 }
-renderComponent() {
-    if (this.state.loggedIn) {
-      return (
-       <Home/>
-      )
-    } else {
-      return (
-        <p>not working</p>
-      );
-    }
-  }
-
 }
+
 
 
 

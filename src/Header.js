@@ -1,16 +1,13 @@
 import React, {Component } from "react";
 import Home from "./Home"
-import {BrowserRouter,Switch,Route}from 'react-router-dom' 
+import {BrowserRouter,Switch,Route} from 'react-router-dom' 
 import SignIn from "./SignIn"
 import CreateAccount from "./CreateAccount"
 import HomeHost from "./HomeHost"
 
 import Navbar from './Navigation'
 import './index.css'
-
-
-
-
+import CreateProfile from './CreateProfile';
 
 
 class Header extends Component{

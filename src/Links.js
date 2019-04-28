@@ -1,10 +1,10 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
+import SignIn from './SignIn';
+import Header from './Header';
 
-
-
-const Links=()=>{
-return(
+const Links=(props)=>{
+    return(
 <ul className="right">
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/about'>About</NavLink></li>
@@ -15,10 +15,7 @@ return(
 
 
 </ul>
-
-
 )
-
-
 }
+
 export default Links;
