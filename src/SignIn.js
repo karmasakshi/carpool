@@ -3,11 +3,22 @@ import "./index.css"
 import fire from './config/fire'
 import {BrowserRouter,Switch,Route}from 'react-router-dom' 
 import Home from './Home'
+import LinksSignOut from './LinksSignOut';
+import HomeHost from './HomeHost';
+import {NavLink} from 'react-router-dom'
+import Header from './Header'
+
 
 
 
 
 class SignIn extends Component {
+constructor(props){
+    super(props)    
+
+}
+
+   
     state = {
         user:{
           
@@ -26,15 +37,17 @@ class SignIn extends Component {
             } else {
               this.setState({ loggedIn: false })
             }
+                localStorage.setItem('Logged',this.state.user.loggedIn);
+
           })
+         
     } 
-
    onFormSubmit = (user) => {
-
     user.preventDefault();
-   
-    
-    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
+
+    var email=this.state.user.email;
+    var password=this.state.user.password;
+    fire.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
             
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -43,7 +56,7 @@ class SignIn extends Component {
           });          
     
    
-          console.log(this.state.loggedIn);
+          
 
       }
       
@@ -60,13 +73,15 @@ class SignIn extends Component {
         console.log(this.state.user);
     }
 
-render(){
+render=()=>{
+  
     const {user} = this.state;
-    if (this.state.loggedIn==true) {
-        return (
-         <Home/>
-        )
-      } else { 
+    var test  =  localStorage.getItem('Logged');
+    if (test===true) {    
+        return (<Home />
+              )      }
+       else { 
+          
         return (
     
    
@@ -81,7 +96,7 @@ render(){
             </div>
             <div className="input">
             <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
+            <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
             </div>
             <div>
                 <button onClick={this.onFormSubmit}>Login</button>
@@ -96,17 +111,7 @@ render(){
         }
 
 }
-renderComponent() {
-    if (this.state.loggedIn) {
-      return (
-       <Home/>
-      )
-    } else {
-      return (
-        <p>not working</p>
-      );
-    }
-  }
+
 
 }
 export default SignIn;

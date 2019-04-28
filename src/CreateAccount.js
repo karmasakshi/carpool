@@ -3,6 +3,7 @@ import "./index.css"
 import fire from './config/fire'
 import {BrowserRouter,Switch,Route}from 'react-router-dom' 
 import Home from './Home'
+import HomeHost from './HomeHost'
 
 
 
@@ -30,11 +31,12 @@ class CreateAccount extends Component {
     } 
 
    onFormSubmit = (user) => {
-
+    var email=this.state.user.email;
+    var password=this.state.user.password;
     user.preventDefault();
    
     
-    fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
+    fire.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -61,9 +63,9 @@ class CreateAccount extends Component {
 
 render(){
     const {user} = this.state;
-    if (this.state.loggedIn==true) {
+    if (this.state.loggedIn===true) {
         return (
-         <Home/>
+         <HomeHost/>
         )
       } else { 
         return (
