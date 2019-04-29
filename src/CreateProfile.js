@@ -12,23 +12,28 @@ class CreateProfile extends Component{
       firstName: '',
       lastName: '',
       email: '',
-      role: null
+      role: null,
+      lat: 0, 
+      lng: 0
     } 
-   
   }
 
-  onFormSubmit = (user) => {
-    user.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
+  onFormSubmit = (e) => {
+     
+    e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
+    const {user} = this.state;
     const usersRef = fire.database().ref('users');//we need to carve out a space in our Firebase database where we'd like to store all of the items that people are bringing to the potluck. We do this by calling the ref method and passing in the destination we'd like them to be stored (items).
 
     const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
-      firstName: this.state.user.firstName,
-      lastName: this.state.user.lastName, 
-      email: this.state.user.email,
-      role: this.state.user.role
+      firstName: user.firstName,
+      lastName: user.lastName, 
+      email: user.email,
+      role: user.role,
+      lat: user.lat,
+      lng: user.lng
     }
     usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-    this.setState({ firstName: '', lastName: '', email: '', role: '' }); //to empty the object after use, so that an additional object can be added
+    this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0 }); //to empty the object after use, so that an additional object can be added
 
     console.log(this.state.user);
   }
@@ -37,17 +42,35 @@ class CreateProfile extends Component{
     console.log(this.state.user);
     user.preventDefault();
     const newUser = this.state.user;
-    // newUser[user.target.name] = user.target.value;
-     newUser[user.target.name] = user.target.value; //(user.target.type === 'radio') ? user.target.checked :
+     newUser[user.target.name] = user.target.value; 
      this.setState({
         user: newUser
      })
   }
 
   getLocation = ()=>{
+      if (navigator.geolocation) {
+        var lat_lng = navigator.geolocation.getCurrentPosition(function(position){
+         console.log(position);
+         var lat = position.coords.latitude;
+         var lng = position.coords.longitude;
+          console.log(lat);
+          console.log(lng);
+        
+          var state = this.state;
+          state.user.lat = lat;  //check whether this is fine?
+          state.user.lng = lng;
 
-  }
+          this.setState({
+           state
+          });
 
+        }.bind(this));
+        console.log(this.state.user);
+    } else {
+       alert("Geolocation is not supported by this browser.");
+    }
+  } 
 
   render(){
     const {user} = this.state;
@@ -81,7 +104,7 @@ class CreateProfile extends Component{
             name='role'
             type="radio"
             id="host"
-            checked= {this.state.user.role === 'host'}       //{user.role === 'host'}
+            checked= {user.role === 'host'}      
             onChange={(e) => {// copy state, modify copy, set state to modified copy
                               var state = this.state; state.user.role = e.target.value; this.setState(state)}}
           ></Form.Radio>
@@ -91,7 +114,7 @@ class CreateProfile extends Component{
             name='role'
             type="radio"
             id="guest"
-            checked= {this.state.user.role === 'guest'}     // {user.role === 'guest'}
+            checked= {user.role === 'guest'}     
             onChange={(e) => {var state = this.state; state.user.role = e.target.value; this.setState(state)}}
           ></Form.Radio>
           </Form.Group>

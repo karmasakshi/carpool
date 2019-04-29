@@ -66,8 +66,7 @@ render(){
             <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
             </div>
             <div>
-                <button onClick={this.onFormSubmit}>Create Account</button>
-                
+            <button onClick={this.onFormSubmit}>Create Account</button>    
             </div>
 
             </form>

@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom'
 import SignIn from './SignIn';
 import Header from './Header';
 
-const Links=(props)=>{
+const Links=()=>{
     return(
 <ul className="right">
     <li><NavLink to='/'>Home</NavLink></li>
