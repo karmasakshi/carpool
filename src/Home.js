@@ -5,13 +5,10 @@ import "./index.css"
 class Home extends Component {
   render() {
     return (
-    <button id="style" onClick>
+    <button id="style">
     Join Now!
     </button>
-
     );
-
-
   }
 }
 

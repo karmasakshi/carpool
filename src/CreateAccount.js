@@ -10,13 +10,10 @@ import ReactDOM from 'react-dom';
 
 class CreateAccount extends Component {
     state = {
-        user:{
-          
+        user:{          
           email:'',
-          
           password:'',
           loggedIn:false
-          
         }
     }
     
@@ -76,8 +73,5 @@ render(){
         }
 
 }
-
-
-
 
 export default CreateAccount;

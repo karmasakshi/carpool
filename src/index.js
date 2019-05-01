@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import Header from "./Header"
-import Home from './Home';
 import "./index.css";
 import '../node_modules/semantic-ui-css/semantic.min.css';
-import CreateProfile from "./CreateProfile"
 
 ReactDOM.render(
     <Header />, 

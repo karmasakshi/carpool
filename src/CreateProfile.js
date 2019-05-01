@@ -1,30 +1,33 @@
 import React, {Component} from 'react';
 import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 import fire from './config/fire';
+import SignIn from './SignIn';
 import firebase from 'firebase';
 import {BrowserRouter,Switch,Route} from 'react-router-dom' 
 import Home from './Home';
 import ReactDOM from 'react-dom' 
 
 class CreateProfile extends Component{
-  state = {
+ state = {
     user:{
+      userUID: localStorage.getItem('appTokenKey'),
       firstName: '',
       lastName: '',
       email: '',
       role: null,
-      lat: 0, 
-      lng: 0
+      lat: null, 
+      lng: null
     } 
-  }
+}
 
   onFormSubmit = (e) => {
-     
+    
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
     const {user} = this.state;
     const usersRef = fire.database().ref('users');//we need to carve out a space in our Firebase database where we'd like to store all of the items that people are bringing to the potluck. We do this by calling the ref method and passing in the destination we'd like them to be stored (items).
 
     const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
+      userUID: localStorage.getItem('appTokenKey'),
       firstName: user.firstName,
       lastName: user.lastName, 
       email: user.email,
@@ -74,9 +77,9 @@ class CreateProfile extends Component{
 
   render(){
     const {user} = this.state;
+    
  return(
 <div>
-
   <Grid>
    <Grid.Column width={6}>
      <h1> Create Profile </h1>
