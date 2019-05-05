@@ -1,21 +1,40 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
-import SignIn from './SignIn';
-import Header from './Header';
+import fire from './config/fire'
+
+function signout(){
+    console.log("i am signout function");
+    fire.auth().signOut().then(function() {
+     
+        console.log("you are signed out");
+    }).catch(function(error) {
+        // An error happened.
+        console.log(error);
+      });
+    
+    }
 
 const Links=(props)=>{
-    return(
-<ul className="right">
+
+    return(    
+    <div className="container">
+    <NavLink to ='/' className="brand-logo">Carpool</NavLink>
+    <ul className="right">
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/about'>About</NavLink></li>
     <li><NavLink to='/signup'>Sign Up</NavLink></li>
-    <li><NavLink to='/signin'>Sign In</NavLink></li>
-
-
-
-
-</ul>
-)
-}
+    
+    {(props.log) ?
+    <li><NavLink to='/' onClick={signout}>Sign out</NavLink></li>
+    :
+    <li><NavLink to={{pathname:'/signin',
+                    aboutLog: {
+                        log: false
+                    }}}>Sign in </NavLink></li> 
+    }
+    </ul>
+    </div>
+    )
+   }
 
 export default Links;
