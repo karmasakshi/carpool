@@ -53,15 +53,14 @@ class Header extends Component{
        <Navbar {...this.state}/>
        <Switch>
        <Route exact path='/'component={Home}/>
-         <Route exact path='/signin' component={SignIn}/>
-         <Route exact path='/signup' component={CreateAccount}/>
-         <Route exact path='/users' component={CreateProfile}/>
+       <Route exact path='/signin' render={() => <SignIn {...this.state}/>} />  
+       <Route exact path='/signup' component={CreateAccount}/>
+       <Route exact path='/users' component={CreateProfile}/>
+       <Route render={() => <h1>Page not found</h1>} />
        </Switch>
       </div>
-      
       </BrowserRouter>
       
-
     );
 }
 
@@ -70,3 +69,6 @@ class Header extends Component{
 
 
 export default Header;
+
+//So to recap, if you need to pass a prop to a component being rendered by React Router, instead of using Routes component prop, use its render prop passing it an inline function then pass along the arguments to the element you’re creating.
+//to prevent unnecessary unmounting and remounting of the entire component

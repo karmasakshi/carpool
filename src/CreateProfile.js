@@ -24,8 +24,9 @@ class CreateProfile extends Component{
     
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
     const {user} = this.state;
-    const usersRef = fire.database().ref('users');//we need to carve out a space in our Firebase database where we'd like to store all of the items that people are bringing to the potluck. We do this by calling the ref method and passing in the destination we'd like them to be stored (items).
 
+    const usersRef = fire.database().ref(`users`);
+    
     const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
       userUID: localStorage.getItem('appTokenKey'),
       firstName: user.firstName,
@@ -124,7 +125,7 @@ class CreateProfile extends Component{
 
           <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
 
-        <Form.Button onClick={this.onFormSubmit}>Submit</Form.Button>
+        <Form.Button ref="btn" onClick={this.onFormSubmit}>Submit</Form.Button>
         </Form>
         </Segment>
        

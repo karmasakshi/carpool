@@ -45,9 +45,8 @@ class SignIn extends Component{
 
     render(){
       const {user} = this.state;
-      console.log("ABOUTLOG: ", this.props.location.aboutLog);
       
-      if (this.props.log) { 
+      if (this.props.log) {   
         return(
            <Redirect to={"/users"}  /> 
         )
