@@ -10,13 +10,10 @@ import ReactDOM from 'react-dom';
 
 class CreateAccount extends Component {
     state = {
-        user:{
-          
+        user:{          
           email:'',
-          
           password:'',
           loggedIn:false
-          
         }
     }
     
@@ -66,8 +63,7 @@ render(){
             <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
             </div>
             <div>
-                <button onClick={this.onFormSubmit}>Create Account</button>
-                
+            <button onClick={this.onFormSubmit}>Create Account</button>    
             </div>
 
             </form>
@@ -77,8 +73,5 @@ render(){
         }
 
 }
-
-
-
 
 export default CreateAccount;
