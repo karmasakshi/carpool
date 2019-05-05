@@ -5,14 +5,17 @@ import Header from "./Header"
 import Home from './Home';
 import "./index.css";
 import App from './App';
-import HomeHost from './HomeHost';
+import HomeHost from "./HomeHost";
 
-ReactDOM.render(
-    <Header />, 
+var test=localStorage.getItem('Logged');
+
+
+  ReactDOM.render(
+    <Header/>,
     document.getElementById("root")
-  );
+    );
 
-
+  
 
 
 

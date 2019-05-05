@@ -1,23 +1,16 @@
 import React, { Component} from 'react'
 import "./index.css"
 import fire from './config/fire'
-import {BrowserRouter,Switch,Route}from 'react-router-dom' 
-import Home from './Home'
-import LinksSignOut from './LinksSignOut';
-import HomeHost from './HomeHost';
-import {NavLink} from 'react-router-dom'
-import Header from './Header'
+import { Redirect } from 'react-router';
+
 
 
 
 
 
 class SignIn extends Component {
-constructor(props){
-    super(props)    
-
-}
-
+ 
+   
    
     state = {
         user:{
@@ -26,50 +19,74 @@ constructor(props){
           
           password:'',
           loggedIn:null,
-          
+
         }
     }
+    
     componentDidMount() {
+
+      const usersRef = fire.database().ref('users');   usersRef.on('value', (snapshot) => {
+        let users = snapshot.val();
+        let newstate = [];
+        for (let user in users) {
+          newstate.push({
+            email: user.email,
+            firstname: users[user].firstname,
+            lastname: users[user].lastname,
+            lat:users[user].lat,
+            lng:users[user].lng,
+            role:users[user].role
+          });
+        }
+        this.setState({
+          users: newstate
+        });
+      });
+  
 
         fire.auth().onAuthStateChanged((user) => {
             if (user) {
-              console.log('user has signed in');
-              this.setState({ loggedIn: true});
+              this.state.user.loggedIn=true;
+              console.log(this.state.user.loggedIn);
+              localStorage.setItem('Logged',this.state.user.loggedIn);
+              this.setState({ loggedIn:true});
+
             } else {
               this.setState({ loggedIn: false});
+              localStorage.setItem('Logged',this.state.user.loggedIn);
               console.log('user has not signed in');
             }
-                localStorage.setItem('Logged',this.state.user.loggedIn);
 
           })
          
     } 
-   onFormSubmit = (user) => {
+   onFormSubmit = (user) => {    
     user.preventDefault();
+    this.setState({ loggedIn: true});
+    var test  =  localStorage.getItem('Logged');
+    console.log(test, typeof test);
+    
 
     var email=this.state.user.email;
     var password=this.state.user.password;
-    fire.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+    fire.auth().signInWithEmailAndPassword(email, password).then(function(user){
+      
+
+
+    }).catch(function(error) {
             
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorMessage);
+
             
           });          
-    
-   
+          
           
 
       }
       
-      signOut =()=>{
-        firebase.auth().signOut().then(function() {
-          // Sign-out successful.
-          console.log('you are logged out successfully');
-        }).catch(function(error) {
-          // An error happened.
-        });
-      }
+     
 
     handleChange=(user)=>{
         
@@ -80,19 +97,27 @@ constructor(props){
             newUser: user
          })
          
-        console.log(this.state.user);
+      console.log(this.state.user);
     }
 
 render=()=>{
-  
+
     const {user} = this.state;
     var test  =  localStorage.getItem('Logged');
-    if (test===true) {    
-        return (<Home />
-              )      }
-       else { 
+
+    if (test==="true") { 
+      localStorage.setItem('Logged',false);
+      return <Redirect to='/' />      
+      
+      
+      }
+     
+      
           
         return (
+          
+            
+
             <div className="container">
             <form className="white">
             <h5>Sign In</h5>
@@ -111,15 +136,18 @@ render=()=>{
             
             </form>
             </div>
+            
+            
 
 
     );
+    
         }
 
 }
 
 
-}
+
 
 
 export default SignIn;

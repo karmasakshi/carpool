@@ -45,10 +45,25 @@ class CreateProfile extends Component{
         newUser: user
      })
   }
+  
 
-  getLocation = ()=>{
-    
+  getLocation = (callback)=>{
+    var x;
+    if (navigator.geolocation) {
+      var lat_lng = navigator.geolocation.getCurrentPosition(function(position){
+       console.log(position);
+        var user_position = {};
+        user_position.lat = position.coords.latitude; 
+        user_position.lng = position.coords.longitude; 
+        return user_position;
+      });
+      
+
+
+  } else {
+      alert("Geolocation is not supported by this browser.");
   }
+}
 
 
   render(){
@@ -59,7 +74,6 @@ class CreateProfile extends Component{
   <Grid>
    <Grid.Column width={6}>
      <h1> Create Profile </h1>
-     <Image src='https://source.unsplash.com/random' size='medium' centered bordered/>
    </Grid.Column>
    <Grid.Column width={8}> 
    <br />
