@@ -17,16 +17,19 @@ class CreateProfile extends Component{
       role: null,
       lat: null, 
       lng: null
-    } 
+    } ,
+    disabled: false
 }
 
   onFormSubmit = (e) => {
     
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
+    if(!this.state.disabled)
+    {
     const {user} = this.state;
 
     const usersRef = fire.database().ref(`users`);
-    
+
     const newUser = {                      //here we grab the item the user typed in (as well as their username) from the state, and package it into an object so we ship it off to our Firebase database.
       userUID: localStorage.getItem('appTokenKey'),
       firstName: user.firstName,
@@ -36,10 +39,11 @@ class CreateProfile extends Component{
       lat: user.lat,
       lng: user.lng
     }
-    usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-    this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0 }); //to empty the object after use, so that an additional object can be added
 
-    console.log(this.state.user);
+    usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0, disabled: true}); //to empty the object after use, so that an additional object can be added
+  }
+   console.log(this.state.user);
   }
 
   onInputChange = (user) => {
@@ -92,7 +96,7 @@ class CreateProfile extends Component{
        <Segment>
        <Form>
         <Form.Group widths='equal'>
-          <Form.Input fluid name='firstName' onChange={this.onInputChange} value={user.firstName} label='First name' placeholder='First name' />
+          <Form.Input fluid name='firstName' onChange={this.onInputChange} value={user.firstName} label='First name' placeholder='First name'/>
           <Form.Input fluid name='lastName' onChange={this.onInputChange} value={user.lastName} label='Last name' placeholder='Last name' />
           </Form.Group>
           
@@ -125,7 +129,7 @@ class CreateProfile extends Component{
 
           <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
 
-        <Form.Button ref="btn" onClick={this.onFormSubmit}>Submit</Form.Button>
+        <Form.Button onClick={this.onFormSubmit} disabled={this.state.disabled}>Submit</Form.Button>
         </Form>
         </Segment>
        

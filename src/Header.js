@@ -11,21 +11,16 @@ import fire from './config/fire';
 
 class Header extends Component{
   
-   state = {log: null};
-
-   updateThisInSignIn=()=>{
-    
-   }
+   state = {log: null, users:[]};
 
    componentDidMount() {
     fire.auth().onAuthStateChanged((user) => {     //to detect when a user is authenticated
-
-    // alert();
       
       if (user) {
         console.log('user has signed in', JSON.stringify(user));
 
         this.setState({log: true});
+        let newState = [];
         
         // application specific token so that you do not have to
         // authenticate with firebase every time a user logs in
@@ -34,15 +29,34 @@ class Header extends Component{
         // store the token
         //this.props.history.push("/users")
         
+        fire.database().ref().child('users').orderByChild('userUID').once('value').then(function(snapshot) {
+          console.log(snapshot.val());  
+          let users = snapshot.val();
+         
+          for (let user in users) {
+            newState.push({
+              id: user,
+              firstName: users[user].firstName,
+              lastName: users[user].lastName,
+              role: users[user].role,
+              lat: users[user].lat,
+              lng: users[user].lng
+            });
+          }
+          });
+
+        console.log(newState);
         this.setState(prevState => ({
           user: {                                   //using spread operator to setState
               ...prevState.user,
-              loggedIn: true
+              loggedIn: true,
+              users: newState
           }
       }))
      } else {
        this.setState({log:false});
      }
+
  }); 
   } 
 
@@ -59,14 +73,11 @@ class Header extends Component{
        <Route render={() => <h1>Page not found</h1>} />
        </Switch>
       </div>
-      </BrowserRouter>
-      
+      </BrowserRouter>  
     );
 }
 
 }
-
-
 
 export default Header;
 
