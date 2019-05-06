@@ -19,8 +19,6 @@ class SignIn extends Component{
   }
   }
 
-
-
    onFormSubmit = (user) => {
     user.preventDefault();
 
@@ -64,15 +62,14 @@ class SignIn extends Component{
               <label htmlFor="password">password</label>
               <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
               </div>
-            <div>
+              <div>
               <button onClick={this.onFormSubmit}>Login</button>
-          </div>
+              </div>
             
-            </form>
-            </div>
+              </form>
+              </div>
     );
   }
-
 }
 }
 
