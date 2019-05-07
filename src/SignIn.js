@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import Home from './Home';
 import fire from './config/fire'; 
-import firebase from 'firebase';
-import Navbar from './Navigation';
 import {Redirect} from 'react-router';
 
 class SignIn extends Component{
@@ -13,13 +10,10 @@ class SignIn extends Component{
     this.state = {
       user:{
         email:'',
-        password:'',
-        loggedIn: null
+        password:''
       }
   }
   }
-
-
 
    onFormSubmit = (user) => {
     user.preventDefault();
@@ -64,15 +58,14 @@ class SignIn extends Component{
               <label htmlFor="password">password</label>
               <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
               </div>
-            <div>
+              <div>
               <button onClick={this.onFormSubmit}>Login</button>
-          </div>
+              </div>
             
-            </form>
-            </div>
+              </form>
+              </div>
     );
   }
-
 }
 }
 

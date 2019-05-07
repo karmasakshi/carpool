@@ -27,10 +27,7 @@ const Links=(props)=>{
     {(props.log) ?
     <li><NavLink to='/' onClick={signout}>Sign out</NavLink></li>
     :
-    <li><NavLink to={{pathname:'/signin',
-                    aboutLog: {
-                        log: false
-                    }}}>Sign in </NavLink></li> 
+    <li><NavLink to={'/signin'}>Sign in </NavLink></li> 
     }
     </ul>
     </div>

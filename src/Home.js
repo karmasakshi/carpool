@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import "./index.css"
-
+import {Link} from 'react-router-dom'
 
 class Home extends Component {
+  
   render() {
     return (
-    <button id="style">
-    Join Now!
-    </button>
+    <Link class="button btn" to="/signup">Join Now</Link>
     );
   }
 }

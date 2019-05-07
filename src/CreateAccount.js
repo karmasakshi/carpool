@@ -1,12 +1,6 @@
 import React, { Component} from 'react'
 import "./index.css"
-import fire, {auth} from './config/fire'
-import {BrowserRouter,Switch,Route}from 'react-router-dom' 
-import Home from './Home'
-import CreateProfile from './CreateProfile';
-import SignIn from './SignIn';
-import ReactDOM from 'react-dom';
-
+import fire from './config/fire'
 
 class CreateAccount extends Component {
     state = {
@@ -17,12 +11,9 @@ class CreateAccount extends Component {
         }
     }
     
-
    onFormSubmit = (user) => {
 
-    user.preventDefault();
-   
-    
+    user.preventDefault(); 
     fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
         // Handle Errors here.
         //var errorCode = error.code;
@@ -31,7 +22,6 @@ class CreateAccount extends Component {
       });
    
           console.log(this.state.loggedIn);
-
       }
       
 
