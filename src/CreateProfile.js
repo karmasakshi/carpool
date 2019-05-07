@@ -118,7 +118,7 @@ class CreateProfile extends Component{
       }
       else if(this.state.allowed === "home")
       {
-        return(<Redirect to={'/'} />)
+        return(<Redirect to={'/results'} />)
       }
       else if(this.state.allowed === "form"){
       return(
@@ -176,7 +176,6 @@ class CreateProfile extends Component{
           </div>
          )
       }
-    
 }
 }
 

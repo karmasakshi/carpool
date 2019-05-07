@@ -8,20 +8,20 @@ import './index.css'
 import CreateProfile from './CreateProfile';
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire'; 
+import Results from './Results';
 
 class Header extends Component{
   
-   state = {log: null, users:[]};
+   state = {log: null, users:[], uid: localStorage.getItem("appTokenKey")};
 
    componentDidMount() {
     fire.auth().onAuthStateChanged((user) => {     //to detect when a user is authenticated
-      
+
       if (user) {
         console.log('user has signed in', JSON.stringify(user));
 
-        this.setState({log: true});
         let newState = [];
-        
+
         // application specific token so that you do not have to
         // authenticate with firebase every time a user logs in
         localStorage.setItem('appTokenKey', user.uid);  //user.uid displays the user uid from authentication table
@@ -29,7 +29,7 @@ class Header extends Component{
         // store the token
         //this.props.history.push("/users")
         
-        fire.database().ref().child('users').orderByChild('userUID').once('value').then(function(snapshot) {
+        fire.database().ref().child('users').orderByChild('userUID').once('value').then((snapshot)=> {
           console.log(snapshot.val());  
           let users = snapshot.val();
          
@@ -43,17 +43,13 @@ class Header extends Component{
               lng: users[user].lng
             });
           }
-          });
 
-        console.log(newState);
-        this.setState(prevState => ({
-          user: {                                   //using spread operator to setState
-              ...prevState.user,
-              loggedIn: true,
-              users: newState
-          }
-      }))
-     } else {
+          this.setState({
+            users: newState, log: true
+          })
+          });
+     } 
+     else {
        this.setState({log:false});
      }
 
@@ -64,10 +60,11 @@ class Header extends Component{
     return(
       <BrowserRouter>
       <div className="Header">
-       <Navbar {...this.state}/>
+       <Navbar log={this.state.log}/>
        <Switch>
        <Route exact path='/'component={Home}/>
-       <Route exact path='/signin' render={() => <SignIn {...this.state}/>} />  
+       <Route exact path='/signin' render={() => <SignIn log={this.state.log}/>} />
+       <Route exact path='/results' render={() => <Results users={this.state.users} uid={this.state.uid}/>} />
        <Route exact path='/signup' component={CreateAccount}/>
        <Route exact path='/users' component={CreateProfile}/>
        <Route render={() => <h1>Page not found</h1>} />
