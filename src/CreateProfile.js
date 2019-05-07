@@ -2,11 +2,6 @@ import React, {Component} from 'react';
 import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 import fire from './config/fire';
 import {Redirect} from 'react-router';
-import SignIn from './SignIn';
-import firebase from 'firebase';
-import {BrowserRouter,Switch,Route} from 'react-router-dom' 
-import Home from './Home';
-import ReactDOM from 'react-dom' 
 
 class CreateProfile extends Component{
  constructor(){
@@ -87,7 +82,7 @@ class CreateProfile extends Component{
 
   getLocation = ()=>{
       if (navigator.geolocation) {
-        var lat_lng = navigator.geolocation.getCurrentPosition(function(position){
+         navigator.geolocation.getCurrentPosition(function(position){
          console.log(position);
          var lat = position.coords.latitude;
          var lng = position.coords.longitude;

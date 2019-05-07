@@ -40,7 +40,8 @@ class Header extends Component{
               lastName: users[user].lastName,
               role: users[user].role,
               lat: users[user].lat,
-              lng: users[user].lng
+              lng: users[user].lng,
+              uid:users[user].userUID
             });
           }
 
@@ -64,7 +65,7 @@ class Header extends Component{
        <Switch>
        <Route exact path='/'component={Home}/>
        <Route exact path='/signin' render={() => <SignIn log={this.state.log}/>} />
-       <Route exact path='/results' render={() => <Results users={this.state.users} uid={this.state.uid}/>} />
+       <Route exact path='/results' render={() => <Results users={this.state.users} uid={this.state.uid}/>}  />
        <Route exact path='/signup' component={CreateAccount}/>
        <Route exact path='/users' component={CreateProfile}/>
        <Route render={() => <h1>Page not found</h1>} />

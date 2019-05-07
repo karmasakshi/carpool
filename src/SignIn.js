@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import Home from './Home';
 import fire from './config/fire'; 
-import firebase from 'firebase';
-import Navbar from './Navigation';
 import {Redirect} from 'react-router';
 
 class SignIn extends Component{

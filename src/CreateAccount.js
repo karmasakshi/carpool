@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 import "./index.css"
-import fire, {auth} from './config/fire'
+import fire from './config/fire'
 
 class CreateAccount extends Component {
     state = {

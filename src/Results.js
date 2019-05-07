@@ -1,34 +1,29 @@
 import React, {Component } from "react";
-import Home from "./Home"
-import {BrowserRouter,Switch,Route} from 'react-router-dom' 
-import SignIn from "./SignIn"
-import CreateAccount from "./CreateAccount"
-import Navbar from './Navigation'
 import './index.css'
-import CreateProfile from './CreateProfile';
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import { Grid, Image, Card, Icon } from 'semantic-ui-react'
-import fire from './config/fire'; 
 
 class Results extends Component{
- constructor(props){
-     super(props);
+ state={currentUser: undefined, users: this.props.users};
+
+ componentDidMount(){
+    
+    let usr=this.props.users.filter((index)=>{
+        return index.uid==this.props.uid;
+    });
+
+    let otherUsers=this.props.users.filter((index)=>{
+        return index.uid!=this.props.uid;
+    });
+
+    this.setState({currentUser: usr, users: otherUsers});
  }
 
  render(){
-    console.log(this.props.users);
 
-    let newState = this.props.users;
-    
-    let CurrentUser=newState.filter((index)=>{
-        return index.id==this.props.uid;
-    });
-   console.log(CurrentUser);
-
-    var lat=CurrentUser.lat;
-    var long=CurrentUser.long;
-    var doubleLat=parseFloat(lat);
-    var doubleLong=parseFloat(long);
+   console.log(this.state.currentUser);
+   console.log(this.state.users);
+   
 
      /*
      var lat=CurrentUser[0].lat;
@@ -36,16 +31,10 @@ class Results extends Component{
      var doubleLat=parseFloat(lat);
      var doubleLong=parseFloat(long);
      */
-function deg2rad(deg) {
-return deg * (Math.PI/180)
-}
-     console.log("Old array: " , newState);
-     let newArray=newState.filter((index)=>{
-       return index.uid!=this.props.uid;
-   });
-   
-      console.log("New Array: " , newArray);
-    
+     function deg2rad(deg) {
+     return deg * (Math.PI/180)
+     }
+
      return(
     <div>
     <Grid container columns={3}>
