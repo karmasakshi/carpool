@@ -47,26 +47,8 @@ render=()=>{
   
     const {user} = this.state;
     var test  =  localStorage.getItem('Logged');
-    if (test===true) {    
-        return (<Home />
-              )      }
-       else { 
-          
-        return (
-            <div className="container">
-            <form className="white">
-            <h5>Sign In</h5>
-            <div >
-            <label htmlFor="email">email</label>
-            <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
-            </div>
-            <div className="input">
-            <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
-            </div>
-            
-    render(){
-      const {user} = this.state;
+   
+   
       
       if (this.props.log) {   
         return(
@@ -93,14 +75,14 @@ render=()=>{
             </form>
             </div>
     );
-        }
+        
 
-
+          }     
 
 
       }
 
-
+    }
 export default SignIn;
 
 
