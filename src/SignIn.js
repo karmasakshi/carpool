@@ -5,24 +5,40 @@ import {Redirect} from 'react-router';
 class SignIn extends Component{
 
   constructor(props){
+    console.log(0);
+
     super();
 
     this.state = {
       user:{
         email:'',
-        password:''
-      }
+        password:'',
+      }, errors: ''
   }
   }
 
    onFormSubmit = (user) => {
     user.preventDefault();
 
-    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {     
+    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {     
             var errorCode = error.code;
             var errorMessage = error.message;
+
+            var errors = '';
+            console.log(JSON.stringify(errors));
             console.log(errorMessage);
-          }); 
+            
+            console.log("type of errorMessage: ", typeof(errorMessage));
+            console.log("type of errors array", typeof(errors));
+           
+            errors = errorMessage;
+            
+              this.setState({errors: errors});
+          
+          
+            console.log(2);
+            console.log("errors here below:", this.state.errors);
+         });
       }
       
     handleChange=(user)=>{
@@ -39,7 +55,7 @@ class SignIn extends Component{
 
     render(){
       const {user} = this.state;
-      
+      console.log(1);
       if (this.props.log) {   
         return(
            <Redirect to={"/users"}  /> 
@@ -49,8 +65,9 @@ class SignIn extends Component{
           return (
               <div className="container">
               <form className="white">
-              <h5>Sign In</h5>
-              <div >
+              <h3>Sign In</h3>
+              <div>
+              {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
               <label htmlFor="email">email</label>
               <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
               </div>
@@ -60,6 +77,7 @@ class SignIn extends Component{
               </div>
               <div>
               <button onClick={this.onFormSubmit}>Login</button>
+           
               </div>
             
               </form>

@@ -41,7 +41,8 @@ class Header extends Component{
               role: users[user].role,
               lat: users[user].lat,
               lng: users[user].lng,
-              uid:users[user].userUID
+              uid:users[user].userUID, 
+              request: null
             });
           }
 
@@ -50,6 +51,7 @@ class Header extends Component{
             return index.uid == user.uid;
       
           });
+          console.log("currentUser:", usr);
 
           
           if(usr.length>0)  //if profile is created by user, this will be executed, else no
@@ -87,7 +89,7 @@ class Header extends Component{
             console.log("C:",c);
             console.log("D", d);
               
-            console.log(results.push({firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d}));
+            console.log(results.push({uid: otherUsers[i].userUID, firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d, role: otherUsers[i].role}));
             console.log("Results ",results);
             console.log("Testdd",this.state.results);
           }
@@ -114,7 +116,7 @@ class Header extends Component{
        <Switch>
        <Route exact path='/'component={Home}/>
        <Route exact path='/signin' render={() => <SignIn log={this.state.log}/>} />
-       <Route exact path='/results' render={() => <Results results={this.state.results}/>}  />
+       <Route exact path='/results' render={() => <Results currentUser={this.props.currentUser} results={this.state.results}/>}  />
        <Route exact path='/signup' component={CreateAccount}/>
        <Route exact path='/users' component={CreateProfile}/>
        <Route render={() => <h1>Page not found</h1>} />

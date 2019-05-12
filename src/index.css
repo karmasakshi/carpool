@@ -41,3 +41,7 @@ border-radius:10px;
 height: 10%;
 margin: auto auto;
 }
+
+#error{
+  color: red;
+}

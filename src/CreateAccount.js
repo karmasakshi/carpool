@@ -8,16 +8,21 @@ class CreateAccount extends Component {
           email:'',
           password:'',
           loggedIn:false
-        }
+        }, 
+        errors: ''
     }
     
    onFormSubmit = (user) => {
 
     user.preventDefault(); 
-    fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {
+    fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {
         // Handle Errors here.
         //var errorCode = error.code;
-        //var errorMessage = error.message;
+        var errorMessage = error.message;
+        var errors = '';
+        errors = errorMessage;
+       
+        this.setState({errors: errors});
         // ...
       });
    
@@ -43,8 +48,9 @@ render(){
         return (         
             <div className="container">
             <form className="white">
-            <h5>Sign Up</h5>
-            <div >
+            <h3>Sign Up</h3>
+            <div>
+            {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
             <label htmlFor="email">email</label>
             <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
             </div>
