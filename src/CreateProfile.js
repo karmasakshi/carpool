@@ -48,8 +48,8 @@ class CreateProfile extends Component{
   onFormSubmit = (e) => {
     
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
-    if(!this.state.disabled)
-    {
+   
+    
     const {user} = this.state;
 
     const usersRef = fire.database().ref(`users`);
@@ -66,7 +66,7 @@ class CreateProfile extends Component{
 
     usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
     this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0, disabled: true}); //to empty the object after use, so that an additional object can be added
-  }
+  
    console.log(this.state.user);
  }
 
@@ -129,12 +129,12 @@ class CreateProfile extends Component{
                <Segment>
                <Form>
                 <Form.Group widths='equal'>
-                  <Form.Input fluid name='firstName' onChange={this.onInputChange} value={user.firstName} label='First name' placeholder='First name'/>
-                  <Form.Input fluid name='lastName' onChange={this.onInputChange} value={user.lastName} label='Last name' placeholder='Last name' />
+                  <Form.Input fluid name='firstName' type="text" onChange={this.onInputChange} value={user.firstName} label='First name' placeholder='First name' required/>
+                  <Form.Input fluid name='lastName' type="text" onChange={this.onInputChange} value={user.lastName} label='Last name' placeholder='Last name' required/>
                   </Form.Group>
                   
                   <Form.Field>
-                  <Form.Input name='email' onChange={this.onInputChange} value={user.email} label='Email' placeholder='joe@schmoe.com' />
+                  <Form.Input name='email' onChange={this.onInputChange} type="email" value={user.email} label='Email' placeholder='joe@schmoe.com' required/>
                   </Form.Field>
         
                   <Form.Group inline>
@@ -162,7 +162,7 @@ class CreateProfile extends Component{
         
                   <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
         
-                <Form.Button onClick={this.onFormSubmit} disabled={this.state.disabled}>Submit</Form.Button>
+                <Form.Button type="submit" onClick={this.onFormSubmit} >Submit</Form.Button>
                 </Form>
                 </Segment>
                
@@ -175,3 +175,4 @@ class CreateProfile extends Component{
 }
 
 export default CreateProfile; 
+//against form button disabled={this.state.disabled},  if(!this.state.disabled)

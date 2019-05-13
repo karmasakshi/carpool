@@ -9,16 +9,19 @@ import CreateProfile from './CreateProfile';
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire'; 
 import Results from './Results';
+import ProtectedRoute from './protectedRoute';
 
 class Header extends Component{
   
-   state = {log: null, users:[], uid: localStorage.getItem("appTokenKey"), currentUser:[], otherUsers:[], results: []};
+   state = {log: null, users:[], uid: localStorage.getItem("appTokenKey"), currentUser:[], results: []};
 
    componentDidMount() {
     fire.auth().onAuthStateChanged((user) => {     //to detect when a user is authenticated
 
       if (user) {
         console.log('user has signed in', JSON.stringify(user));
+
+        localStorage.setItem("Logged", true);
 
         let newState = [];
 
@@ -51,9 +54,8 @@ class Header extends Component{
             return index.uid == user.uid;
       
           });
-          console.log("currentUser:", usr);
+          console.log("currentUser:", JSON.stringify(usr));
 
-          
           if(usr.length>0)  //if profile is created by user, this will be executed, else no
           {
             let otherUsers = newState.filter((index) => {
@@ -93,12 +95,15 @@ class Header extends Component{
             console.log("Results ",results);
             console.log("Testdd",this.state.results);
           }
-            this.setState({otherUsers: otherUsers, results: results});
+    
+            this.setState({results: results});
+            
           }
 
           this.setState({
             users: newState, log: true, currentUser: usr
           })
+          localStorage.setItem('currentUser', JSON.stringify(this.state.currentUser));
           });
      } 
      else {
@@ -116,8 +121,8 @@ class Header extends Component{
        <Switch>
        <Route exact path='/'component={Home}/>
        <Route exact path='/signin' render={() => <SignIn log={this.state.log}/>} />
-       <Route exact path='/results' render={() => <Results currentUser={this.props.currentUser} results={this.state.results}/>}  />
-       <Route exact path='/signup' component={CreateAccount}/>
+       <ProtectedRoute exact path='/results' component={Results} currentUser={this.state.currentUser} results={this.state.results}></ProtectedRoute>
+       <Route exact path='/signup' render={() => <CreateAccount log={this.state.log}/>} />
        <Route exact path='/users' component={CreateProfile}/>
        <Route render={() => <h1>Page not found</h1>} />
        </Switch>
@@ -132,3 +137,5 @@ export default Header;
 
 //So to recap, if you need to pass a prop to a component being rendered by React Router, instead of using Routes component prop, use its render prop passing it an inline function then pass along the arguments to the element you’re creating.
 //to prevent unnecessary unmounting and remounting of the entire component
+
+// render={() => <Results currentUser={this.state.currentUser} results={this.state.results}/>} 

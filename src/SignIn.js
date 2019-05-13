@@ -25,19 +25,10 @@ class SignIn extends Component{
             var errorMessage = error.message;
 
             var errors = '';
-            console.log(JSON.stringify(errors));
-            console.log(errorMessage);
-            
-            console.log("type of errorMessage: ", typeof(errorMessage));
-            console.log("type of errors array", typeof(errors));
            
             errors = errorMessage;
             
-              this.setState({errors: errors});
-          
-          
-            console.log(2);
-            console.log("errors here below:", this.state.errors);
+            this.setState({errors: errors});
          });
       }
       

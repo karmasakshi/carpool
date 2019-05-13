@@ -1,6 +1,8 @@
 import React, { Component} from 'react'
 import "./index.css"
 import fire from './config/fire'
+import {Redirect} from 'react-router';
+
 
 class CreateAccount extends Component {
     state = {
@@ -44,7 +46,12 @@ class CreateAccount extends Component {
 
 render(){
     const {user} = this.state;
-   
+    if (this.props.log) {   
+        return(
+           <Redirect to={"/users"}  /> 
+        )
+      }
+         else {   
         return (         
             <div className="container">
             <form className="white">
@@ -65,7 +72,7 @@ render(){
             </form>
               
             </div>
-    );
+    );}
         }
 
 }

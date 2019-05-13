@@ -7,6 +7,9 @@ function signout(){
     fire.auth().signOut().then(function() {
      
         console.log("you are signed out");
+        localStorage.setItem('Logged', false);
+       // this.props.history.push('/');
+      
     }).catch(function(error) {
         // An error happened.
         console.log(error);
