@@ -28,28 +28,29 @@ class CreateProfile extends Component{
 
   fire.database().ref().child('users').orderByChild('userUID').equalTo(uid).once('value').then((snapshot)=>{
 
-    var x = snapshot.val();
-    console.log(x);
+    var y = snapshot.val();
+    console.log(y);
+   
     try{
-    if(Object.keys(x).length>0)
+    if(Object.keys(y).length>0)
     {
       this.setState({
         allowed: "home"
       });
     }
-   }catch(err){
+  }
+  catch(e){
     this.setState({
       allowed: "form"
     })
-  }
-  });
- }
+   }
+ });
+}
  
   onFormSubmit = (e) => {
     
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
-   
-    
+       
     const {user} = this.state;
 
     const usersRef = fire.database().ref(`users`);

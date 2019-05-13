@@ -21,8 +21,6 @@ class Header extends Component{
       if (user) {
         console.log('user has signed in', JSON.stringify(user));
 
-        localStorage.setItem("Logged", true);
-
         let newState = [];
 
         // application specific token so that you do not have to
@@ -44,8 +42,7 @@ class Header extends Component{
               role: users[user].role,
               lat: users[user].lat,
               lng: users[user].lng,
-              uid:users[user].userUID, 
-              request: null
+              uid:users[user].userUID
             });
           }
 
@@ -63,7 +60,7 @@ class Header extends Component{
             return ((index.uid !== this.state.uid) && (index.role !== usr[0].role));
             });
  
-            var lat=usr[0].lat;
+           var lat=usr[0].lat;
            var long=usr[0].lng;
            var doubleLat=parseFloat(lat);
            var doubleLong=parseFloat(long);
@@ -91,7 +88,7 @@ class Header extends Component{
             console.log("C:",c);
             console.log("D", d);
               
-            console.log(results.push({uid: otherUsers[i].userUID, firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d, role: otherUsers[i].role}));
+            console.log(results.push({id: otherUsers[i].id, uid: otherUsers[i].userUID, firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d, role: otherUsers[i].role}));
             console.log("Results ",results);
             console.log("Testdd",this.state.results);
           }
@@ -103,6 +100,7 @@ class Header extends Component{
           this.setState({
             users: newState, log: true, currentUser: usr
           })
+          console.log(this.state.currentUser[0].id);
           localStorage.setItem('currentUser', JSON.stringify(this.state.currentUser));
           });
      } 
@@ -121,7 +119,7 @@ class Header extends Component{
        <Switch>
        <Route exact path='/'component={Home}/>
        <Route exact path='/signin' render={() => <SignIn log={this.state.log}/>} />
-       <ProtectedRoute exact path='/results' component={Results} currentUser={this.state.currentUser} results={this.state.results}></ProtectedRoute>
+       <Route exact path='/results' render={() => <Results currentUser={this.state.currentUser} results={this.state.results}/>} />
        <Route exact path='/signup' render={() => <CreateAccount log={this.state.log}/>} />
        <Route exact path='/users' component={CreateProfile}/>
        <Route render={() => <h1>Page not found</h1>} />
@@ -138,4 +136,5 @@ export default Header;
 //So to recap, if you need to pass a prop to a component being rendered by React Router, instead of using Routes component prop, use its render prop passing it an inline function then pass along the arguments to the element you’re creating.
 //to prevent unnecessary unmounting and remounting of the entire component
 
-// render={() => <Results currentUser={this.state.currentUser} results={this.state.results}/>} 
+// 
+//component={Results} currentUser={this.state.currentUser} results={this.state.results}

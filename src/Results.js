@@ -56,13 +56,13 @@ localStorage.getItem('currentUser') && this.setState({
 componentDidUpdate() {
   console.log("i was called again");
   
-  /*
+ 
   if (this.state.currentUser === undefined) {
 
     this.setState({currentUser: this.props.currentUser});
 
   }
-*/
+
 
   if (this.state.results.length === 0 && this.state.currentUser !== undefined && this.props.results.length > 0) {
 
@@ -71,9 +71,45 @@ componentDidUpdate() {
   }
 }
 
-handleRequest=()=>{
- // fire.database().ref().child('users').update({request: "hey a request"}); //CHECK THIS OUT
+handleRequest(index){
+
+    this.sendRequest(index);
 }
+
+sendRequest(index){
+  
+  var currentUserUID=this.props.currentUser[0].uid;
+  console.log("index", index);
+  console.log("key",this.props.results[index].id);
+  console.log("currentuserUID",currentUserUID);
+  console.log("wierd id" , typeof(this.props.results[index].uid));  //no type --> it is undefined
+  
+  console.log("testing");
+  fire.database().ref().child('users/'+this.props.results[index].id).update({  //child has the path to refer to each object in the firebase database. Firebase stores data in JSON format
+    "requesting": currentUserUID
+  });
+  } 
+  
+  retrieveRequests=(x)=>{
+  
+    var id=x[0].id;
+    
+    var requests = [];
+/*
+   fire.database().ref().child('users/'+id).orderByKey('requesting').on('child_added', function(snapshot){
+     
+     requests = snapshot.val();
+ 
+     console.log("i am requests array:", JSON.stringify(requests));
+  });
+*/
+
+  var query = fire.database().ref("users/"+id);
+  query.once("value").then(function(snapshot) {
+   requests = snapshot.child("requesting").val(); // {first:"Ada",last:"Lovelace"}
+    console.log("i am requests array:", requests );
+  });
+  }
 
   render() {
    console.log(3);
@@ -88,6 +124,7 @@ handleRequest=()=>{
      return(
        <div>
        <h1> Hey, you have logged in as host. you will shortly see the list of requests</h1>
+       <p> {this.retrieveRequests(x)}</p>
      <Grid container>
      <Grid.Column width={16}>
       <Segment.Group>
@@ -114,18 +151,18 @@ handleRequest=()=>{
     </div>
      )
    }
-   else{
+   else if(x[0].role === 'guest'){
    return (
       <div>
         <Grid container columns={3}>
-          {this.state.results.map((user, index) => (
+          {this.props.results.map((user, index) => (
             <Grid.Column key={index}>
               <Card>
                 <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                 <Card.Content>
                   <Card.Header>{user.firstName} {user.lastName}</Card.Header>
                   <Card.Description>Distance from you: {user.distance} m</Card.Description>
-                  <Button inverted color='green' onClick={this.handleRequest}>Request a ride</Button>
+                  <Button inverted color='green' onClick={() => { this.handleRequest(index) }}>Request a ride</Button>
                 </Card.Content>
               </Card>
             </Grid.Column>

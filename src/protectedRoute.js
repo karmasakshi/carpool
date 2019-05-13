@@ -10,8 +10,8 @@ return(
 
         if (user) {
             return <Component {...props}/>
-        } else {
-      
+        } 
+        else {
         return <Redirect to={
             {
                 pathname: "/",
