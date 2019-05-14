@@ -7,6 +7,9 @@ function signout(){
     fire.auth().signOut().then(function() {
      
         console.log("you are signed out");
+       
+       // this.props.history.push('/');
+      
     }).catch(function(error) {
         // An error happened.
         console.log(error);
@@ -19,7 +22,7 @@ const Links=(props)=>{
     return(    
     <div className="container">
     <NavLink to ='/' className="brand-logo">Carpool</NavLink>
-    <ul className="right">
+    <ul className="right menu">
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/about'>About</NavLink></li>
     <li><NavLink to='/signup'>Sign Up</NavLink></li>
@@ -27,10 +30,7 @@ const Links=(props)=>{
     {(props.log) ?
     <li><NavLink to='/' onClick={signout}>Sign out</NavLink></li>
     :
-    <li><NavLink to={{pathname:'/signin',
-                    aboutLog: {
-                        log: false
-                    }}}>Sign in </NavLink></li> 
+    <li><NavLink to={'/signin'}>Sign in </NavLink></li> 
     }
     </ul>
     </div>

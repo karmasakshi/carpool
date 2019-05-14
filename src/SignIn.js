@@ -1,34 +1,36 @@
 import React, {Component} from 'react';
-import Home from './Home';
 import fire from './config/fire'; 
-import firebase from 'firebase';
-import Navbar from './Navigation';
 import {Redirect} from 'react-router';
+import {Container, Form, Header} from 'semantic-ui-react';
 
 class SignIn extends Component{
 
   constructor(props){
+    console.log(0);
+
     super();
 
     this.state = {
       user:{
         email:'',
         password:'',
-        loggedIn: null
-      }
+      }, errors: ''
   }
   }
-
-
 
    onFormSubmit = (user) => {
     user.preventDefault();
 
-    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch(function(error) {     
+    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {     
             var errorCode = error.code;
             var errorMessage = error.message;
-            console.log(errorMessage);
-          }); 
+
+            var errors = '';
+           
+            errors = errorMessage;
+            
+            this.setState({errors: errors});
+         });
       }
       
     handleChange=(user)=>{
@@ -67,7 +69,7 @@ render=()=>{
             
     render(){
       const {user} = this.state;
-      
+      console.log(1);
       if (this.props.log) {   
         return(
            <Redirect to={"/users"}  /> 
@@ -75,31 +77,32 @@ render=()=>{
       }
          else {   
           return (
-              <div className="container">
-              <form className="white">
-              <h5>Sign In</h5>
-              <div >
-              <label htmlFor="email">email</label>
-              <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
-              </div>
-              <div className="input">
-              <label htmlFor="password">password</label>
-              <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
-              </div>
-            <div>
-              <button onClick={this.onFormSubmit}>Login</button>
-          </div>
+            <Container>
+           
+            <Form>
+            <Header as='h2'>Sign In</Header>
+
+            {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
             
-            </form>
-            </div>
+            <Form.Field>
+            <label htmlFor="email">email</label>
+            <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
+            </Form.Field>
+            
+            <Form.Field>
+            <label htmlFor="password">password</label>
+            <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
+            </Form.Field>
+           
+            <button className="ui button" onClick={this.onFormSubmit}>Login</button>    
+           
+            </Form>
+              
+            </Container>
     );
-        }
-
-
-
-
-      }
-
+  }
+}
+}
 
 export default SignIn;
 

@@ -1,11 +1,8 @@
 import React, { Component} from 'react'
 import "./index.css"
-import fire, {auth} from './config/fire'
-import {BrowserRouter,Switch,Route}from 'react-router-dom' 
-import Home from './Home'
-import HomeHost from './HomeHost'
-
-
+import fire from './config/fire'
+import {Redirect} from 'react-router';
+import {Container, Form, Header} from 'semantic-ui-react';
 
 
 class CreateAccount extends Component {
@@ -14,25 +11,25 @@ class CreateAccount extends Component {
           email:'',
           password:'',
           loggedIn:false
-        }
+        }, 
+        errors: ''
     }
     
-
    onFormSubmit = (user) => {
-    var email=this.state.user.email;
-    var password=this.state.user.password;
-    user.preventDefault();
-   
-    
-    fire.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+
+    user.preventDefault(); 
+    fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {
         // Handle Errors here.
         //var errorCode = error.code;
-        //var errorMessage = error.message;
+        var errorMessage = error.message;
+        var errors = '';
+        errors = errorMessage;
+       
+        this.setState({errors: errors});
         // ...
       });
    
           console.log(this.state.loggedIn);
-
       }
       
 
@@ -50,34 +47,36 @@ class CreateAccount extends Component {
 
 render(){
     const {user} = this.state;
-    if (this.state.loggedIn===true) {
-        return (
-         <HomeHost/>
+    if (this.props.log) {   
+        return(
+           <Redirect to={"/users"}  /> 
         )
-      } else { 
-        return (
-    
-   
+      }
+         else {   
         return (         
-            <div className="container">
-            <form className="white">
-            <h5>Sign Up</h5>
-            <div >
+            <Container>
+           
+            <Form>
+            <Header as='h2'>Sign Up</Header>
+
+            {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
+            
+            <Form.Field>
             <label htmlFor="email">email</label>
             <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
-            </div>
-            <div className="input">
+            </Form.Field>
+            
+            <Form.Field>
             <label htmlFor="password">password</label>
             <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
-            </div>
-            <div>
-            <button onClick={this.onFormSubmit}>Create Account</button>    
-            </div>
-
-            </form>
+            </Form.Field>
+           
+            <button className="ui primary button" onClick={this.onFormSubmit}>Create Account</button>    
+           
+            </Form>
               
-            </div>
-    );
+            </Container>
+    );}
         }
 
 }
