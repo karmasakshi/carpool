@@ -22,7 +22,7 @@ const Links=(props)=>{
     return(    
     <div className="container">
     <NavLink to ='/' className="brand-logo">Carpool</NavLink>
-    <ul className="right">
+    <ul className="right menu">
     <li><NavLink to='/'>Home</NavLink></li>
     <li><NavLink to='/about'>About</NavLink></li>
     <li><NavLink to='/signup'>Sign Up</NavLink></li>

@@ -27,17 +27,15 @@ ul.header li a {
 
 h1{
   text-align: center;
-
 }
 
 #style{
-background-color: White;
-display: flex; 
-justify-content: center;
+display: block;
+width: 50vw;
 text-align:center;
 font-weight: bold;
-font-size: 100px;
-border-radius:10px;
+font-size: 80px;
+border-radius:15px;
 height: 10%;
 margin: auto auto;
 }

@@ -12,7 +12,7 @@ class Results extends Component {
 
     super(props);
 
-    this.state = { currentUser: this.props.currentUser, results: this.props.results };
+    this.state = { currentUser: this.props.currentUser, results: this.props.results,requests:[] };
   }
  
  
@@ -35,7 +35,41 @@ class Results extends Component {
 
 componentDidMount() {
  console.log(" i am componentdidmount()");
+ var x = JSON.parse(localStorage.getItem('currentUser'));
+ var id=x[0].id;
+ 
+ var requests = [];
+/*
+fire.database().ref().child('users/'+id).orderByKey('requesting').on('child_added', function(snapshot){
+  
+  requests = snapshot.val();
 
+  console.log("i am requests array:", JSON.stringify(requests));
+});
+*/
+let newState = [];
+
+if(x[0].role==="host"){
+var query = fire.database().ref("users/"+id+'/requesting');
+query.once("value").then((snapshot)=> {
+requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
+ console.log("i am requests array:", (requests) );
+ for (let request in requests) {
+  newState.push({
+    id: request,
+    uid:requests[request].uid,
+    firstName:requests[request].firstName,
+    lastName:requests[request].lastName
+  });
+}
+// var arrayRequest=Object.keys(requests);
+ 
+ console.log("newState",newState);
+ this.setState({requests:newState});
+ 
+});
+}
+console.log(this.state.requests);
  if(localStorage.getItem('currentUser') === ''){
   this.componentDidUpdate();
  } 
@@ -55,7 +89,8 @@ localStorage.getItem('currentUser') && this.setState({
 
 componentDidUpdate() {
   console.log("i was called again");
-  
+  var x = JSON.parse(localStorage.getItem('currentUser')); 
+
  
   if (this.state.currentUser === undefined) {
 
@@ -79,36 +114,25 @@ handleRequest(index){
 sendRequest(index){
   
   var currentUserUID=this.props.currentUser[0].uid;
-  console.log("index", index);
-  console.log("key",this.props.results[index].id);
+  var currentUserFirstName=this.props.currentUser[0].firstName;
+  var currentUserLastName=this.props.currentUser[0].lastName;
+ 
   console.log("currentuserUID",currentUserUID);
-  console.log("wierd id" , typeof(this.props.results[index].uid));  //no type --> it is undefined
-  
-  console.log("testing");
+ 
+  const requestsObj = fire.database().ref(`users/`+this.props.results[index].id+'/requesting');
+
+ // const newRequest = {requesting: currentUserUID}
+
+  requestsObj.push({uid: currentUserUID,firstName:currentUserFirstName,lastName:currentUserLastName});       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+
+  /*
   fire.database().ref().child('users/'+this.props.results[index].id).update({  //child has the path to refer to each object in the firebase database. Firebase stores data in JSON format
     "requesting": currentUserUID
-  });
-  } 
+  });*/
+} 
   
   retrieveRequests=(x)=>{
   
-    var id=x[0].id;
-    
-    var requests = [];
-/*
-   fire.database().ref().child('users/'+id).orderByKey('requesting').on('child_added', function(snapshot){
-     
-     requests = snapshot.val();
- 
-     console.log("i am requests array:", JSON.stringify(requests));
-  });
-*/
-
-  var query = fire.database().ref("users/"+id);
-  query.once("value").then(function(snapshot) {
-   requests = snapshot.child("requesting").val(); // {first:"Ada",last:"Lovelace"}
-    console.log("i am requests array:", requests );
-  });
   }
 
   render() {
@@ -123,31 +147,34 @@ sendRequest(index){
    {
      return(
        <div>
-       <h1> Hey, you have logged in as host. you will shortly see the list of requests</h1>
-       <p> {this.retrieveRequests(x)}</p>
-     <Grid container>
-     <Grid.Column width={16}>
-      <Segment.Group>
-      <Segment>
-      <Item.Group>
-      <Item>
-      <Item.Image size='tiny' src='/images/wireframe/image.png' />
+        {this.state.requests.length === 0? <h1>Hey {x[0].firstName}, you currently have no requests</h1>:
+       this.state.requests.map((request,index)=>(
+          <Grid key={index} container>
+          <Grid.Column width={16}>
+           <Segment.Group>
+           <Segment>
+           <Item.Group>
+           <Item>
+           <Item.Image size='tiny' src='/images/wireframe/image.png' />
+     
+           <Item.Content>
+             <Item.Header as='a'>{request.firstName} {request.lastName}</Item.Header>
+             <Item.Meta>Description</Item.Meta>
+             <Item.Description>
+               <Image src='/images/wireframe/short-paragraph.png' />
+             </Item.Description>
+             <Item.Extra>Additional Details</Item.Extra>
+           </Item.Content>
+         </Item>
+        
+        </Item.Group>
+        </Segment>
+        </Segment.Group>
+        </Grid.Column>
+        </Grid>
 
-      <Item.Content>
-        <Item.Header as='a'>Header</Item.Header>
-        <Item.Meta>Description</Item.Meta>
-        <Item.Description>
-          <Image src='/images/wireframe/short-paragraph.png' />
-        </Item.Description>
-        <Item.Extra>Additional Details</Item.Extra>
-      </Item.Content>
-    </Item>
-   
-   </Item.Group>
-   </Segment>
-   </Segment.Group>
-   </Grid.Column>
-   </Grid>
+       ))};
+     
     </div>
      )
    }
@@ -162,7 +189,7 @@ sendRequest(index){
                 <Card.Content>
                   <Card.Header>{user.firstName} {user.lastName}</Card.Header>
                   <Card.Description>Distance from you: {user.distance} m</Card.Description>
-                  <Button inverted color='green' onClick={() => { this.handleRequest(index) }}>Request a ride</Button>
+                  <Button color='green' onClick={() => { this.handleRequest(index) }}>Request a ride</Button>
                 </Card.Content>
               </Card>
             </Grid.Column>

@@ -4,7 +4,7 @@ import Links from './Links'
 const Navbar=(props)=>{
 
 return (
-<nav className="nav-wrapper grey darken-3 " >
+<nav className="ui inverted menu" >
 <Links {...props}/>   
 </nav>
 

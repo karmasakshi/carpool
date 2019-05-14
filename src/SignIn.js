@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import fire from './config/fire'; 
 import {Redirect} from 'react-router';
+import {Container, Form, Header} from 'semantic-ui-react';
 
 class SignIn extends Component{
 
@@ -54,25 +55,28 @@ class SignIn extends Component{
       }
          else {   
           return (
-              <div className="container">
-              <form className="white">
-              <h3>Sign In</h3>
-              <div>
-              {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
-              <label htmlFor="email">email</label>
-              <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
-              </div>
-              <div className="input">
-              <label htmlFor="password">password</label>
-              <input type="password" name='password' id="password" value={user.passwordd} onChange={this.handleChange}/>
-              </div>
-              <div>
-              <button onClick={this.onFormSubmit}>Login</button>
+            <Container>
            
-              </div>
+            <Form>
+            <Header as='h2'>Sign In</Header>
+
+            {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
             
-              </form>
-              </div>
+            <Form.Field>
+            <label htmlFor="email">email</label>
+            <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
+            </Form.Field>
+            
+            <Form.Field>
+            <label htmlFor="password">password</label>
+            <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
+            </Form.Field>
+           
+            <button className="ui button" onClick={this.onFormSubmit}>Login</button>    
+           
+            </Form>
+              
+            </Container>
     );
   }
 }

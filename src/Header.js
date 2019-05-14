@@ -31,7 +31,7 @@ class Header extends Component{
         //this.props.history.push("/users")
         
         fire.database().ref().child('users').orderByChild('userUID').once('value').then((snapshot)=> {
-          console.log(snapshot.val());  
+          console.log('users', snapshot.val());  
           let users = snapshot.val();
          
           for (let user in users) {
@@ -100,7 +100,7 @@ class Header extends Component{
           this.setState({
             users: newState, log: true, currentUser: usr
           })
-          console.log(this.state.currentUser[0].id);
+         // console.log(this.state.currentUser[0].id);
           localStorage.setItem('currentUser', JSON.stringify(this.state.currentUser));
           });
      } 

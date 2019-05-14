@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import "./index.css"
 import fire from './config/fire'
 import {Redirect} from 'react-router';
+import {Container, Form, Header} from 'semantic-ui-react';
 
 
 class CreateAccount extends Component {
@@ -53,25 +54,28 @@ render(){
       }
          else {   
         return (         
-            <div className="container">
-            <form className="white">
-            <h3>Sign Up</h3>
-            <div>
+            <Container>
+           
+            <Form>
+            <Header as='h2'>Sign Up</Header>
+
             {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
+            
+            <Form.Field>
             <label htmlFor="email">email</label>
             <input type="email" name='email' id="email" value={user.email} onChange={this.handleChange}/>
-            </div>
-            <div className="input">
+            </Form.Field>
+            
+            <Form.Field>
             <label htmlFor="password">password</label>
             <input type="password" name='password' id="password" value={user.password} onChange={this.handleChange}/>
-            </div>
-            <div>
-            <button onClick={this.onFormSubmit}>Create Account</button>    
-            </div>
-
-            </form>
+            </Form.Field>
+           
+            <button className="ui primary button" onClick={this.onFormSubmit}>Create Account</button>    
+           
+            </Form>
               
-            </div>
+            </Container>
     );}
         }
 
