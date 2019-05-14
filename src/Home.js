@@ -6,7 +6,7 @@ class Home extends Component {
   
   render() {
     return (
-    <Link class="button btn" to="/signup">Join Now</Link>
+    <Link className="ui green button" id="style" to="/signup">Join Now</Link>
     );
   }
 }
