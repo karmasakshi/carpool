@@ -22,7 +22,7 @@ class SignIn extends Component{
     user.preventDefault();
 
     fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {     
-            var errorCode = error.code;
+           
             var errorMessage = error.message;
 
             var errors = '';
@@ -47,7 +47,7 @@ class SignIn extends Component{
 
     render(){
       const {user} = this.state;
-      console.log(1);
+     
       if (this.props.log) {   
         return(
            <Redirect to={"/users"}  /> 

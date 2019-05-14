@@ -19,14 +19,13 @@ class CreateAccount extends Component {
 
     user.preventDefault(); 
     fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error)=> {
-        // Handle Errors here.
-        //var errorCode = error.code;
+        
         var errorMessage = error.message;
         var errors = '';
         errors = errorMessage;
        
         this.setState({errors: errors});
-        // ...
+        
       });
    
           console.log(this.state.loggedIn);
@@ -59,7 +58,7 @@ render(){
             <Form>
             <Header as='h2'>Sign Up</Header>
 
-            {this.state.errors!== ''?<p id='error'>Error: {this.state.errors}</p>:''}
+            {this.state.errors !== ''?<p id='error'>Error: {this.state.errors}</p>:''}
             
             <Form.Field>
             <label htmlFor="email">email</label>
