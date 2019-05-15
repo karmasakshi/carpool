@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
-import { Grid, Image, Card, Icon, Button, Item, Segment} from 'semantic-ui-react'
+import { Grid, Image, Card, Button, Item, Segment} from 'semantic-ui-react'
 import fire from './config/fire'
 
 class Results extends Component {
@@ -12,40 +12,19 @@ class Results extends Component {
 
     super(props);
 
-    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests:[], requestSendRecieve: false};
+    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests:[],acceptRiderUID :undefined};
   }
 
 componentDidMount() {
  console.log(" i am componentdidmount()");
- 
+
  var x = JSON.parse(localStorage.getItem('currentUser'));
- var id=x[0].id;
- 
- var requests = [];
 
-let newState = [];
+ if(x[0].role==="host"){
+  this.retrieveRequests();
+ }
 
-if(x[0].role==="host"){
-var query = fire.database().ref("users/"+id+'/requesting');
-query.once("value").then((snapshot)=> {
-requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
- console.log("i am requests array:", (requests) );
- for (let request in requests) {
-  newState.push({
-    id: request,
-    uid:requests[request].uid,
-    firstName:requests[request].firstName,
-    lastName:requests[request].lastName
-  
-  });
-}
-
- console.log("newState",newState);
- this.setState({requests:newState});
- 
-});
-}
-console.log(this.state.requests);
+ console.log(this.state.requests);
  if(localStorage.getItem('currentUser') === ''){
   this.componentDidUpdate();
  } 
@@ -56,7 +35,7 @@ console.log(this.state.requests);
 }
 
 componentDidUpdate() {
- 
+
   if (this.state.currentUser === undefined) {
 
     this.setState({currentUser: this.props.currentUser});
@@ -69,6 +48,23 @@ componentDidUpdate() {
     this.setState({results: this.props.results, currentUser: this.props.currentUser});
 
   }
+  
+  if(this.state.acceptRiderUID!==undefined){
+ 
+  var currentUserUID=this.props.currentUser[0].uid;
+  var currentUserFirstName=this.props.currentUser[0].firstName;
+  var currentUserLastName=this.props.currentUser[0].lastName;
+
+   let riderObj = this.state.results.find(o => o.uid === this.state.acceptRiderUID);
+   
+   var riderId =riderObj.id;
+
+   
+   const accept=fire.database().ref(`users/`+riderId+'/accepted');
+   accept.push({uid:currentUserUID,firstName:currentUserFirstName,lastName:currentUserLastName});
+  }
+  
+
 }
 
 sendRequest(index){
@@ -83,35 +79,51 @@ sendRequest(index){
 
   requestsObj.push({uid: currentUserUID, firstName:currentUserFirstName, lastName:currentUserLastName});       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
 
-   this.setState({requestSendRecieve: true});
-} 
+   //this.setState({requestSendRecieve: true});
+ } 
   
-  retrieveRequests=(x)=>{
-  
+  retrieveRequests=()=>{
+   
+ var x = JSON.parse(localStorage.getItem('currentUser'));
+ var id=x[0].id;
+ 
+ var requests = [];
+
+let newState = [];
+
+var query = fire.database().ref("users/"+id+'/requesting');
+query.once("value").then((snapshot)=> {
+requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
+ console.log("i am requests array:", (requests) );
+ for (let request in requests) {
+  newState.push({
+    id: request,
+    uid:requests[request].uid,
+    firstName:requests[request].firstName,
+    lastName:requests[request].lastName
+  });
+
+  console.log("newState",newState);
+ this.setState({requests:newState});
   }
+ });
+}
 
   acceptRequest=(index)=>{
-    var requests = [];
+    var acceptedRiderUID=undefined;
 
     var currentUserUID=this.props.currentUser[0].id;
-    var currentUserFirstName=this.props.currentUser[0].firstName;
-    var currentUserLastName=this.props.currentUser[0].lastName;
-  console.log(this.state.requests[index].id)
-  console.log("currentuserUID",currentUserUID);
-  console.log("iddd",this.state.requests);
+    
+    console.log(this.state.requests[index].id)
   
-  const query = fire.database().ref(`users/`+this.props.currentUser[0].id+'/requesting/'+this.state.requests[index].id+'/uid');
-  //var query = fire.database().ref("users/"+this.state.requests[index].id+'/requesting');
-  query.once("value").then((snapshot)=> {
-  requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
- console.log("i am requests array:", requests );
-});
-
-fire.database().ref("users").equalTo(query).once('value').then((snapshot)=>{
-         console.log('//////????', snapshot.val());
-});
- 
-  // acceptRequests.push({uid: currentUserUID, firstName:currentUserFirstName, lastName:currentUserLastName});       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    const queryRider = fire.database().ref(`users/`+currentUserUID+'/requesting/'+this.state.requests[index].id+'/uid');
+   
+    queryRider.once("value").then((snapshot)=> {
+    acceptedRiderUID = snapshot.val();       // {first:"Ada",last:"Lovelace"}child("requesting").
+    console.log("i am rider uid:", acceptedRiderUID );
+    console.log("test",typeof(acceptedRiderUID));
+    this.setState({acceptRiderUID:acceptedRiderUID});
+  });
 }
 
   render() {
@@ -119,7 +131,6 @@ fire.database().ref("users").equalTo(query).once('value').then((snapshot)=>{
    console.log("other users:", JSON.stringify(this.state.results));
   
    var x = JSON.parse(localStorage.getItem('currentUser')); 
-   console.log("role", x[0].role);
    
    if(x[0].role === 'host')
    {
@@ -143,6 +154,7 @@ fire.database().ref("users").equalTo(query).once('value').then((snapshot)=>{
              </Item.Description>
              <Item.Extra>Additional Details</Item.Extra>
              <Button color='green' onClick={()=>{this.acceptRequest(index)}}>Accept Request</Button>
+             <Button color='red' onClick={()=>{this.declineRequest()}}>Decline Request</Button>
            </Item.Content>  
          </Item>
         </Item.Group>
@@ -169,7 +181,7 @@ fire.database().ref("users").equalTo(query).once('value').then((snapshot)=>{
                   <Card.Description>Distance from you: {user.distance} m</Card.Description>
                   <Button color='green' onClick={() => { this.sendRequest(index) }}>Request a ride</Button>
                 </Card.Content>
-              {this.state.requestSendRecieve === true? <p>your request has been sent!!!</p>: ''}
+              
               </Card>
             </Grid.Column>
           ))}
@@ -181,3 +193,5 @@ fire.database().ref("users").equalTo(query).once('value').then((snapshot)=>{
 }
 
 export default Results;
+
+//{this.state.requestSendRecieve[index] === true? <p>your request has been sent!!!</p>: ''}

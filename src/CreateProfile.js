@@ -71,14 +71,27 @@ class CreateProfile extends Component{
    console.log(this.state.user);
  }
 
-  onInputChange = (user) => {
+  onInputChange = (e) => {
     console.log(this.state.user);
-    user.preventDefault();
+    e.preventDefault();
     const newUser = this.state.user;
-     newUser[user.target.name] = user.target.value; 
+     newUser[e.target.name] = e.target.value; 
+   console.log('each name in form', newUser[e.target.name]);
+     console.log('newUser', newUser);
      this.setState({
         user: newUser
      })
+     
+    {this.validateField(newUser)}; //function call
+  }
+
+  validateField=(newUser)=>{
+   
+   
+    console.log("i am checking whether i am getting a value", newUser);
+
+    var firstNameValid = (newUser.firstName.matches("[a-zA-Z]+")==true)? true: false;
+    console.log(firstNameValid);
   }
 
   getLocation = ()=>{

@@ -68,7 +68,7 @@ class Header extends Component{
            function deg2rad(deg) {
             return deg * (Math.PI/180)
           }
-
+          
           let results = [];
             for(var i=0;i<otherUsers.length;i++){
               var R = 6371; // km 
@@ -88,7 +88,7 @@ class Header extends Component{
             console.log("C:",c);
             console.log("D", d);
               
-            console.log(results.push({id: otherUsers[i].id, uid: otherUsers[i].userUID, firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d, role: otherUsers[i].role}));
+            console.log(results.push({id: otherUsers[i].id, uid: otherUsers[i].uid, firstName: otherUsers[i].firstName, lastName: otherUsers[i].lastName, distance: d, role: otherUsers[i].role}));
             console.log("Results ",results);
             console.log("Testdd",this.state.results);
           }
