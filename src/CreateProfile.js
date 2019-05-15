@@ -90,8 +90,8 @@ class CreateProfile extends Component{
    
     console.log("i am checking whether i am getting a value", newUser);
 
-    var firstNameValid = (newUser.firstName.matches("[a-zA-Z]+")==true)? true: false;
-    console.log(firstNameValid);
+   // var firstNameValid = (newUser.firstName.matches("^[a-zA-Z]*$")==true)? true: false;
+   // console.log(firstNameValid);
   }
 
   getLocation = ()=>{

@@ -63,7 +63,6 @@ componentDidUpdate() {
    const accept=fire.database().ref(`users/`+riderId+'/accepted');
    accept.push({uid:currentUserUID,firstName:currentUserFirstName,lastName:currentUserLastName});
   }
-  
 
 }
 
