@@ -162,7 +162,7 @@ requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
         </Grid.Column>
         </Grid>
 
-       ))};
+       ))}
      
     </div>
      )

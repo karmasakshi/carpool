@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Segment, Grid, Image, Form, Radio} from 'semantic-ui-react';
 import fire from './config/fire';
 import {Redirect} from 'react-router';
+import { register } from './serviceWorker';
 
 class CreateProfile extends Component{
  constructor(){
@@ -18,9 +19,11 @@ class CreateProfile extends Component{
       lng: null
     },
     disabled: false, 
-    allowed: "loading"
+    allowed: "loading",
+    firstNameValid: null,
+    lastNameValid: null, 
+    profileCreated: false
   }   
-  
  }
 
  componentDidMount(){
@@ -50,7 +53,9 @@ class CreateProfile extends Component{
   onFormSubmit = (e) => {
     
     e.preventDefault();  //we need to prevent the default behavior of the form, which if we don't will cause the page to refresh when you hit the submit button
-       
+    
+    if(!this.state.disabled)
+    { 
     const {user} = this.state;
 
     const usersRef = fire.database().ref(`users`);
@@ -66,8 +71,10 @@ class CreateProfile extends Component{
     }
 
     usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-    this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0, disabled: true}); //to empty the object after use, so that an additional object can be added
-  
+    this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0}); //to empty the object after use, so that an additional object can be added
+    this.setState({profileCreated: true});
+    console.log("PROFILE CREATE", this.state.profileCreated);
+  }
    console.log(this.state.user);
  }
 
@@ -87,12 +94,17 @@ class CreateProfile extends Component{
 
   validateField=(newUser)=>{
    
-   
-    console.log("i am checking whether i am getting a value", newUser);
+    var fnValid, lnValid;
+    
+    fnValid = /^[a-z]+$/i.test(newUser.firstName)?' ':"First name should only contain alpabets (a-z) and (A-Z)";
+    
+    lnValid = /^[a-z]+$/i.test(newUser.lastName)?' ':"Last name should only contain alphabets (a-z) and (A-Z)"; 
 
-   // var firstNameValid = (newUser.firstName.matches("^[a-zA-Z]*$")==true)? true: false;
-   // console.log(firstNameValid);
-  }
+      this.setState({
+        firstNameValid: fnValid,
+        lastNameValid: lnValid
+      });
+}
 
   getLocation = ()=>{
       if (navigator.geolocation) {
@@ -143,7 +155,9 @@ class CreateProfile extends Component{
                <Segment>
                <Form>
                 <Form.Group widths='equal'>
+                  {this.state.firstNameValid}
                   <Form.Input fluid name='firstName' type="text" onChange={this.onInputChange} value={user.firstName} label='First name' placeholder='First name' required/>
+                  {this.state.lastNameValid}
                   <Form.Input fluid name='lastName' type="text" onChange={this.onInputChange} value={user.lastName} label='Last name' placeholder='Last name' required/>
                   </Form.Group>
                   
@@ -176,7 +190,7 @@ class CreateProfile extends Component{
         
                   <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
         
-                <Form.Button type="submit" onClick={this.onFormSubmit} >Submit</Form.Button>
+                <Form.Button type="submit" disabled={(!(this.state.firstNameValid === ' ' && this.state.lastNameValid === ' '&& this.state.user.lng!==null && this.state.user.lat!==null && this.state.user.role!==null && !(this.state.profileCreated)))} onClick={this.onFormSubmit} >Submit</Form.Button>
                 </Form>
                 </Segment>
                
@@ -189,4 +203,4 @@ class CreateProfile extends Component{
 }
 
 export default CreateProfile; 
-//against form button disabled={this.state.disabled},  if(!this.state.disabled)
+//against form button,  
