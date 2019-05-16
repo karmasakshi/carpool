@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
 body {
   background-color: rgb(255, 255, 255);
   padding: 20px;
   margin: 0;
+}
+
+p{
+  font-family: 'Pacifico', cursive;
+  font-size: 36px;
+  text-align: center;
+  font-weight: bold; 
+  color: rgb(83,175,80);
 }
 
 ul.header li {
@@ -14,7 +24,7 @@ ul.header {
   padding: 0;
 }
 
-h1,p, ul, li {
+h1, ul, li {
   font-family: sans-serif;
 }
 ul.header li a {

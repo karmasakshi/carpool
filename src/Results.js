@@ -12,7 +12,7 @@ class Results extends Component {
 
     super(props);
 
-    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests:[],acceptRiderUID :undefined};
+    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests:[], acceptRiderUID :undefined};
   }
 
 componentDidMount() {
@@ -92,7 +92,7 @@ let newState = [];
 
 var query = fire.database().ref("users/"+id+'/requesting');
 query.once("value").then((snapshot)=> {
-requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
+requests = snapshot.val(); 
  console.log("i am requests array:", (requests) );
  for (let request in requests) {
   newState.push({
@@ -118,12 +118,30 @@ requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
     const queryRider = fire.database().ref(`users/`+currentUserUID+'/requesting/'+this.state.requests[index].id+'/uid');
    
     queryRider.once("value").then((snapshot)=> {
-    acceptedRiderUID = snapshot.val();       // {first:"Ada",last:"Lovelace"}child("requesting").
+    acceptedRiderUID = snapshot.val();       
     console.log("i am rider uid:", acceptedRiderUID );
     console.log("test",typeof(acceptedRiderUID));
     this.setState({acceptRiderUID:acceptedRiderUID});
   });
 }
+
+  declineRequest=(index)=>{
+    
+    var currentUserUID=this.props.currentUser[0].id;
+    fire.database().ref(`users/`+currentUserUID+'/requesting/'+this.state.requests[index].id).remove();
+
+    var arr = this.state.requests;
+
+    var rider_index = arr.findIndex(o => o.id === this.state.requests[index].id);
+
+    delete arr[rider_index];    //delete rider object from array
+
+    this.setState({
+      requests: arr
+    });
+
+    console.log('Requests array', JSON.stringify(this.state.requests));
+  }
 
   render() {
    console.log(3);
@@ -153,7 +171,7 @@ requests = snapshot.val(); // {first:"Ada",last:"Lovelace"}child("requesting").
              </Item.Description>
              <Item.Extra>Additional Details</Item.Extra>
              <Button color='green' onClick={()=>{this.acceptRequest(index)}}>Accept Request</Button>
-             <Button color='red' onClick={()=>{this.declineRequest()}}>Decline Request</Button>
+             <Button color='red' onClick={()=>{this.declineRequest(index)}}>Decline Request</Button>
            </Item.Content>  
          </Item>
         </Item.Group>
