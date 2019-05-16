@@ -132,10 +132,11 @@ requests = snapshot.val();
 
     var arr = this.state.requests;
 
-    var rider_index = arr.findIndex(o => o.id === this.state.requests[index].id);
+    var rider_index= arr.findIndex(o => o.id === this.state.requests[index].id);
 
-    delete arr[rider_index];    //delete rider object from array
-
+    arr.splice(rider_index, 1);
+    console.log("arr after splicing", JSON.stringify(arr)); 
+   
     this.setState({
       requests: arr
     });
