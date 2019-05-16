@@ -6,9 +6,9 @@ import "./index.css";
 import '../node_modules/semantic-ui-css/semantic.min.css';
 
 ReactDOM.render(
-    <Header />, 
-    document.getElementById("root")
-  );
+  <Header />,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
