@@ -1,15 +1,15 @@
 import React from 'react'
 import Links from './Links'
 
-const Navbar=(props)=>{
+const Navbar = (props) => {
 
-return (
-<nav className="ui inverted menu" >
-<Links {...props}/>   
-</nav>
+    return (
+        <nav className="ui inverted menu" >
+            <Links {...props} />
+        </nav>
 
 
-)
+    )
 
 
 }
