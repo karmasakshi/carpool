@@ -12,7 +12,7 @@ class Results extends Component {
 
     super(props);
 
-    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests: [], acceptRiderUID: undefined };
+    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests: [], acceptRiderUID: undefined, sendReq: [], acceptReq: [] };
   }
 
   componentDidMount() {
@@ -77,7 +77,8 @@ class Results extends Component {
 
     requestsObj.push({ uid: currentUserUID, firstName: currentUserFirstName, lastName: currentUserLastName });       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
 
-    //this.setState({requestSendRecieve: true});
+    this.state.sendReq[index] = true;
+    this.forceUpdate();
   }
 
   retrieveRequests = () => {
@@ -122,6 +123,9 @@ class Results extends Component {
       console.log("test", typeof (acceptedRiderUID));
       this.setState({ acceptRiderUID: acceptedRiderUID });
     });
+
+    this.state.acceptReq[index] = true;
+    this.forceUpdate();
   }
 
   declineRequest = (index) => {
@@ -161,7 +165,6 @@ class Results extends Component {
                       <Item.Group>
                         <Item>
                           <Item.Image size='tiny' src='/images/wireframe/image.png' />
-
                           <Item.Content>
                             <Item.Header as='a'>{request.firstName} {request.lastName}</Item.Header>
                             <Item.Meta>Description</Item.Meta>
@@ -171,6 +174,7 @@ class Results extends Component {
                             <Item.Extra>Additional Details</Item.Extra>
                             <Button color='green' onClick={() => { this.acceptRequest(index) }}>Accept Request</Button>
                             <Button color='red' onClick={() => { this.declineRequest(index) }}>Decline Request</Button>
+                            <p className='req'>{this.state.acceptReq[index]? 'Your accept request has been sent': null}</p>
                           </Item.Content>
                         </Item>
                       </Item.Group>
@@ -194,8 +198,12 @@ class Results extends Component {
                   <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                   <Card.Content>
                     <Card.Header>{user.firstName} {user.lastName}</Card.Header>
-                    <Card.Description>Distance from you: {user.distance} m</Card.Description>
+                    <Card.Description className="description">Distance from you: {user.distance} m</Card.Description>
+                    <br />
                     <Button color='green' onClick={() => { this.sendRequest(index) }}>Request a ride</Button>
+                    <br />
+                    <br />
+                    <p className='req'>{this.state.sendReq[index]? <p><i className="check icon"></i>Your request has been sent</p>: null}</p>
                   </Card.Content>
 
                 </Card>
@@ -211,3 +219,4 @@ class Results extends Component {
 export default Results;
 
 //{this.state.requestSendRecieve[index] === true? <p>your request has been sent!!!</p>: ''}
+//return null to prevent rendering

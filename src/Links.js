@@ -26,7 +26,6 @@ const Links = (props) => {
             <NavLink to='/' className="brand-logo">Carpool</NavLink>
             <ul className="right menu">
                 <li><NavLink to='/'>Home</NavLink></li>
-                <li><NavLink to='/about'>About</NavLink></li>
                 {(props.log) ?
                     <li><NavLink to='/results'>Plan a Journey</NavLink></li> :
                     <li><NavLink to='/signup'>Sign Up</NavLink></li>

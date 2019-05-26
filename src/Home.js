@@ -9,7 +9,7 @@ class Home extends Component {
       <div>
         <Link className="ui green button" id="style" to="/signup">Join Now</Link>
         <br />
-        <p>Join Hands for a Greener Tomorrow!</p>
+        <p id="tagline">Join Hands for a Greener Tomorrow!</p>
       </div>
     );
   }

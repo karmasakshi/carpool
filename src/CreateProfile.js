@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Grid, Image, Form, Radio } from 'semantic-ui-react';
+import { Segment, Grid, Image, Form, Radio, Loader, Dimmer } from 'semantic-ui-react';
 import fire from './config/fire';
 import { Redirect } from 'react-router';
 import { register } from './serviceWorker';
@@ -29,6 +29,14 @@ class CreateProfile extends Component {
   componentDidMount() {
     var uid = localStorage.getItem('appTokenKey');
 
+    var email = '';
+
+    fire.auth().onAuthStateChanged((usr)=>{
+      if (usr) {
+       email = usr.email; 
+      }
+    });
+
     fire.database().ref().child('users').orderByChild('userUID').equalTo(uid).once('value').then((snapshot) => {
 
       var y = snapshot.val();
@@ -43,7 +51,8 @@ class CreateProfile extends Component {
       }
       catch (e) {
         this.setState({
-          allowed: "form"
+          allowed: "form",    
+          email: email            //to pre-populate the form with email address
         })
       }
     });
@@ -62,16 +71,17 @@ class CreateProfile extends Component {
         userUID: localStorage.getItem('appTokenKey'),
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
+        email: this.state.email,
         role: user.role,
         lat: user.lat,
         lng: user.lng
       }
 
       usersRef.push(newUser);       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-      this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0 }); //to empty the object after use, so that an additional object can be added
-      this.setState({ profileCreated: true });
+      
+      this.setState({ firstName: '', lastName: '', email: '', role: '', lat: 0, lng: 0, profileCreated: true }); //to empty the object after use, so that an additional object can be added
       console.log("PROFILE CREATE", this.state.profileCreated);
+
     }
     console.log(this.state.user);
   }
@@ -132,13 +142,19 @@ class CreateProfile extends Component {
     const { user } = this.state;
     if (this.state.allowed === 'loading') {
       return (
-        <h1>Loading...</h1>
+        <div>
+        <Dimmer active inverted>
+        <Loader size='large' id="loader">Loading</Loader>
+        </Dimmer>
+        </div>
       )
     }
     else if (this.state.allowed === "home") {
       return (<Redirect to={'/results'} />)
     }
     else if (this.state.allowed === "form") {
+    
+
       return (
         <div>
           <Grid>
@@ -159,7 +175,7 @@ class CreateProfile extends Component {
                   </Form.Group>
 
                   <Form.Field>
-                    <Form.Input name='email' onChange={this.onInputChange} type="email" value={user.email} label='Email' placeholder='joe@schmoe.com' required />
+                    <Form.Input value={this.state.email} label='Email' placeholder='joe@schmoe.com' required />
                   </Form.Field>
 
                   <Form.Group inline>
@@ -202,3 +218,7 @@ class CreateProfile extends Component {
 
 export default CreateProfile;
 //against form button,
+
+// <Form.Field>
+// <Form.Input name='email' onChange={this.onInputChange} type="email" value={user.email} label='Email' placeholder='joe@schmoe.com' required />
+// </Form.Field>
