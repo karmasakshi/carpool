@@ -1,7 +1,5 @@
 import React from 'react'
 import { Link} from 'react-router-dom'
-import Links from './Links'
-import SignIn from './SignIn';
 import LinksSignOut from './LinksSignOut'
 
 const HomeHost=()=>{
