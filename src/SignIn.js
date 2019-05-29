@@ -42,30 +42,46 @@ class SignIn extends Component {
 
   render() {
 
-    return (
-      <Container>
+    if (this.props.authUser) {
 
-        <Form>
-          <Header as='h2'>Sign In</Header>
+      if (this.props.appUser) {
 
-          {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+        return <Redirect to="/dashboard"></Redirect>
 
-          <Form.Field>
-            <label htmlFor="email">email</label>
-            <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
-          </Form.Field>
+      } else {
 
-          <Form.Field>
-            <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
-          </Form.Field>
+        return <Redirect to="/create-profile"></Redirect>
 
-          <button className="ui button" onClick={this.signInUserWithEmailAndPassword}>Login</button>
+      }
 
-        </Form>
+    } else {
 
-      </Container>
-    );
+      return (
+        <Container>
+
+          <Form>
+            <Header as='h2'>Sign In</Header>
+
+            {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+
+            <Form.Field>
+              <label htmlFor="email">email</label>
+              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+            </Form.Field>
+
+            <Form.Field>
+              <label htmlFor="password">password</label>
+              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+            </Form.Field>
+
+            <button className="ui button" onClick={this.signInUserWithEmailAndPassword}>Login</button>
+
+          </Form>
+
+        </Container>
+      );
+
+    }
 
   }
 

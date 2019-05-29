@@ -27,7 +27,7 @@ class App extends Component {
 
       var result = [];
 
-      for (let user of allUsers) {
+      for (let user in allUsers) {
 
         if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
 
@@ -82,7 +82,7 @@ class App extends Component {
 
         this.setState({ authUser: authUser });
 
-        fire.database().ref('/users/' + authUser.uid).once('value').then(function (snapshot) {
+        fire.database().ref('/users/' + authUser.uid).once('value').then((snapshot) => {
 
           var appUser = (snapshot.val() || null);
 
