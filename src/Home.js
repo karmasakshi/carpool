@@ -12,7 +12,7 @@ class Home extends Component {
     
     return (
       <div>
-        {this.state.authUser ? signIntoDashBoard : signUp}
+        {this.props.authUser ? signIntoDashBoard : signUp}
         <br />
         <p id="tagline">Join Hands for a Greener Tomorrow!</p>
       </div>
