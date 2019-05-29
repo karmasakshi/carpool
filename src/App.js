@@ -76,11 +76,9 @@ class App extends Component {
 
     fire.auth().onAuthStateChanged((authUser) => {
 
-      console.log('Auth state changed: ', authUser);
+      console.log(authUser);
 
       if (authUser) {
-
-        this.setState({ authUser: authUser });
 
         fire.database().ref('/users/' + authUser.uid).once('value').then((snapshot) => {
 
@@ -88,11 +86,29 @@ class App extends Component {
 
           if (!appUser) {
 
-            return <Redirect to='/create-profile' />
+            this.setState({ authUser: authUser });
 
           } else {
 
-            this.getAndUpdateAllUsers(appUser);
+            fire.database().ref('/users').once('value').then((snapshot) => {
+
+              var allUsers = snapshot.val();
+
+              var result = [];
+
+              for (let user in allUsers) {
+
+                if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
+
+                  result.push(user);
+
+                }
+
+              }
+
+              this.setState({ authUser: authUser, appUser: appUser, otherUsers: result });
+
+            });
 
           }
 
@@ -116,7 +132,7 @@ class App extends Component {
           <Navbar authUser={this.state.authUser} />
           <Switch>
             <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
-            <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
+            <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} />} />
             <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
