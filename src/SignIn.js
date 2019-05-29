@@ -14,30 +14,29 @@ class SignIn extends Component {
     isLoading: false
   }
 
-  onFormSubmit = (user) => {
+  signInUserWithEmailAndPassword = (event) => {
 
-    user.preventDefault();
+    if (!this.state.isLoading) {
 
-    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+      fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error) => {
 
-      var errors = '';
+        this.setState({ errors: error.message });
 
-      errors = errorMessage;
+      });
 
-      this.setState({ errors: errors });
-    });
+    }
+
   }
 
-  handleChange = (user) => {
+  updateInputs = (event) => {
 
-    const newUser = this.state.user;
-    newUser[user.target.name] = user.target.value;
+    let stateUserCopy = this.state.user;
+
+    stateUserCopy[event.target.name] = event.target.value;
 
     this.setState({
-      newUser: user
-    })
+      user: stateUserCopy
+    });
 
   }
 
@@ -53,15 +52,15 @@ class SignIn extends Component {
 
           <Form.Field>
             <label htmlFor="email">email</label>
-            <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.handleChange} />
+            <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
           </Form.Field>
 
           <Form.Field>
             <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.handleChange} />
+            <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
           </Form.Field>
 
-          <button className="ui button" onClick={this.onFormSubmit}>Login</button>
+          <button className="ui button" onClick={this.signInUserWithEmailAndPassword}>Login</button>
 
         </Form>
 
