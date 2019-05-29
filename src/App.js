@@ -11,7 +11,7 @@ import fire from './config/fire';
 import Results from './Results';
 import { Redirect } from 'react-router-dom';
 
-class Header extends Component {
+class App extends Component {
 
   state = {
     authUser: null,
@@ -29,7 +29,7 @@ class Header extends Component {
 
       for (let user of allUsers) {
 
-        if (appUser.userUID !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
+        if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
 
           result.push(user);
 
@@ -82,7 +82,7 @@ class Header extends Component {
 
         this.setState({ authUser: authUser });
 
-        fire.database().ref('/users/' + authUser.userUID).once('value').then(function (snapshot) {
+        fire.database().ref('/users/' + authUser.uid).once('value').then(function (snapshot) {
 
           var appUser = (snapshot.val() || null);
 
@@ -130,4 +130,4 @@ class Header extends Component {
 
 }
 
-export default Header;
+export default App;
