@@ -116,7 +116,7 @@ class App extends Component {
           <Navbar authUser={this.state.authUser} />
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} />} />
+            <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} />} />
             <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
