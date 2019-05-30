@@ -23,9 +23,11 @@ class App extends Component {
 
     fire.database().ref('/users').once('value').then((snapshot) => {
 
-      var allUsers = snapshot.val();
+      let allUsers = snapshot.val();
 
-      var result = [];
+      let result = [];
+
+      console.log(allUsers);
 
       for (let user in allUsers) {
 
@@ -83,28 +85,31 @@ class App extends Component {
         fire.database().ref('/users/' + authUser.uid).once('value').then((snapshot) => {
 
           var appUser = (snapshot.val() || null);
-
+          console.log(appUser);
           if (!appUser) {
 
             this.setState({ authUser: authUser });
 
           } else {
-
             fire.database().ref('/users').once('value').then((snapshot) => {
 
-              var allUsers = snapshot.val();
-
+              let allUsers = snapshot.val();
               var result = [];
+              console.log(allUsers)
+              for (var user in allUsers) {
 
-              for (let user in allUsers) {
-
-                if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
-
-                  result.push(user);
+                var x = allUsers[user];
+                console.log(x.role);
+                console.log(appUser.id);
+                if (appUser.id !== x.id && appUser.role !== x.role && this.isCloseby(appUser.lat, appUser.lng, x.lat, x.lng, 200)) {
+                result.push(x);
+                  
 
                 }
 
               }
+
+              console.log(result);
 
               this.setState({ authUser: authUser, appUser: appUser, otherUsers: result });
 
@@ -133,7 +138,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
             <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
-            <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} />} />
+            <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} authUser={this.state.authUser} />} />
             <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <Route render={() => <h1>Page not found</h1>} />
