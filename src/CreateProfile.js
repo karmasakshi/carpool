@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Grid, Image, Form, Radio, Loader, Dimmer } from 'semantic-ui-react';
 import fire from './config/fire';
-import { Redirect } from 'react-router';
 
 class CreateProfile extends Component {
 
@@ -11,8 +10,7 @@ class CreateProfile extends Component {
       lastName: '',
       role: null,
       lat: null,
-      lng: null,
-      id: ''
+      lng: null, 
     },
     isLoading: false,
     isGeolocationLoading: false,
@@ -21,11 +19,7 @@ class CreateProfile extends Component {
 
   componentDidMount() {
 
-    if (this.props.currentUser) {
-
-      return <Redirect to='/create-profile' />
-
-    }
+   
 
   }
 
@@ -33,17 +27,16 @@ class CreateProfile extends Component {
 
     event.preventDefault();
 
-    if (!this.state.isLoading && this.state.isLocationAvailable) {
-
+    if (!this.state.isLoading) {
       this.setState({ isLoading: true });
-
-      fire.database().ref('users/' + this.props.authUser.userUID).set({
-        id: this.props.authUser.userUID,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        role: this.state.role,
-        lat: this.state.lat,
-        lng: this.state.lng
+      console.log(this.props.authUser.uid);
+      fire.database().ref('/users/' + this.props.authUser.uid).set({
+        firstName: this.state.user.firstName,
+        lastName: this.state.user.lastName,
+        role: this.state.user.role,
+        lat: this.state.user.lat,
+        lng: this.state.user.lng,
+        id: this.props.authUser.uid
       }).then((res) => {
 
         console.log(res);
@@ -71,14 +64,14 @@ class CreateProfile extends Component {
   getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
-        //console.log(position);
+        
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
-        //console.log(lat);
-        //console.log(lng);
+        console.log(lat);
+        console.log(lng);
 
         var state = this.state;
-        state.user.lat = lat;  //check whether this is fine?
+        state.user.lat = lat;  
         state.user.lng = lng;
 
         this.setState({
@@ -86,14 +79,14 @@ class CreateProfile extends Component {
         });
 
       }.bind(this));
-      //console.log(this.state.user);
+    
     } else {
       alert("Geolocation is not supported by this browser.");
     }
   }
 
   render() {
-
+   
     return (
       <div>
         <Grid>
@@ -112,10 +105,6 @@ class CreateProfile extends Component {
                   {this.state.lastNameValid}
                   <Form.Input fluid name='lastName' type="text" onChange={this.updateInputs} value={this.state.user.lastName} label='Last name' placeholder='Last name' required />
                 </Form.Group>
-
-                <Form.Field>
-                  <Form.Input value={this.state.email} label='Email' placeholder='joe@schmoe.com' required />
-                </Form.Field>
 
                 <Form.Group inline>
                   <label>User Role</label>
@@ -143,7 +132,7 @@ class CreateProfile extends Component {
 
                 <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
 
-                <Form.Button type="submit" disabled={(!(this.state.firstNameValid === ' ' && this.state.lastNameValid === ' ' && this.state.user.lng !== null && this.state.user.lat !== null && this.state.user.role !== null && !(this.state.profileCreated)))} onClick={this.createProfile} >Submit</Form.Button>
+                <Form.Button type="submit" disabled={this.state.user.firstName === '' || this.state.user.lastName=== '' || this.state.user.lng === null || this.state.user.lat === null || this.state.user.role === null} onClick={this.createProfile} >Submit</Form.Button>
               </Form>
             </Segment>
 
@@ -156,4 +145,5 @@ class CreateProfile extends Component {
 
 }
 
-export default CreateProfile;
+export default CreateProfile; 
+ 

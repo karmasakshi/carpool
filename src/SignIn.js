@@ -14,59 +14,76 @@ class SignIn extends Component {
     isLoading: false
   }
 
-  onFormSubmit = (user) => {
+  signInUserWithEmailAndPassword = (event) => {
 
-    user.preventDefault();
+    if (!this.state.isLoading) {
 
-    fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+        this.setState({ isLoading: true });
 
-      var errors = '';
+      fire.auth().signInWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error) => {
 
-      errors = errorMessage;
+        this.setState({ errors: error.message, isLoading: false });
 
-      this.setState({ errors: errors });
-    });
+      });
+
+    }
+
   }
 
-  handleChange = (user) => {
+  updateInputs = (event) => {
 
-    const newUser = this.state.user;
-    newUser[user.target.name] = user.target.value;
+    let stateUserCopy = this.state.user;
+
+    stateUserCopy[event.target.name] = event.target.value;
 
     this.setState({
-      newUser: user
-    })
+      user: stateUserCopy
+    });
 
   }
 
   render() {
 
-    return (
-      <Container>
+    if (this.props.authUser) {
 
-        <Form>
-          <Header as='h2'>Sign In</Header>
+      if (this.props.appUser) {
 
-          {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+        return <Redirect to="/dashboard" />
 
-          <Form.Field>
-            <label htmlFor="email">email</label>
-            <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.handleChange} />
-          </Form.Field>
+      } else {
 
-          <Form.Field>
-            <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.handleChange} />
-          </Form.Field>
+        return <Redirect to="/create-profile"></Redirect>
 
-          <button className="ui button" onClick={this.onFormSubmit}>Login</button>
+      }
 
-        </Form>
+    } else {
 
-      </Container>
-    );
+      return (
+        <Container>
+
+          <Form>
+            <Header as='h2'>Sign In</Header>
+
+            {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+
+            <Form.Field>
+              <label htmlFor="email">email</label>
+              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+            </Form.Field>
+
+            <Form.Field>
+              <label htmlFor="password">password</label>
+              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+            </Form.Field>
+
+            <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.signInUserWithEmailAndPassword}>Login</button>
+
+          </Form>
+
+        </Container>
+      );
+
+    }
 
   }
 

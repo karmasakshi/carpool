@@ -1,3 +1,22 @@
+/*
+class ProtectedRoute extends Component {
+  render() {
+    const { component: Component, ...props } = this.props
+
+    return (
+      <Route 
+        {...props} 
+        render={props => (
+          !this.state.appUser ?
+            <Component {...props} /> :
+            <Redirect to='/dashboard' />
+        )} 
+      />
+    )
+  }
+}
+*/
+
 import React, { Component } from 'react';
 import Home from './Home'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -9,9 +28,8 @@ import CreateProfile from './CreateProfile';
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import Results from './Results';
-import { Redirect } from 'react-router-dom';
 
-class Header extends Component {
+class App extends Component {
 
   state = {
     authUser: null,
@@ -19,32 +37,7 @@ class Header extends Component {
     otherUsers: []
   };
 
-  getAndUpdateAllUsers(appUser) {
-
-    fire.database().ref('/users').once('value').then((snapshot) => {
-
-      var allUsers = snapshot.val();
-
-      var result = [];
-
-      for (let user of allUsers) {
-
-        if (appUser.userUID !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
-
-          result.push(user);
-
-        }
-
-      }
-
-      this.setState({ appUser: appUser, otherUsers: result });
-
-    });
-
-  }
-
   deg2rad(deg) {
-
     return deg * (Math.PI / 180)
 
   }
@@ -69,6 +62,8 @@ class Header extends Component {
       return true;
 
     }
+    else 
+    return false;
 
   }
 
@@ -76,23 +71,42 @@ class Header extends Component {
 
     fire.auth().onAuthStateChanged((authUser) => {
 
-      console.log('Auth state changed: ', authUser);
+      console.log(authUser);
 
       if (authUser) {
 
-        this.setState({ authUser: authUser });
-
-        fire.database().ref('/users/' + authUser.userUID).once('value').then(function (snapshot) {
+        fire.database().ref('users/' + authUser.uid).once('value').then((snapshot) => {
 
           var appUser = (snapshot.val() || null);
 
           if (!appUser) {
 
-            return <Redirect to='/create-profile' />
+            this.setState({ authUser: authUser });
 
           } else {
 
-            this.getAndUpdateAllUsers(appUser);
+            //if user info. is in database
+            fire.database().ref('users').once('value').then((snapshot) => {
+
+              let allUsers = snapshot.val();
+
+              let result = [];
+
+              for (let user in allUsers) {
+                    
+                var x=allUsers[user];
+
+                if (appUser.role !== x.role && this.isCloseby(appUser.lat, appUser.lng, x.lat, x.lng, 200)) {
+                  
+                  result.push(x);
+
+                }
+     
+              }
+
+              this.setState({ authUser: authUser, appUser: appUser, otherUsers: result });
+
+            });
 
           }
 
@@ -115,8 +129,8 @@ class Header extends Component {
         <div className='Header'>
           <Navbar authUser={this.state.authUser} />
           <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} />} />
+            <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
+            <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} />} />
             <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
@@ -130,4 +144,4 @@ class Header extends Component {
 
 }
 
-export default Header;
+export default App;

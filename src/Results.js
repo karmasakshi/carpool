@@ -9,152 +9,89 @@ class Results extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { currentUser: this.props.currentUser, results: this.props.results, requests: [], acceptRiderUID: undefined, sendReq: [], acceptReq: [] };
-    //console.log(this.props);
+    this.state = {
+      usersRequests: [],
+      sendReq: [],
+      acceptReq: [],
+      requestMessageDisplay: null
+    };
   }
 
   componentDidMount() {
-    var x = [];
-    if (x.length > 0 && x[0].role === "host") {
+
+    if (this.props.appUser.role === 'host')
       this.retrieveRequests();
-    }
-
-    //console.log(this.state.requests);
-    
-  }
-
-  componentDidUpdate() {
-
-    if (this.state.currentUser === undefined) {
-
-      this.setState({ currentUser: this.props.currentUser });
-
-    }
-
-
-    if (this.state.results.length === 0 && this.state.currentUser !== undefined && this.props.results.length > 0) {
-
-      this.setState({ results: this.props.results, currentUser: this.props.currentUser });
-
-    }
-
-    if (this.state.acceptRiderUID !== undefined) {
-
-      var currentUserUID = this.props.currentUser[0].uid;
-      var currentUserFirstName = this.props.currentUser[0].firstName;
-      var currentUserLastName = this.props.currentUser[0].lastName;
-
-      let riderObj = this.state.results.find(o => o.uid === this.state.acceptRiderUID);
-
-      var riderId = riderObj.id;
-
-
-      const accept = fire.database().ref(`users/` + riderId + '/accepted');
-      accept.push({ uid: currentUserUID, firstName: currentUserFirstName, lastName: currentUserLastName });
-    }
 
   }
+
 
   sendRequest(index) {
+    
+    fire.database().ref(`users/` + this.props.results[index].id + '/requests').push({
+      id: this.props.appUser.id,
+      firstName: this.props.appUser.firstName,
+      lastName: this.props.appUser.lastName
+    });       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    
+    console.log(this.props.appUser.id);
 
-    var currentUserUID = this.props.currentUser[0].uid;
-    var currentUserFirstName = this.props.currentUser[0].firstName;
-    var currentUserLastName = this.props.currentUser[0].lastName;
-
-    //console.log("currentuserUID", currentUserUID);
-
-    const requestsObj = fire.database().ref(`users/` + this.props.results[index].id + '/requesting');
-
-    requestsObj.push({ uid: currentUserUID, firstName: currentUserFirstName, lastName: currentUserLastName });       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
-    var sr = this.state.sendReq;
-    sr[index].
-      this.setState({
-
-      })
-    //this.state.sendReq[index] = true;
-    //this.forceUpdate();
+    this.setState({
+      requestMessageDisplay: this.props.results[index].id
+    })
+    
   }
 
   retrieveRequests = () => {
 
-    var x = []; // JSON.parse(localStorage.getItem('currentUser'));
-    var id = x.length > 0 ? x[0].id : '';
+    var usersRequests = [];
 
-    var requests = [];
+    let newRequest = [];
 
-    let newState = [];
+    fire.database().ref("users/" + this.props.appUser.id + '/requests').once("value").then((snapshot) => {
+      usersRequests = snapshot.val();
 
-    var query = fire.database().ref("users/" + id + '/requesting');
-    query.once("value").then((snapshot) => {
-      requests = snapshot.val();
-      //console.log("i am requests array:", (requests));
-      for (let request in requests) {
-        newState.push({
-          id: request,
-          uid: requests[request].uid,
-          firstName: requests[request].firstName,
-          lastName: requests[request].lastName
+      for (let userRequest in usersRequests) {
+        newRequest.push({
+          id: usersRequests[userRequest].id,
+          firstName: usersRequests[userRequest].firstName,
+          lastName: usersRequests[userRequest].lastName
         });
 
-        //console.log("newState", newState);
-        this.setState({ requests: newState });
+        this.setState({ usersRequests: newRequest });
       }
     });
   }
 
   acceptRequest = (index) => {
-    var acceptedRiderUID = undefined;
 
-    var currentUserUID = this.props.currentUser[0].id;
-
-    //console.log(this.state.requests[index].id)
-
-    const queryRider = fire.database().ref(`users/` + currentUserUID + '/requesting/' + this.state.requests[index].id + '/uid');
-
-    queryRider.once("value").then((snapshot) => {
-      acceptedRiderUID = snapshot.val();
-      //console.log("i am rider uid:", acceptedRiderUID);
-      //console.log("test", typeof (acceptedRiderUID));
-      this.setState({ acceptRiderUID: acceptedRiderUID });
+    fire.database().ref(`users/` + this.state.usersRequests[index].id + '/accept').push({
+      id: this.props.appUser.id
     });
-
-    this.state.acceptReq[index] = true;
-    this.forceUpdate();
   }
 
   declineRequest = (index) => {
 
-    var currentUserUID = this.props.currentUser[0].id;
-    fire.database().ref(`users/` + currentUserUID + '/requesting/' + this.state.requests[index].id).remove();
+    fire.database().ref(`users/` + this.props.appUser.id + '/requests/' + this.state.usersRequests[index].id).remove();
 
-    var arr = this.state.requests;
+    var requests = this.state.usersRequests;
 
-    var rider_index = arr.findIndex(o => o.id === this.state.requests[index].id);
+    var deleteRiderIndex = requests.findIndex(o => o.id === this.state.usersRequests[index].id);
 
-    arr.splice(rider_index, 1);
-    //console.log("arr after splicing", JSON.stringify(arr));
+    requests.splice(deleteRiderIndex, 1);
 
     this.setState({
-      requests: arr
+      usersRequests: requests
     });
 
-    //console.log('Requests array', JSON.stringify(this.state.requests));
   }
 
   render() {
-    //console.log(3);
-    //console.log("other users:", JSON.stringify(this.state.results));
 
-    //var x = JSON.parse(localStorage.getItem('currentUser'));
-    //console.log("x ", x);
-    //console.log('curr', this.props.currentUser);
-    //console.log('', this.state.currentUser);
-var x = [];
-    if (x.length > 0 && x[0].role === 'host') {
+    if (this.props.appUser.role === 'host') {
       return (
         <div>
-          {this.state.requests.length === 0 ? <h1>Hey {x[0].firstName}, you currently have no requests</h1> :
-            this.state.requests.map((request, index) => (
+          {this.state.usersRequests.length === 0 ? <h1>Hey {this.props.appUser.firstName}, you currently have no requests</h1> :
+            this.state.usersRequests.map((request, index) => (
               <Grid key={index} container>
                 <Grid.Column width={16}>
                   <Segment.Group>
@@ -171,7 +108,6 @@ var x = [];
                             <Item.Extra>Additional Details</Item.Extra>
                             <Button color='green' onClick={() => { this.acceptRequest(index) }}>Accept Request</Button>
                             <Button color='red' onClick={() => { this.declineRequest(index) }}>Decline Request</Button>
-                            <p className='req'>{this.state.acceptReq[index] ? 'Your accept request has been sent' : null}</p>
                           </Item.Content>
                         </Item>
                       </Item.Group>
@@ -181,28 +117,28 @@ var x = [];
               </Grid>
 
             ))}
-
         </div>
       )
     }
-    else if (x[0].role === 'guest') {
+    else if (this.props.appUser.role === 'guest') {
       return (
         <div>
+          {console.log('results props', this.props.results)}
           <Grid container columns={3}>
+            {console.log("i am reslts props", this.props.results)}
             {this.props.results.map((user, index) => (
               <Grid.Column key={index}>
                 <Card>
                   <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                   <Card.Content>
                     <Card.Header>{user.firstName} {user.lastName}</Card.Header>
-                    <Card.Description className="description">Distance from you: {user.distance} m</Card.Description>
                     <br />
-                    <Button color='green' onClick={() => { this.sendRequest(index) }}>Request a ride</Button>
+                    <Button className='styling' color='green' onClick={() => { this.sendRequest(index) }}>Request a ride</Button>
+                    <br/>
                     <br />
-                    <br />
-                    <p className='req'>{this.state.sendReq[index] ? <p><i className="check icon"></i>Your request has been sent</p> : null}</p>
+                    { this.state.requestMessageDisplay === this.props.results[index].id? <p className='req'><i className="check icon"></i>Your request has been sent</p>: null}
+                   
                   </Card.Content>
-
                 </Card>
               </Grid.Column>
             ))}
@@ -213,7 +149,6 @@ var x = [];
   }
 }
 
+
 export default Results;
 
-//{this.state.requestSendRecieve[index] === true? <p>your request has been sent!!!</p>: ''}
-//return null to prevent rendering
