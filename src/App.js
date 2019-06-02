@@ -10,6 +10,7 @@ import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import Results from './Results';
 import { Redirect } from 'react-router-dom';
+import Host from './Host'
 
 class App extends Component {
 
@@ -18,30 +19,34 @@ class App extends Component {
     appUser: null,
     otherUsers: []
   };
-
+  componentDidUpdate(appUser) {
+    this.getAndUpdateAllUsers(appUser);
+    console.log(this.state.appUser);
+  }
   getAndUpdateAllUsers(appUser) {
+    if (appUser === null) {
+      fire.database().ref('/users').once('value').then((snapshot) => {
 
-    fire.database().ref('/users').once('value').then((snapshot) => {
+        let allUsers = snapshot.val();
 
-      let allUsers = snapshot.val();
+        let result = [];
 
-      let result = [];
+        console.log(allUsers);
 
-      console.log(allUsers);
+        for (let user in allUsers) {
 
-      for (let user in allUsers) {
+          if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
 
-        if (appUser.uid !== user.id && appUser.role !== user.role && this.isCloseby(appUser.lat, appUser.long, user.lat, user.long, 200)) {
+            result.push(user);
 
-          result.push(user);
+          }
 
         }
 
-      }
+        this.setState({ appUser: appUser, otherUsers: result });
 
-      this.setState({ appUser: appUser, otherUsers: result });
-
-    });
+      });
+    }
 
   }
 
@@ -85,7 +90,6 @@ class App extends Component {
         fire.database().ref('/users/' + authUser.uid).once('value').then((snapshot) => {
 
           var appUser = (snapshot.val() || null);
-          console.log(appUser);
           if (!appUser) {
 
             this.setState({ authUser: authUser });
@@ -102,8 +106,8 @@ class App extends Component {
                 console.log(x.role);
                 console.log(appUser.id);
                 if (appUser.id !== x.id && appUser.role !== x.role && this.isCloseby(appUser.lat, appUser.lng, x.lat, x.lng, 200)) {
-                result.push(x);
-                  
+                  result.push(x);
+
 
                 }
 
@@ -132,23 +136,25 @@ class App extends Component {
   render() {
 
     return (
-      <BrowserRouter>
-        <div className='Header'>
-          <Navbar authUser={this.state.authUser} />
-          <Switch>
-            <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
-            <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
-            <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} authUser={this.state.authUser} />} />
-            <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
-            <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
-            <Route render={() => <h1>Page not found</h1>} />
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <div className='Header'>
+        <Navbar authUser={this.state.authUser} />
+        <Switch>
+          <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
+          <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
+          <Route exact path='/dashboard' component={() => <Results appUser={this.state.appUser} results={this.state.otherUsers} authUser={this.state.authUser} />} />
+          <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} appUser={this.state.appUser} />} />
+          <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} update={this.componentDidUpdate.bind(this)} />} />
+          <Route exact path='/host' component={() => <Host authUser={this.state.authUser} appUser={this.state.appUser} results={this.state.otherUsers} />} />
+
+          <Route render={() => <h1>Page not found</h1>} />
+        </Switch>
+      </div>
     );
 
   }
-
 }
+
+
+
 
 export default App;

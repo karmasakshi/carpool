@@ -4,11 +4,11 @@ import * as serviceWorker from './serviceWorker';
 import "./index.css";
 import HomeHost from './HomeHost';
 import App from './App';
-
+import { BrowserRouter } from 'react-router-dom'
 ReactDOM.render(
-    <App />, 
-    document.getElementById("root")
-  );
+  <BrowserRouter><App /></BrowserRouter>,
+  document.getElementById("root")
+);
 
 
 
