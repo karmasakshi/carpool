@@ -15,8 +15,7 @@ class App extends Component {
 
   state = {
     authUser: null,
-    appUser: null,
-    otherUsers: []
+    appUser: null
   };
 
   componentDidMount() {
