@@ -6,13 +6,13 @@ import '../node_modules/semantic-ui-css/semantic.min.css';
 class HostDashboard extends Component {
 
 
-  render() {
+    render() {
 
-    return (
-        <h1> this is host dashboard </h1>
-    )
-  }
+        return (
+            <h1> this is host dashboard </h1>
+        )
+    }
 
 }
 
-export default HostDashboard;
+export default HostDashboard; 
