@@ -10,19 +10,18 @@ class GuestDashboard extends Component {
     super(props);
 
     this.state = {
-      pushAppUserRequest: null,
       results: [],
       requests: []
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let allUsers = [];
+    let usersID = [];
 
     fire.database().ref('users').once('value').then((snapshot) => {
 
       allUsers = snapshot.val();
-
     }).then(() => {
       var result = [];
 
@@ -34,34 +33,20 @@ class GuestDashboard extends Component {
           result.push(x);
         }
 
+        if (x.requests) {
+          if (x.requests.hasOwnProperty(this.props.appUser.id)) {
+            usersID.push(x.id);
+          }
+        }
       }
 
       this.setState({
-        results: result
+        results: result,
+        requests: usersID
       })
     }).catch(() => {
       console.log("error has occured")
     })
-
-    var arr = [];     
-      
-      fire.database().ref('users/'+this.state.results[0].id+'/requests'+this.props.appUser.id).then((snapshot)=>{
-        arr.push(this.state.results[0].id);
-
-        console.log("hey i am finally working", snapshot.val());
-         
-        
-        this.setState({
-          requests: arr
-        })
-        console.log("i am requests array", this.state.requests);
-      
-      
-      })
-
-    
-    
-   
   }
 
   isCloseby(xLat, xLong, yLat, yLong, delta) {
@@ -93,16 +78,16 @@ class GuestDashboard extends Component {
 
   }
 
-  sendRequest(index) {
+  sendRequest(hostId) {
 
     let requestsArr = this.state.requests;
 
-    fire.database().ref('users/' + this.state.results[index].id + '/requests/'+this.props.appUser.id).set({
+    fire.database().ref('users/' + hostId + '/requests/'+this.props.appUser.id).set({
       id: this.props.appUser.id,
       firstName: this.props.appUser.firstName,
       lastName: this.props.appUser.lastName
     }).then(() => {
-      requestsArr.push(this.state.results[index].id);
+      requestsArr.push(hostId);
 
       this.setState({
         requests: requestsArr
@@ -113,23 +98,21 @@ class GuestDashboard extends Component {
 
   }
 
-
   render() {
-
     return (
       <div>
         <Grid container columns={3}>
-          {this.state.results.map((host, index) => (
-            <Grid.Column key={index}>
+          {this.state.results.map((host) => (
+            <Grid.Column key={host.id}>
               <Card>
                 <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
                 <Card.Content>
                   <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                   <br />
-                  <Button className='styling' color='green' disabled={this.state.requests.indexOf(this.state.results[index].id) !== -1} onClick={() => { this.sendRequest(index) }}>Request a ride</Button>
+                  <Button className='styling' color='green' disabled={this.state.requests.indexOf(host.id) !== -1} onClick={() => { this.sendRequest(host.id) }}>Request a ride</Button>
                   <br />
                   <br />
-                  {this.state.requests.indexOf(this.state.results[index].id) !== -1 ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
+                  {this.state.requests.indexOf(host.id) !== -1 ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
                 </Card.Content>
               </Card>
             </Grid.Column>
