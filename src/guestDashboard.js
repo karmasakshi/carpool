@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
-import { Grid, Image, Card, Button, Item, Segment } from 'semantic-ui-react'
+import { Grid, Image, Card, Button } from 'semantic-ui-react'
 import fire from './config/fire'
+import { Form, Container } from 'semantic-ui-react';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import { SingleDatePicker } from 'react-dates';
+import { Icon } from 'semantic-ui-react'
 
 class GuestDashboard extends Component {
 
@@ -11,7 +16,9 @@ class GuestDashboard extends Component {
 
     this.state = {
       results: [],
-      requests: []
+      requests: [],
+      date: null,
+      focused: null
     };
   }
 
@@ -82,10 +89,11 @@ class GuestDashboard extends Component {
 
     let requestsArr = this.state.requests;
 
-    fire.database().ref('users/' + hostId + '/requests/'+this.props.appUser.id).set({
+    fire.database().ref('users/' + hostId + '/requests/' + this.props.appUser.id).set({
       id: this.props.appUser.id,
       firstName: this.props.appUser.firstName,
-      lastName: this.props.appUser.lastName
+      lastName: this.props.appUser.lastName,
+      dateOfJourney: String(this.state.date._d)
     }).then(() => {
       requestsArr.push(hostId);
 
@@ -98,10 +106,41 @@ class GuestDashboard extends Component {
 
   }
 
+  handleDateChange(date) {
+
+    this.setState({
+      date: date
+    });
+
+  }
+
   render() {
     return (
       <div>
-        <Grid container columns={3}>
+         <Container>
+          <Form.Group>
+            <label name="departureDate">Departure Date: </label>
+            <SingleDatePicker
+              // showClearDate={true}
+              customInputIcon={
+                <Icon name="calendar alternate outline" size='big' />
+              }
+              inputIconPosition="after"
+              small={true}
+              block={false}
+              numberOfMonths={1}
+              date={this.state.date}
+              onDateChange={date => this.handleDateChange(date)}
+              focused={this.state.focused}
+              onFocusChange={({ focused }) =>
+                this.setState({ focused })
+              }
+              openDirection="down"
+              hideKeyboardShortcutsPanel={true}
+            />
+          </Form.Group>
+          <br />
+        <Grid columns={4}>
           {this.state.results.map((host) => (
             <Grid.Column key={host.id}>
               <Card>
@@ -118,6 +157,7 @@ class GuestDashboard extends Component {
             </Grid.Column>
           ))}
         </Grid>
+        </Container>
       </div>
     )
   }
