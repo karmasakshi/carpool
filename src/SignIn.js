@@ -4,7 +4,6 @@ import { Redirect } from 'react-router';
 import { Container, Form, Header } from 'semantic-ui-react';
 
 class SignIn extends Component {
-
   state = {
     user: {
       email: '',
@@ -13,6 +12,7 @@ class SignIn extends Component {
     errors: '',
     isLoading: false
   }
+
 
   signInUserWithEmailAndPassword = (event) => {
 

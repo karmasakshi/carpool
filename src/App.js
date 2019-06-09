@@ -29,13 +29,11 @@ class App extends Component {
         fire.database().ref('/users/' + authUser.uid).once('value').then((snapshot) => {
 
           var appUser = (snapshot.val() || null);
-
           if (!appUser) {
 
             this.setState({ authUser: authUser });
 
           } else {
-
             this.setState({ authUser: authUser, appUser: appUser });
           }
 
@@ -71,9 +69,7 @@ class App extends Component {
         </div>
       </BrowserRouter>
     );
-
   }
-
 }
 
 export default App;
