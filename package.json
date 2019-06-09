@@ -7,6 +7,7 @@
     "firebaseui": "^3.5.2",
     "notifications": "^0.2.0",
     "react": "^16.8.6",
+    "react-dates": "^20.2.2",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.4",
     "react-lifecycle-visualizer": "^2.2.2",
