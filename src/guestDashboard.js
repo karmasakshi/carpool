@@ -25,7 +25,6 @@ class GuestDashboard extends Component {
 
   componentDidMount() {
 
-    console.log("date", this.state.date);
     this.findRequestedDriversByDate(this.state.date)
 
   }
@@ -59,7 +58,7 @@ class GuestDashboard extends Component {
 
   }
 
-  findRequestedDriversByDate(date){
+  findRequestedDriversByDate(date) {
     let allUsers = [];
     let usersID = [];
 
@@ -79,7 +78,10 @@ class GuestDashboard extends Component {
 
         if (x.requests) {
           if (x.requests.hasOwnProperty(this.props.appUser.id)) {
-            if (x.requests[this.props.appUser.id]["dateOfJourney"] === String(date._d)) {
+
+            var dateObj = new Date(x.requests[this.props.appUser.id]["dateOfJourney"]);
+
+            if (dateObj.toDateString() === date._d.toDateString()) {
               usersID.push(x.id);
             }
           }
@@ -94,15 +96,6 @@ class GuestDashboard extends Component {
     }).catch(() => {
       console.log("error has occured")
     })
-
-    /*console.log("i am typeof ", typeof (x.requests[this.props.appUser.id]["dateOfJourney"]))
-            console.log('is date even working',String(this.state.date._d));
-            console.log(this.state.date);
-
-            console.log(x.requests[this.props.appUser.id]["dateOfJourney"])
-              console.log(String(this.state.date._d);
-              console.log("i am users array", usersID);
-            */
   }
 
   sendRequest(hostId) {
@@ -122,18 +115,16 @@ class GuestDashboard extends Component {
       })
     }).catch(() => {
       console.log("error message")
-    })       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    })
   }
 
   handleDateChange(date) {
-    
+
     this.findRequestedDriversByDate(date);
-    console.log("i am requests from handleDateChange", this.state.requests);
+
   }
 
   render() {
-    console.log("i am requests from render", this.state.requests);
-
     return (
       <div>
         <Container>
