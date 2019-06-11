@@ -124,6 +124,10 @@ class GuestDashboard extends Component {
 
   }
 
+  componentWillUnmount() {
+    fire.database().ref('users').off();
+  }
+
   render() {
     return (
       <div>
