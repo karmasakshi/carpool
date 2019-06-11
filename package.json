@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "firebase": "^5.10.0",
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^2.3.1",
     "firebaseui": "^3.5.2",
+    "http2": "^3.3.7",
     "notifications": "^0.2.0",
     "react": "^16.8.6",
     "react-dates": "^20.2.2",
