@@ -4,8 +4,18 @@ import * as serviceWorker from './serviceWorker';
 import "./index.css";
 import App from './App';
 import { BrowserRouter } from 'react-router-dom'
+import { auth } from 'firebase';
+//const functions = require('firebase-functions');
+
+// The Firebase Admin SDK to access the Firebase Realtime Database.
+//const admin = require('firebase-admin');
+//admin.initializeApp();
+
+// Realtime Database under the path /messages/:pushId/original
+
+
 ReactDOM.render(
-  <BrowserRouter><App /></BrowserRouter>,
+  <App />,
   document.getElementById("root")
 );
 

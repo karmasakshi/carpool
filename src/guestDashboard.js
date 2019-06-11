@@ -50,7 +50,22 @@ class GuestDashboard extends Component {
 
     }
   }
+  FirebaseMessaging() {
+    const messaging = fire.messaging();
+    messaging.usePublicVapidKey("BH5Gjuahju79-ITrvvJ3cMTSLyBep3VhERmAdLdGvf8rPZjgIfM40Pemd6PkM1GsE_07ZmzqUU2Mape9q3-S9Fk");
+    Notification.requestPermission().then(function (permission) {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        // TODO(developer): Retrieve an Instance ID token for use with FCM.
+        // ...
+      } else {
+        console.log('Unable to get permission to notify.');
+      }
+    });
 
+
+
+  }
 
   deg2rad(deg) {
 
@@ -61,7 +76,7 @@ class GuestDashboard extends Component {
   findRequestedDriversByDate(date) {
     let allUsers = [];
     let usersID = [];
-
+    console.log(this.props.appUser);
     fire.database().ref('users').once('value').then((snapshot) => {
 
       allUsers = snapshot.val();
@@ -79,12 +94,13 @@ class GuestDashboard extends Component {
         if (x.requests) {
           if (x.requests.hasOwnProperty(this.props.appUser.id)) {
 
+
             var dateObj = new Date(x.requests[this.props.appUser.id]["dateOfJourney"]);
 
             if (dateObj.toDateString() === date._d.toDateString()) {
               usersID.push(x.id);
             }
-          }
+          
         }
       }
 
@@ -93,8 +109,8 @@ class GuestDashboard extends Component {
         requests: usersID,
         date: date
       })
-    }).catch(() => {
-      console.log("error has occured")
+    }).catch((error) => {
+      console.log(error)
     })
   }
 
@@ -106,10 +122,10 @@ class GuestDashboard extends Component {
       id: this.props.appUser.id,
       firstName: this.props.appUser.firstName,
       lastName: this.props.appUser.lastName,
-      dateOfJourney: String(this.state.date._d)
+      dateOfJourney: this.state.date._d
     }).then(() => {
       requestsArr.push(hostId);
-
+      this.FirebaseMessaging();
       this.setState({
         requests: requestsArr
       })
