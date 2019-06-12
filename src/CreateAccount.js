@@ -12,9 +12,17 @@ class CreateAccount extends Component {
       password: ''
     },
     errors: '',
-    isLoading: false
+    isLoading: false,
+    isUserAvailable: false
   }
 
+  componentDidUpdate(prevProps) {
+    console.log(this.props);
+    if (prevProps !== this.props) {
+      this.setState({ isUserAvailable: true });
+    }
+
+  }
 
   createUserWithEmailAndPassword = (user) => {
 
@@ -27,7 +35,6 @@ class CreateAccount extends Component {
       fire.auth().createUserWithEmailAndPassword(this.state.user.email, this.state.user.password).catch((error) => {
 
         this.setState({ errors: error.message, isLoading: false });
-
       });
 
     }
@@ -47,30 +54,37 @@ class CreateAccount extends Component {
   }
 
   render() {
+    console.log(this.props);
+    if (this.props.authUser) {
+      return <Redirect to='/create-profile' />
+    }
+    else {
 
+      return (
+        <Container>
+          <Form>
 
-    return (
-      <Form>
+            <Header as='h2'>Sign Up</Header>
 
-        <Header as='h2'>Sign Up</Header>
+            {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
 
-        {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+            <Form.Field>
+              <label htmlFor="email">email</label>
+              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+            </Form.Field>
 
-        <Form.Field>
-          <label htmlFor="email">email</label>
-          <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
-        </Form.Field>
+            <Form.Field>
+              <label htmlFor="password">password</label>
+              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+            </Form.Field>
 
-        <Form.Field>
-          <label htmlFor="password">password</label>
-          <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
-        </Form.Field>
+            <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.createUserWithEmailAndPassword}>Create Account</button>
 
-        <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.createUserWithEmailAndPassword}>Create Account</button>
+          </Form>
+        </Container>
+      );
 
-      </Form>
-    );
-
+    }
   }
 }
 
