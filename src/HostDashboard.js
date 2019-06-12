@@ -3,102 +3,94 @@ import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
-import { updateLocale } from "../../../Library/Caches/typescript/3.3/node_modules/moment/moment";
 import moment from 'moment';
 class HostDashboard extends Component {
 
   constructor(props) {
     super(props);
-    console.log('sri varun', this.props)
+
     this.state = {
       usersRequests: [],
+      isUsersRequestsRetrieved: false,
       acceptedRequests: [],
+      isUserAvailable: false,
       date: moment().add(1, "day"),
-
     };
   }
 
-
+  componentDidMount() {
+    this.retrieveRequests();
+  }
 
 
   componentDidUpdate() {
-    if (this.state.usersRequests === null) {
+
+    if (this.state.isUsersRequestsRetrieved === false) {
       this.retrieveRequests();
     }
   }
-  findAcceptedRequesters() {
-    var allUsers = [];
-    var acceptedRequestersID = [];
 
-    fire.database().ref('users').once('value').then((snapshot) => {
+  findAcceptedRequests(usersRequests) {
 
-      allUsers = snapshot.val();
-    }).then(() => {
+    let acceptedRequests = [];
 
-      for (let user in allUsers) {
-
-        var x = allUsers[user];
-        console.log(x);
-        if (x.accept) {
-          if (x.accept.hasOwnProperty(this.props.appUser.id)) {
-            acceptedRequestersID.push(x.id);
-          }
-        }
+    usersRequests.forEach(function (request) {
+      if (request.isApproved === true) {
+        acceptedRequests.push(request.requestId);
       }
-    }).catch(() => {
-      console.log("ERROR has occured");
     })
-
-    return acceptedRequestersID;
-
+    return acceptedRequests;
   }
 
-  acceptRequest = (requesterId, dateOfPickUp) => {
-    fire.database().ref(`users/` + requesterId + '/accept/' + this.props.appUser.id).set({
-      id: this.props.appUser.id,
-      firstName: this.props.appUser.firstName,
-      lastName: this.props.appUser.lastName,
-      dateOfPickUp: dateOfPickUp
-    });
+  acceptRequest = (requestId) => {
+    fire.database().ref('Requests/' + requestId).update({
+      'isApproved': true
+    })
   }
 
-  declineRequest = (requesterId) => {
-    fire.database().ref(`users/` + this.props.appUser.id + '/requests/' + requesterId).remove();
-    var requests = this.state.usersRequests;
-    var deleteRiderIndex = requests.findIndex(o => o.id === requesterId);
-    requests.splice(deleteRiderIndex, 1);
+  declineRequest = (requestId) => {
+    var usersRequests = this.state.usersRequests;
+
+    fire.database().ref('Requests/' + requestId).remove();
+
+    var x = usersRequests.filter(function (request) {
+      return request.requestId !== requestId;
+    })
     this.setState({
-      usersRequests: requests
-    });
+      usersRequests: x
+    })
   }
-
 
   retrieveRequests = () => {
 
-    var acceptedRequestersId = [];
+    var acceptedRequests = [];
     var usersRequests = [];
-    var newRequest = [];
+    var requestIds = [];
+
     if (this.props.appUser !== null) {
-      fire.database().ref("users/" + this.props.appUser.id + '/requests').once("value").then((snapshot) => {
-        usersRequests = snapshot.val();
-        console.log(this.props.appUser);
-        for (let userRequest in usersRequests) {
-          newRequest.push({
-            id: usersRequests[userRequest].id,
-            firstName: usersRequests[userRequest].firstName,
-            lastName: usersRequests[userRequest].lastName,
-            dateOfJourney: usersRequests[userRequest].dateOfJourney
-          });
 
-          acceptedRequestersId = this.findAcceptedRequesters();
-          console.log('///', acceptedRequestersId);
-
-          if (this.state.usersRequests !== [])
-            this.setState({ usersRequests: newRequest, acceptedRequests: acceptedRequestersId });
+      fire.database().ref("Requests/").orderByChild('hostID').equalTo(this.props.appUser.id).once("value").then((snapshot) => {
+        if (snapshot.val()) {
+          usersRequests = Object.values(snapshot.val());
+          requestIds = Object.keys(snapshot.val());
         }
-      });
-    }
+        else {
+          usersRequests = [];
+          requestIds = [];
+        }
 
+        if (requestIds !== []) {
+          for (var i = 0; i < requestIds.length; i++) {
+            usersRequests[i].requestId = requestIds[i];
+          }
+        }
+
+        acceptedRequests = this.findAcceptedRequests(usersRequests);
+
+        if (this.state.usersRequests !== [])
+          this.setState({ isUsersRequestsRetrieved: true, usersRequests: usersRequests, acceptedRequests: acceptedRequests });
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -110,7 +102,7 @@ class HostDashboard extends Component {
       <div>
         {this.state.usersRequests.length === 0 ? <h1>Hey, you currently have no requests</h1> :
           this.state.usersRequests.map((requester) => (
-            <Grid key={requester.id} container>
+            <Grid key={requester.requestId} container>
               <Grid.Column width={16}>
                 <Segment.Group>
                   <Segment>
@@ -118,15 +110,15 @@ class HostDashboard extends Component {
                       <Item>
                         <Item.Image size='tiny' src='/images/wireframe/image.png' />
                         <Item.Content>
-                          <Item.Header as='a'>{requester.firstName} {requester.lastName}</Item.Header>
-                          <Item.Meta>Date of Joruney: {new Date(requester.dateOfJourney).toDateString()}</Item.Meta>
+                          <Item.Header as='a'>{requester.guestName} </Item.Header>
                           <Item.Description>
                             <Image src='/images/wireframe/short-paragraph.png' />
                           </Item.Description>
-                          <Item.Extra>Additional Details</Item.Extra>
-                          <Button className='styling' color='green' disabled={this.state.acceptedRequests.indexOf(requester.id) !== -1} onClick={() => { this.acceptRequest(requester.id, requester.dateOfJourney) }}>Accept Request</Button>
-                          {this.state.acceptedRequests.indexOf(requester.id) !== -1 ? <p className='req'><i className="check icon"></i>Your accept has been sent</p> : null}
-                          <Button className='styling' color='red' onClick={() => { this.declineRequest(requester.id) }}>Decline Request</Button>
+                          <Item.Extra>{new Date(requester.dateOfJourney).toDateString()}</Item.Extra>
+                          <Button className='styling' color='green' disabled={this.state.acceptedRequests.indexOf(requester.requestId) !== -1}
+                            onClick={() => { this.acceptRequest(requester.requestId) }}>Accept Request</Button>
+                          <Button className='styling' color='red' disabled={this.state.acceptedRequests.indexOf(requester.requestId) !== -1} onClick={() => { this.declineRequest(requester.requestId) }}>Decline Request</Button>
+                          {this.state.acceptedRequests.indexOf(requester.requestId) !== -1 ? <p className='req'><i className="check icon"></i>Your accept has been sent</p> : null}
                         </Item.Content>
                       </Item>
                     </Item.Group>
@@ -141,3 +133,6 @@ class HostDashboard extends Component {
 }
 
 export default HostDashboard;
+
+//disabled = { this.state.acceptedRequests.indexOf(requester.requestId) !== -1 }
+//
