@@ -19,15 +19,21 @@ class GuestDashboard extends Component {
       results: [],
       requests: [],
       date: moment().add(1, "day"),
-      focused: null
+      focused: null,
+      isUserAvailable: false
     };
   }
 
   componentDidMount() {
 
-    console.log("date", this.state.date);
-    this.findRequestedDriversByDate(this.state.date)
+    this.findAvailableHostsByDate(this.state.date)
 
+  }
+
+  componentDidUpdate() {
+    if (this.state.isUserAvailable === false) {
+      this.findAvailableHostsByDate(this.state.date)
+    }
   }
 
   isCloseby(xLat, xLong, yLat, yLong, delta) {
@@ -51,22 +57,6 @@ class GuestDashboard extends Component {
 
     }
   }
-  FirebaseMessaging() {
-    const messaging = fire.messaging();
-    messaging.usePublicVapidKey("BH5Gjuahju79-ITrvvJ3cMTSLyBep3VhERmAdLdGvf8rPZjgIfM40Pemd6PkM1GsE_07ZmzqUU2Mape9q3-S9Fk");
-    Notification.requestPermission().then(function (permission) {
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        // TODO(developer): Retrieve an Instance ID token for use with FCM.
-        // ...
-      } else {
-        console.log('Unable to get permission to notify.');
-      }
-    });
-
-
-
-  }
 
   deg2rad(deg) {
 
@@ -74,14 +64,14 @@ class GuestDashboard extends Component {
 
   }
 
-  findRequestedDriversByDate(date) {
+  findAvailableHostsByDate(date) {
+    let requestArray = [];
     let allUsers = [];
-    let usersID = [];
-    console.log(this.props.appUser);
-    fire.database().ref('users').once('value').then((snapshot) => {
 
+    requestArray = this.updateRequestArray();
+
+    fire.database().ref('users').once('value').then((snapshot) => {
       allUsers = snapshot.val();
-    }).then(() => {
       var result = [];
 
       for (let user in allUsers) {
@@ -92,64 +82,77 @@ class GuestDashboard extends Component {
           result.push(x);  //should be calculated as per driver available -- feature to be added
         }
 
-        if (x.requests) {
-          if (x.requests.hasOwnProperty(this.props.appUser.id)) {
-            console.log(x.requests[this.props.appUser.id].dateOfJourney);
 
-            if (x.requests[this.props.appUser.id]["dateOfJourney"] === String(date._d)) {
-              usersID.push(x.id);
-            }
-          }
-        }
       }
-
-      this.setState({
-        results: result,
-        requests: usersID,
-        date: date
-      })
+      if (allUsers !== []) {
+        this.setState({
+          results: result,
+          requests: requestArray,
+          date: date,
+          isUserAvailable: true
+        })
+      }
     }).catch((error) => {
       console.log(error)
     })
+  }
 
-    /*console.log("i am typeof ", typeof (x.requests[this.props.appUser.id]["dateOfJourney"]))
-            console.log('is date even working',String(this.state.date._d));
-            console.log(this.state.date);
+  updateRequestArray() {
+    var requestArray = [];
 
-            console.log(x.requests[this.props.appUser.id]["dateOfJourney"])
-              console.log(String(this.state.date._d);
-              console.log("i am users array", usersID);
-            */
+    if (this.props.appUser !== null) {
+      fire.database().ref('Requests').orderByChild("guestID").equalTo(this.props.appUser.id).once('value').then((snapshot) => {
+        if (snapshot.val()) {
+          Object.values(snapshot.val()).forEach(function (request) {
+            requestArray.push({
+              hostID: request.hostID,
+              dateOfJourney: request.dateOfJourney
+            })
+          });
+          console.log(requestArray);
+        }
+        else
+          requestArray = [];
+      })
+    }
+    return requestArray;
   }
 
   sendRequest(hostId) {
 
     let requestsArr = this.state.requests;
 
-    fire.database().ref('users/' + hostId + '/requests/' + this.props.appUser.id).set({
-      id: this.props.appUser.id,
-      firstName: this.props.appUser.firstName,
-      lastName: this.props.appUser.lastName,
-      dateOfJourney: this.state.date._d
+    fire.database().ref('Requests/').push({
+      guestID: this.props.appUser.id,
+      guestName: this.props.appUser.firstName + " " + this.props.appUser.lastName,
+      dateOfJourney: String(this.state.date._d),
+      hostID: hostId,
+      isApproved: false
     }).then(() => {
-      requestsArr.push(hostId);
-      this.FirebaseMessaging();
+      requestsArr.push({ hostID: hostId, dateOfJourney: this.state.date._d });
       this.setState({
         requests: requestsArr
       })
-    }).catch(() => {
-      console.log("error message")
-    })       //similar to the Array.push method, this sends a copy of our object so that it can be stored in Firebase.
+    }).catch((e) => {
+      console.log(e)
+    })
   }
 
   handleDateChange(date) {
 
-    this.findRequestedDriversByDate(date);
-    console.log("i am requests from handleDateChange", this.state.requests);
+    this.findAvailableHostsByDate(date);
+
+  }
+
+  searchForRequests(hostId) {
+    for (var i = 0; i < this.state.requests.length; i++) {
+      if ((this.state.requests[i].hostID === hostId) && (new Date(this.state.requests[i].dateOfJourney).toDateString() === new Date(this.state.date._d).toDateString())) {
+        return true;
+      }
+    }
   }
 
   render() {
-    console.log("i am requests from render", this.state.requests);
 
     return (
       <div>
@@ -184,10 +187,10 @@ class GuestDashboard extends Component {
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />
-                    <Button className='styling' color='green' disabled={this.state.requests.indexOf(host.id) !== -1} onClick={() => { this.sendRequest(host.id) }}>Request a ride</Button>
+                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id) }}>Request a ride</Button>
                     <br />
                     <br />
-                    {this.state.requests.indexOf(host.id) !== -1 ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
+                    {this.searchForRequests(host.id) ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
                   </Card.Content>
                 </Card>
               </Grid.Column>
