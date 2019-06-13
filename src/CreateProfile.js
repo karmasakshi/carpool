@@ -19,14 +19,6 @@ class CreateProfile extends Component {
     updateProfile: null
   }
 
-
-  componentDidMount(appUser) {
-    //  this.props.update(appUser);
-    console.log(this.props);
-  }
-
-
-
   createProfile = (event) => {
 
     event.preventDefault();
@@ -41,19 +33,8 @@ class CreateProfile extends Component {
         lat: this.state.user.lat,
         lng: this.state.user.lng,
         id: this.props.authUser.uid
-      }).then((res) => {
-
-        console.log(res);
-        if (this.state.user !== null) {
-          console.log("loop");
-          this.setState({ updateProfile: true });
-          this.updateProfile(this.state.user);
-
-        }
-      });
-
+      })
     }
-
   }
 
   updateInputs = (event) => {

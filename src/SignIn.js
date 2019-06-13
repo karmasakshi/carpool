@@ -44,38 +44,44 @@ class SignIn extends Component {
 
   render() {
 
+    if (this.props.authUser) {
 
+      if (this.props.appUser === null)
+        return <Redirect to='/create-profile' />
 
+      else if (this.props.appUser.role === 'guest')
+        return <Redirect to='/guest-dashboard' />
 
-    return (
-      <Container>
+      else if (this.props.appUser.role === 'host')
+        return <Redirect to='/host-dashboard' />
+    }
+    else {
+      return (
+        <Container>
 
-        <Form>
-          <Header as='h2'>Sign In</Header>
+          <Form>
+            <Header as='h2'>Sign In</Header>
 
-          {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+            {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
 
-          <Form.Field>
-            <label htmlFor="email">email</label>
-            <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
-          </Form.Field>
+            <Form.Field>
+              <label htmlFor="email">email</label>
+              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+            </Form.Field>
 
-          <Form.Field>
-            <label htmlFor="password">password</label>
-            <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
-          </Form.Field>
+            <Form.Field>
+              <label htmlFor="password">password</label>
+              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+            </Form.Field>
 
-          <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.signInUserWithEmailAndPassword}>Login</button>
+            <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.signInUserWithEmailAndPassword}>Login</button>
 
-        </Form>
+          </Form>
 
-      </Container>
-    );
-
+        </Container>
+      )
+    }
   }
-
 }
-
-
 
 export default SignIn;
