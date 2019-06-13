@@ -95,6 +95,7 @@ class HostDashboard extends Component {
 
   componentWillUnmount() {
     fire.database().ref('users').off();
+    fire.database().ref('Requests').off();
   }
 
   render() {
