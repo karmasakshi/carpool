@@ -12,20 +12,22 @@ import GuestDashboard from './GuestDashboard';
 import HostDashboard from './HostDashboard';
 import { MyProvider } from './Context.js';
 
+function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => (authUser !== null && appUser !== null)
+        ? <Component appUser={appUser} authUser={authUser} {...rest} />
+        : <Redirect to='/sign-in' />} />
+  )
+}
+
 class App extends Component {
 
   state = {
     authUser: null,
     appUser: null
   };
-
-  update(eve) {
-    this.setState({ eve: this.state.appUser });
-  }
-  componentWillUnmount() {
-    fire.database().ref('users').off();
-
-  }
 
   componentDidMount() {
 
@@ -64,8 +66,12 @@ class App extends Component {
 
   }
 
+  componentWillUnmount() {
+    fire.database().ref('users').off();  //prevents callback from executing after promise is executed
+
+  }
+
   render() {
-    console.log(",", this.state.appUser);
     return (
       <MyProvider appUser={this.state.appUser} authUser={this.state.authUser}>
         <BrowserRouter>
@@ -74,8 +80,8 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
               <Route exact path='/sign-in' component={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
-              <Route exact path='/guest-dashboard' render={() => <GuestDashboard appUser={this.state.appUser} authUser={this.state.authUser} />} />
-              <Route exact path='/host-dashboard' render={() => <HostDashboard appUser={this.state.appUser} authUser={this.state.authUser} />} />
+              <AuthenticatedRoute exact path='/guest-dashboard' component={GuestDashboard} appUser={this.state.appUser} authUser={this.state.authUser} />} />
+              <AuthenticatedRoute exact path='/host-dashboard' component={HostDashboard} appUser={this.state.appUser} authUser={this.state.authUser} />} />
               <Route exact path='/sign-up' component={() => <CreateAccount authUser={this.state.authUser} />} />
               <Route exact path='/create-profile' component={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
               <Route render={() => <h1>Page not found</h1>} />
