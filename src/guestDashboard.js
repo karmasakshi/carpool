@@ -26,12 +26,12 @@ class GuestDashboard extends Component {
 
   componentDidMount() {
     this.findAvailableHostsByDate(this.state.date)
-    }
-    
+  }
+
   componentDidUpdate() {
     if (this.state.isUserAvailable === false) {
       this.findAvailableHostsByDate(this.state.date)
-   }
+    }
   }
 
   isCloseby(xLat, xLong, yLat, yLong, delta) {
@@ -78,78 +78,77 @@ class GuestDashboard extends Component {
 
         if (this.props.appUser.role !== x.role && this.isCloseby(this.props.appUser.lat, this.props.appUser.lng, x.lat, x.lng, 200)) {
           result.push(x);  //should be calculated as per driver available -- feature to be added
-        } 
-            }
-            if (allUsers !== []) {
+        }
+      }
+      if (allUsers !== []) {
         this.setState({
-                results: result,
-                requests: requestArray,
-                date: date,
-                isUserAvailable: true
-                })
-                }
+          results: result,
+          requests: requestArray,
+          date: date,
+          isUserAvailable: true
+        })
+      }
     }).catch((error) => {
       console.log(error)
     })
-  
+  }
 
 
 
   updateRequestArray() {
-var requestArray = [];
+    var requestArray = [];
 
     if (this.props.appUser !== null) {
-    fire.database().ref('Requests').orderByChild("guestID").equalTo(this.props.appUser.id).once('value').then((snapshot) => {
+      fire.database().ref('Requests').orderByChild("guestID").equalTo(this.props.appUser.id).once('value').then((snapshot) => {
         if (snapshot.val()) {
-        Object.values(snapshot.val()).forEach(function (request) {
+          Object.values(snapshot.val()).forEach(function (request) {
             requestArray.push({
-            hostID: request.hostID,
-            dateOfJourney: request.dateOfJourney
-          })
-        });
-        console.log(requestArray);
-      }
-      else
-        requestArray = [];
-    })
+              hostID: request.hostID,
+              dateOfJourney: request.dateOfJourney
+            })
+          });
+          console.log(requestArray);
+        }
+        else
+          requestArray = [];
+      })
     }
     return requestArray;
   }
 
-  sendRequest(hostId) {
-  
+  sendRequest(hostId, hostFirstName, hostLastName) {
+
     let requestsArr = this.state.requests;
 
     fire.database().ref('Requests/').push({
-    guestID: this.props.appUser.id,
-    guestName: this.props.appUser.firstName + " " + this.props.appUser.lastName,
-     dateOfJourney: String(this.state.date._d),
-    hostID: hostId,
-  isApproved: false
-}).then(() => {
+      guestID: this.props.appUser.id,
+      guestName: this.props.appUser.firstName + " " + this.props.appUser.lastName,
+      dateOfJourney: String(this.state.date._d),
+      hostID: hostId,
+      hostName: hostFirstName + ' '+ hostLastName,
+      isApproved: false
+    }).then(() => {
       requestsArr.push({ hostID: hostId, dateOfJourney: this.state.date._d });
       this.setState({
-      requests: requestsArr
-    })
-  }).catch((e) => {
+        requests: requestsArr
+      })
+    }).catch((e) => {
       console.log(e)
- 
-    })
-    
 
-  handleDateChange(date) {          
-  thi.findAvailableHostsByDa t e(date);    
-  }               
-               
-  searchForRequest s ( hostId) {     
-    for (var i = 0; i < th i s .state.re quests.length; i++) { 
-s.state . r equests[i].hostID  === hostId) && (new Date(this.tate. requests[i].dateOfJourney).toDateString() === new Date(this.state.date._d).toDateString())) {
-      retu  true;    
-      }
-    }
+    })
   }
 
-  render() {
+  handleDateChange(date) {
+    this.findAvailableHostsByDate(date);
+  }
+
+  searchForRequests(hostId) {
+    for (var i = 0; i < this.state.requests.length; i++) {
+      if((this.state.requests[i].hostID === hostId) && (new Date(this.state.requests[i].dateOfJourney).toDateString() === new Date(this.state.date._d).toDateString())) {
+           return true;
+      }   
+    }
+  }
 
   render() {
     return (
@@ -185,7 +184,7 @@ s.state . r equests[i].hostID  === hostId) && (new Date(this.tate. requests[i].d
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />
-                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id) }}>Request a ride</Button>
+                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id, host.firstName, host.lastName) }}>Request a ride</Button>
                     <br />
                     <br />
                     {this.searchForRequests(host.id) ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
@@ -200,4 +199,4 @@ s.state . r equests[i].hostID  === hostId) && (new Date(this.tate. requests[i].d
   }
 }
 
-export default GuestDashboard;
+  export default GuestDashboard;

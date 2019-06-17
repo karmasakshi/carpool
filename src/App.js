@@ -8,19 +8,16 @@ import './index.css'
 import CreateProfile from './CreateProfile';
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
-import GuestDashboard from './GuestDashboard';
+import GuestDashboard from './guestDashboard';
 import HostDashboard from './HostDashboard';
-import ErrorBoundary from './ErrorBoundary';
+import Notifications from './Notifications'
 
 function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }) {
-  console.log('appUser from authnticated route', appUser);
-  console.log('authUser from authenticated route', authUser);
-
   return (
     <Route
       {...rest}
       render={(props) => (authUser !== null && appUser !== null)
-        ? <Component {...props} {...rest} />
+        ? <Component appUser={appUser} authUser={authUser} {...rest} />
         : <Redirect to='/sign-in' />} />
 
   )
@@ -44,9 +41,7 @@ class App extends Component {
           var appUser = (snapshot.val() || null);
 
           if (appUser) {
-
             this.setState({ authUser: authUser, appUser: appUser });
-            console.log('appUser from inside', appUser);
           } else {
             this.setState({ authUser: authUser, appuser: null })
           }
@@ -73,7 +68,8 @@ class App extends Component {
             <Route exact path='/' render={() => <Home appUser={this.state.appUser} authUser={this.state.authUser} />} />
             <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <AuthenticatedRoute exact path='/guest-dashboard' appUser={this.state.appUser} authUser={this.state.authUser} component={GuestDashboard} />} />
-            <Route exact path='/host-dashboard' render={() => <HostDashboard appUser={this.state.appUser} authUser={this.state.authUser} />} />
+            <AuthenticatedRoute exact path='/host-dashboard' component={HostDashboard} appUser={this.state.appUser} authUser={this.state.authUser} />} />
+            <Route exact path='/notifications' render={()=><Notifications appUser={this.state.appUser} />} />
             <Route exact path='/sign-up' render={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <Route render={() => <h1>Page not found</h1>} />
@@ -85,5 +81,3 @@ class App extends Component {
 }
 
 export default App;
-
-//<Route exact path='/host-dashboard' render={() => <HostDashboard appUser={this.state.appUser} authUser={this.state.authUser} />} />

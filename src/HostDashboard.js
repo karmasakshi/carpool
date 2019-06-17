@@ -4,6 +4,8 @@ import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
+import * as functions from 'firebase-functions';
+
 class HostDashboard extends Component {
 
   constructor(props) {
@@ -20,11 +22,11 @@ class HostDashboard extends Component {
 
   componentDidMount() {
     this.retrieveRequests();
+    this.clearOldRequests();
   }
 
 
   componentDidUpdate() {
-
     if (this.state.isUsersRequestsRetrieved === false) {
       this.retrieveRequests();
     }
@@ -41,6 +43,11 @@ class HostDashboard extends Component {
     })
     return acceptedRequests;
   }
+
+  clearOldRequests=()=>{
+    console.log('i am working');
+  }
+
 
   acceptRequest = (requestId) => {
     fire.database().ref('Requests/' + requestId).update({
@@ -66,7 +73,7 @@ class HostDashboard extends Component {
     var acceptedRequests = [];
     var usersRequests = [];
     var requestIds = [];
-
+     
     if (this.props.appUser !== null) {
 
       fire.database().ref("Requests/").orderByChild('hostID').equalTo(this.props.appUser.id).once("value").then((snapshot) => {

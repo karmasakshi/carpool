@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "exports": "0.0.1",
     "firebase": "^5.10.0",
-    "firebase-admin": "^8.0.0",
+    "firebase-admin": "^8.1.0",
     "firebase-functions": "^2.3.1",
     "firebaseui": "^3.5.2",
     "http2": "^3.3.7",
