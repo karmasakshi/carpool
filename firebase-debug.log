@@ -1,0 +1,29 @@
+[debug] [2019-06-16T11:07:34.188Z] ----------------------------------------------------------------------
+[debug] [2019-06-16T11:07:34.193Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2019-06-16T11:07:34.194Z] CLI Version:   7.0.0
+[debug] [2019-06-16T11:07:34.194Z] Platform:      win32
+[debug] [2019-06-16T11:07:34.194Z] Node Version:  v11.13.0
+[debug] [2019-06-16T11:07:34.196Z] Time:          Sun Jun 16 2019 15:07:34 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-16T11:07:34.196Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-16T11:07:34.225Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-16T11:07:34.226Z] > authorizing via signed-in user
+[debug] [2019-06-16T11:07:34.227Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-06-16T11:07:34.227Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-06-16T11:07:34.750Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-16T11:07:34.775Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/carpool-d3255  
+ 
+[debug] [2019-06-16T11:07:36.621Z] <<< HTTP RESPONSE 200
+[info] i  Starting emulators: ["functions","database","hosting"]
+[warn] !  Your requested "node" version "8" doesn't match your global version "11"
+[debug] [2019-06-16T11:07:36.642Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/13033149059:getServerAppConfig  
+ 
+[debug] [2019-06-16T11:07:37.245Z] <<< HTTP RESPONSE 200
+[info] +  functions: Emulator started at http://localhost:5001
+[warn] !  Setup required, please run: firebase setup:emulators:database
+[info] i  Shutting down emulators.
+[info] i  Stopping functions emulator
+[debug] [2019-06-16T11:07:37.452Z] 
+[error] 
+[error] Error: An unexpected error has occurred.
