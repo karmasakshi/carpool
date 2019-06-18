@@ -4,7 +4,6 @@ import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
-import * as functions from 'firebase-functions';
 
 class HostDashboard extends Component {
 
@@ -20,9 +19,14 @@ class HostDashboard extends Component {
     };
   }
 
+  props = {
+    appUser:{
+      firstName: "Hi"
+    }
+  }
+
   componentDidMount() {
     this.retrieveRequests();
-    this.clearOldRequests();
   }
 
 
@@ -43,11 +47,6 @@ class HostDashboard extends Component {
     })
     return acceptedRequests;
   }
-
-  clearOldRequests=()=>{
-    console.log('i am working');
-  }
-
 
   acceptRequest = (requestId) => {
     fire.database().ref('Requests/' + requestId).update({
@@ -76,7 +75,7 @@ class HostDashboard extends Component {
      
     if (this.props.appUser !== null) {
 
-      fire.database().ref("Requests/").orderByChild('hostID').equalTo(this.props.appUser.id).once("value").then((snapshot) => {
+      fire.database().ref("Requests/").orderByChild('hostID').equalTo(this.props.authUser.uid).once("value").then((snapshot) => {
         if (snapshot.val()) {
           usersRequests = Object.values(snapshot.val());
           requestIds = Object.keys(snapshot.val());
@@ -108,7 +107,7 @@ class HostDashboard extends Component {
   render() {
     return (
       <div>
-        {this.state.usersRequests.length === 0 ? <h1>Hey, you currently have no requests</h1> :
+        {this.state.usersRequests.length === 0 ? <h1>Hey {this.props.appUser.firstName}, you currently have no requests</h1> :
           this.state.usersRequests.map((requester) => (
             <Grid key={requester.requestId} container>
               <Grid.Column width={16}>
