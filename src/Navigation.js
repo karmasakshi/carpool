@@ -41,7 +41,7 @@ class Navbar extends Component {
             <nav className="ui inverted menu" >
                 <div className="container">
 
-                    <NavLink to='/' className="brand-logo">Carpool</NavLink>
+                    <NavLink to='/' className="left menu">Carpool</NavLink>
 
                     {menu}
 
