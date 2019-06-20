@@ -9,6 +9,8 @@ import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import { Icon } from 'semantic-ui-react'
 import moment from 'moment';
+import * as functions from 'firebase-functions';
+import exports from 'exports';
 
 class GuestDashboard extends Component {
 
@@ -93,8 +95,6 @@ class GuestDashboard extends Component {
     })
   }
 
-
-
   updateRequestArray() {
     var requestArray = [];
 
@@ -178,7 +178,7 @@ class GuestDashboard extends Component {
             {this.state.results.map((host) => (
               <Grid.Column key={host.id}>
                 <Card>
-                  <Image> <i class="user huge icon"></i> </Image>
+                  <Image> <i className="user huge icon"></i> </Image>
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />

@@ -1,0 +1,174 @@
+[debug] [2019-06-20T07:13:17.800Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:13:17.803Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:13:17.803Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:13:17.803Z] Platform:      win32
+[debug] [2019-06-20T07:13:17.803Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:13:17.805Z] Time:          Thu Jun 20 2019 11:13:17 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:13:17.805Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:13:17.824Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:13:17.825Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\Desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2019-06-20T07:14:28.910Z] Error: kill ENOSYS
+    at process.kill (internal/process/per_thread.js:185:13)
+    at process.listener (C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\signal-exit\index.js:95:15)
+    at process.emit (events.js:193:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-06-20T07:15:02.921Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:15:02.923Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:15:02.924Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:15:02.924Z] Platform:      win32
+[debug] [2019-06-20T07:15:02.924Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:15:02.925Z] Time:          Thu Jun 20 2019 11:15:02 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:15:02.925Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:15:02.936Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:15:02.936Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\Desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2019-06-20T07:21:05.721Z] Error: kill ENOSYS
+    at process.kill (internal/process/per_thread.js:185:13)
+    at process.listener (C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\signal-exit\index.js:95:15)
+    at process.emit (events.js:193:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-06-20T07:23:56.846Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:23:56.859Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:23:56.859Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:23:56.859Z] Platform:      win32
+[debug] [2019-06-20T07:23:56.860Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:23:56.945Z] Time:          Thu Jun 20 2019 11:23:56 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:23:56.945Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:23:57.015Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:23:57.015Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\Desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2019-06-20T07:24:20.756Z] Error: kill ENOSYS
+    at process.kill (internal/process/per_thread.js:185:13)
+    at process.listener (C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\signal-exit\index.js:95:15)
+    at process.emit (events.js:193:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-06-20T07:24:21.506Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:24:21.509Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:24:21.509Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:24:21.509Z] Platform:      win32
+[debug] [2019-06-20T07:24:21.509Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:24:21.511Z] Time:          Thu Jun 20 2019 11:24:21 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:24:21.511Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:24:21.526Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:24:21.526Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2019-06-20T07:25:39.082Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:25:39.085Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:25:39.086Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:25:39.086Z] Platform:      win32
+[debug] [2019-06-20T07:25:39.086Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:25:39.087Z] Time:          Thu Jun 20 2019 11:25:39 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:25:39.087Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:25:39.098Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:25:39.098Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\Desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[debug] [2019-06-20T07:26:07.577Z] Error: kill ENOSYS
+    at process.kill (internal/process/per_thread.js:185:13)
+    at process.listener (C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\signal-exit\index.js:95:15)
+    at process.emit (events.js:193:13)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-06-20T07:42:02.981Z] ----------------------------------------------------------------------
+[debug] [2019-06-20T07:42:02.984Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shichell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-06-20T07:42:02.984Z] CLI Version:   7.0.0
+[debug] [2019-06-20T07:42:02.984Z] Platform:      win32
+[debug] [2019-06-20T07:42:02.984Z] Node Version:  v11.13.0
+[debug] [2019-06-20T07:42:03.005Z] Time:          Thu Jun 20 2019 11:42:02 GMT+0400 (Gulf Standard Time)
+[debug] [2019-06-20T07:42:03.005Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-06-20T07:42:03.097Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-20T07:42:03.098Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\shichell\Desktop\projects\carpool
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
