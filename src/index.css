@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
-body {
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
-  margin: 0;
-}
-
 #tagline{
   font-family: 'Pacifico', cursive;
   font-size: 36px;
@@ -52,11 +46,11 @@ margin: auto auto;
 }
  
 .styling:hover{
-    text-shadow: 0px 0px 6px rgba(255, 255, 255, 1) !important;
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1) !important;
    box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
-    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
-    transition: all 0.4s ease 0s !important;
-    }
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
+  transition: all 0.4s ease 0s !important;
+}
  
     #home{
       background-image: url("./artistic-asphalt-automobiles-799443.jpg");    
@@ -83,4 +77,9 @@ margin: auto auto;
 
     h1{
       text-align: center;
+    }
+
+    .left.menu{
+      font-size: 24px;
+      font-weight: bolder;
     }

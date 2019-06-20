@@ -61,7 +61,7 @@ class CreateAccount extends Component {
       return (
         <Container>
           <Form>
-
+            <br />
             <Header as='h2'>Sign Up</Header>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
@@ -81,13 +81,8 @@ class CreateAccount extends Component {
           </Form>
         </Container>
       );
-
     }
   }
 }
-
-
-
-
 
 export default CreateAccount;
