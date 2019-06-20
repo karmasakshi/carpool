@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Grid, Image, Form, Icon, Header, Radio, Container } from 'semantic-ui-react';
+import { Segment, Grid, Form, Container, Icon, Header } from 'semantic-ui-react';
 import fire from './config/fire';
 import { Redirect } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
+import ReactCrop, { makeAspectCrop } from 'react-image-crop'
 
 class CreateProfile extends Component {
 
@@ -11,9 +13,10 @@ class CreateProfile extends Component {
       lastName: '',
       role: null,
       lat: null,
-      lng: null,
+      lng: null
     },
-    createdProfile: false
+    createdProfile: false,
+    acceptedPicture: null
   }
 
   createProfile = (event) => {
@@ -33,6 +36,12 @@ class CreateProfile extends Component {
 
     this.props.getAppUserAfterRegistration(this.state.user);
 
+    var storageRef = fire.storage().ref();
+    var userRef = storageRef.child(this.props.authUser.uid);
+
+    userRef.put(this.state.acceptedPicture[0]).then(function (snapshot) {
+      console.log('Uploaded a blob or file!');
+    });
   }
 
   updateInputs = (event) => {
@@ -69,7 +78,13 @@ class CreateProfile extends Component {
     }
   }
 
+  savePictureToState(userPicture) {
+    this.setState({ acceptedPicture: userPicture });
+  }
+
   render() {
+    const maxSize = 5048576;
+
     if (this.state.createdProfile === true && this.state.user.role === 'guest') {
       return <Redirect to='/guest-dashboard' />
     }
@@ -80,12 +95,40 @@ class CreateProfile extends Component {
       return (
         <div>
           <Container>
+            <br />
             <Grid>
               <Grid.Column width={6}>
                 <h1> Create Profile </h1>
+                <br />
+                <Dropzone onDrop={acceptedFiles => {
+                  this.savePictureToState(acceptedFiles);
+                }} multiple={false} accept='image/*' minSize={0}
+                  maxSize={maxSize}>
+                  {({ getRootProps, getInputProps, isDragActive, isDragReject, rejectedFiles }) => {
+                    const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
+                    return (
+                      <section className="container">
+                        <div {...getRootProps({ className: 'dropzone' })}>
+                          <input {...getInputProps()} />
+                          {!isDragActive && <div>
+                            <Icon name='upload' size='huge' />
+                            <Header content="Drop 'n' Drop Image Here, or click to select files" />
+                          </div>}
+                          {isDragActive && !isDragReject && <p className='dropzone--isActive'>you are good to go</p>}
+                          {isDragReject && "File type not accepted, sorry!"}
+                          {isFileTooLarge && (
+                            <div>
+                              File is too large.
+                             </div>
+                          )}
+                        </div>
+                      </section>
+                    )
+                  }
+                  }
+                </Dropzone>
               </Grid.Column>
               <Grid.Column width={8}>
-                <br />
                 <br />
                 <Segment>
                   <Form>
@@ -135,21 +178,3 @@ class CreateProfile extends Component {
 }
 
 export default CreateProfile;
-
-
-/*
-import Dropzone from 'react-dropzone'
-<br />
-              <Icon name='upload' size='huge'/>
-              <Header content="Drop Image Here"/>
-              <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-                {({ getRootProps, getInputProps }) => (
-                  <section className="container">
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <p>Drag 'n' drop some files here, or click to select files</p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-              */
