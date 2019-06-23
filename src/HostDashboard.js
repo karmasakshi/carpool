@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
+import 'firebase'
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
+let admin = require("firebase-admin");
 
 class HostDashboard extends Component {
 
@@ -15,14 +17,21 @@ class HostDashboard extends Component {
       isUsersRequestsRetrieved: false,
       acceptedRequests: [],
       isUserAvailable: false,
-      date: moment().add(1, "day"),
+      date: moment().add(1, "day")
     };
   }
 
-  props = {
-    appUser:{
-      firstName: "Hi"
-    }
+  componentWillMount() {
+    var date = new Date(Date.now()).getTime();
+
+    fire.database().ref('Requests/').orderByChild('dateOfJourney').endAt(date).once("value").then(function (snapshot) {
+      snapshot.forEach(function (child) {
+        child.ref.remove();
+        console.log("Removed!");
+      })
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   componentDidMount() {
@@ -72,7 +81,7 @@ class HostDashboard extends Component {
     var acceptedRequests = [];
     var usersRequests = [];
     var requestIds = [];
-     
+
     if (this.props.appUser !== null) {
 
       fire.database().ref("Requests/").orderByChild('hostID').equalTo(this.props.authUser.uid).once("value").then((snapshot) => {
@@ -140,6 +149,3 @@ class HostDashboard extends Component {
 }
 
 export default HostDashboard;
-
-//disabled = { this.state.acceptedRequests.indexOf(requester.requestId) !== -1 }
-//
