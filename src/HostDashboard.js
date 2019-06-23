@@ -17,21 +17,25 @@ class HostDashboard extends Component {
       isUsersRequestsRetrieved: false,
       acceptedRequests: [],
       isUserAvailable: false,
-      date: moment().add(1, "day")
+      date: moment().add(1, "day"),
+      deleteOldRequests: false
     };
   }
 
   componentWillMount() {
     var date = new Date(Date.now()).getTime();
 
-    fire.database().ref('Requests/').orderByChild('dateOfJourney').endAt(date).once("value").then(function (snapshot) {
+    fire.database().ref('Requests/').orderByChild('dateOfJourney').endAt(date).once("value").then((snapshot) => {
       snapshot.forEach(function (child) {
         child.ref.remove();
         console.log("Removed!");
       })
+
+      this.retrieveRequests();
     }).catch((error) => {
       console.log(error);
     });
+
   }
 
   componentDidMount() {
@@ -58,9 +62,18 @@ class HostDashboard extends Component {
   }
 
   acceptRequest = (requestId) => {
+    let acceptedRequests = this.state.acceptedRequests;
+
     fire.database().ref('Requests/' + requestId).update({
       'isApproved': true
-    })
+    }).then(() => {
+      acceptedRequests.push(requestId);
+
+      this.setState({
+        acceptedRequests: acceptedRequests
+      })
+    }
+    );
   }
 
   declineRequest = (requestId) => {
@@ -77,7 +90,6 @@ class HostDashboard extends Component {
   }
 
   retrieveRequests = () => {
-
     var acceptedRequests = [];
     var usersRequests = [];
     var requestIds = [];

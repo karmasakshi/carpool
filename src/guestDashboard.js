@@ -89,7 +89,7 @@ class GuestDashboard extends Component {
         })
       }
     }).catch((error) => {
-      // console.log(error)
+       console.log(error)
     })
   }
 
