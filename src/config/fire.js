@@ -11,8 +11,9 @@ import firebase from 'firebase'
     storageBucket: "carpool-d3255.appspot.com",
     messagingSenderId: "13033149059"
   };
+
   const fire=firebase.initializeApp(config);
-  
+
   export const auth = firebase.auth();  //This exports the auth module of Firebase
   export const database = fire.database(); //This exports the database module of Firebase
   export default fire;

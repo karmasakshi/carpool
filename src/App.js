@@ -19,7 +19,6 @@ function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }
       render={(props) => (authUser !== null && appUser !== null)
         ? <Component appUser={appUser} authUser={authUser} {...rest} />
         : <Redirect to='/sign-in' />} />
-
   )
 }
 
@@ -29,6 +28,12 @@ class App extends Component {
     authUser: null,
     appUser: null
   };
+
+  getAppUser(user) {
+    this.setState({
+      appUser: user
+    })
+  }
 
   componentDidMount() {
 
@@ -69,9 +74,9 @@ class App extends Component {
             <Route exact path='/sign-in' render={() => <SignIn authUser={this.state.authUser} appUser={this.state.appUser} />} />
             <AuthenticatedRoute exact path='/guest-dashboard' appUser={this.state.appUser} authUser={this.state.authUser} component={GuestDashboard} />} />
             <AuthenticatedRoute exact path='/host-dashboard' component={HostDashboard} appUser={this.state.appUser} authUser={this.state.authUser} />} />
-            <Route exact path='/notifications' render={()=><Notifications appUser={this.state.appUser} />} />
+            <Route exact path='/guest-dashboard/notifications' render={() => <Notifications appUser={this.state.appUser} />} />
             <Route exact path='/sign-up' render={() => <CreateAccount authUser={this.state.authUser} />} />
-            <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} />} />
+            <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} getAppUserAfterRegistration={this.getAppUser.bind(this)} />} />
             <Route render={() => <h1>Page not found</h1>} />
           </Switch>
         </div>

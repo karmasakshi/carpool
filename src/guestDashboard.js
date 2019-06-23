@@ -89,17 +89,15 @@ class GuestDashboard extends Component {
         })
       }
     }).catch((error) => {
-      console.log(error)
+       console.log(error)
     })
   }
-
-
 
   updateRequestArray() {
     var requestArray = [];
 
     if (this.props.appUser !== null) {
-      fire.database().ref('Requests').orderByChild("guestID").equalTo(this.props.appUser.id).once('value').then((snapshot) => {
+      fire.database().ref('Requests').orderByChild("guestID").equalTo(this.props.authUser.uid).once('value').then((snapshot) => {
         if (snapshot.val()) {
           Object.values(snapshot.val()).forEach(function (request) {
             requestArray.push({
@@ -107,7 +105,6 @@ class GuestDashboard extends Component {
               dateOfJourney: request.dateOfJourney
             })
           });
-          console.log(requestArray);
         }
         else
           requestArray = [];
@@ -123,9 +120,9 @@ class GuestDashboard extends Component {
     fire.database().ref('Requests/').push({
       guestID: this.props.appUser.id,
       guestName: this.props.appUser.firstName + " " + this.props.appUser.lastName,
-      dateOfJourney: String(this.state.date._d),
+      dateOfJourney: new Date(this.state.date._d).getTime(),
       hostID: hostId,
-      hostName: hostFirstName + ' '+ hostLastName,
+      hostName: hostFirstName + ' ' + hostLastName,
       isApproved: false
     }).then(() => {
       requestsArr.push({ hostID: hostId, dateOfJourney: this.state.date._d });
@@ -133,8 +130,7 @@ class GuestDashboard extends Component {
         requests: requestsArr
       })
     }).catch((e) => {
-      console.log(e)
-
+      // console.log(e)
     })
   }
 
@@ -144,9 +140,9 @@ class GuestDashboard extends Component {
 
   searchForRequests(hostId) {
     for (var i = 0; i < this.state.requests.length; i++) {
-      if((this.state.requests[i].hostID === hostId) && (new Date(this.state.requests[i].dateOfJourney).toDateString() === new Date(this.state.date._d).toDateString())) {
-           return true;
-      }   
+      if ((this.state.requests[i].hostID === hostId) && (new Date(this.state.requests[i].dateOfJourney).toDateString() === new Date(this.state.date._d).toDateString())) {
+        return true;
+      }
     }
   }
 
@@ -180,7 +176,7 @@ class GuestDashboard extends Component {
             {this.state.results.map((host) => (
               <Grid.Column key={host.id}>
                 <Card>
-                  <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
+                  <Image> <i className="user huge icon"></i> </Image>
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />
@@ -199,4 +195,4 @@ class GuestDashboard extends Component {
   }
 }
 
-  export default GuestDashboard;
+export default GuestDashboard;

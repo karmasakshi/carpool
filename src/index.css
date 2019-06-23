@@ -1,39 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-body {
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
-  margin: 0;
-}
+
 #tagline{
   font-family: 'Pacifico', cursive;
   font-size: 36px;
   text-align: center;
   font-weight: bold;
- color: rgb(83,175,80);
+  color:white;  /*rgb(130, 212, 53);;*/
 }
-ul.header li {
-  display: inline;
-  list-style-type: none;
-  margin: 0;
-}
-ul.header {
-  background-color: rgb(255, 0, 0);
-  padding: 0;
-}
-h1, ul, li {
-  font-family: sans-serif;
-}
-ul.header li a {
-  color: #FFF;
-  font-weight: bold;
-  text-decoration: none;
-  padding: 20px;
-  display: inline-block;
-}
-h1{
-  text-align: center;
-}
+
 #style{
 display: block;
 width: 50vw;
@@ -41,23 +16,28 @@ text-align:center;
 font-weight: bold;
 font-size: 80px;
 border-radius:15px;
-height: 10%;
-margin: auto auto;
+height: 25%;
+margin: auto;
 }
+
 #style:hover{
   transform: translate(5px, -5px);
 }
+
 #error{
   color: red;
 }
+
 #loader{
 margin: auto auto;
 }
+
 .req{
   font-family: 'Roboto', sans-serif;
   color: green;
   font-weight: bold;
 }
+
 .description{
   font-family: 'Roboto', sans-serif;
   color: black;
@@ -66,9 +46,40 @@ margin: auto auto;
 }
  
 .styling:hover{
-    text-shadow: 0px 0px 6px rgba(255, 255, 255, 1) !important;
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1) !important;
    box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
-    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
-    transition: all 0.4s ease 0s !important;
-    }
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57) !important;
+  transition: all 0.4s ease 0s !important;
+}
  
+    #home{
+      background-image: url("./artistic-asphalt-automobiles-799443.jpg");    
+      background-position: center;
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    }
+
+    .ui.menu{
+    margin: 0 !important;
+    }
+
+    .dropzone{
+      border: dashed 3px #eee;
+      border-radius: 5px;
+      padding-top: 30px;
+      text-align: center; 
+    }
+
+    .dropzone--isActive{
+      border: dashed 3px green
+    }
+
+    h1{
+      text-align: center;
+    }
+
+    .left.menu{
+      font-size: 24px;
+      font-weight: bolder;
+    }

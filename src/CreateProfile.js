@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Grid, Image, Form, Radio, Loader, Dimmer } from 'semantic-ui-react';
+import { Segment, Grid, Form, Container, Icon, Header } from 'semantic-ui-react';
 import fire from './config/fire';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
+import ReactCrop, { makeAspectCrop } from 'react-image-crop'
 
 class CreateProfile extends Component {
 
@@ -11,30 +13,35 @@ class CreateProfile extends Component {
       lastName: '',
       role: null,
       lat: null,
-      lng: null,
+      lng: null
     },
-    isLoading: false,
-    isGeolocationLoading: false,
-    isLocationAvailable: false,
-    updateProfile: null
+    createdProfile: false,
+    acceptedPicture: null
   }
 
   createProfile = (event) => {
 
     event.preventDefault();
 
-    if (!this.state.isLoading) {
-      this.setState({ isLoading: true });
-      console.log(this.props.authUser.uid);
-      fire.database().ref('/users/' + this.props.authUser.uid).set({
-        firstName: this.state.user.firstName,
-        lastName: this.state.user.lastName,
-        role: this.state.user.role,
-        lat: this.state.user.lat,
-        lng: this.state.user.lng,
-        id: this.props.authUser.uid
-      })
-    }
+    this.setState({ createdProfile: true });
+
+    fire.database().ref('/users/' + this.props.authUser.uid).set({
+      firstName: this.state.user.firstName,
+      lastName: this.state.user.lastName,
+      role: this.state.user.role,
+      lat: this.state.user.lat,
+      lng: this.state.user.lng,
+      id: this.props.authUser.uid
+    })
+
+    this.props.getAppUserAfterRegistration(this.state.user);
+
+    var storageRef = fire.storage().ref();
+    var userRef = storageRef.child(this.props.authUser.uid);
+
+    userRef.put(this.state.acceptedPicture[0]).then(function (snapshot) {
+      console.log('Uploaded a blob or file!');
+    });
   }
 
   updateInputs = (event) => {
@@ -55,8 +62,6 @@ class CreateProfile extends Component {
 
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
-        console.log(lat);
-        console.log(lng);
 
         var state = this.state;
         state.user.lat = lat;
@@ -73,68 +78,103 @@ class CreateProfile extends Component {
     }
   }
 
-  render() {
-
-    return (
-      <div>
-        <Grid>
-          <Grid.Column width={6}>
-            <h1> Create Profile </h1>
-            <Image src='' size='medium' centered bordered />
-          </Grid.Column>
-          <Grid.Column width={8}>
-            <br />
-            <br />
-            <Segment>
-              <Form>
-                <Form.Group widths='equal'>
-                  {this.state.firstNameValid}
-                  <Form.Input fluid name='firstName' type="text" onChange={this.updateInputs} value={this.state.user.firstName} label='First name' placeholder='First name' required />
-                  {this.state.lastNameValid}
-                  <Form.Input fluid name='lastName' type="text" onChange={this.updateInputs} value={this.state.user.lastName} label='Last name' placeholder='Last name' required />
-                </Form.Group>
-
-                <Form.Group inline>
-                  <label>User Role</label>
-                  <Form.Radio
-                    label='Host'
-                    value='host'
-                    name='role'
-                    type="radio"
-                    id="host"
-                    checked={this.state.user.role === 'host'}
-                    onChange={(e) => {// copy state, modify copy, set state to modified copy
-                      var state = this.state; state.user.role = e.target.value; this.setState(state)
-                    }}
-                  ></Form.Radio>
-                  <Form.Radio
-                    label='Guest'
-                    value='guest'
-                    name='role'
-                    type="radio"
-                    id="guest"
-                    checked={this.state.user.role === 'guest'}
-                    onChange={(e) => { var state = this.state; state.user.role = e.target.value; this.setState(state) }}
-                  ></Form.Radio>
-                </Form.Group>
-
-                <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
-
-                <Form.Button type="submit" disabled={this.state.user.firstName === '' || this.state.user.lastName === '' || this.state.user.lng === null || this.state.user.lat === null || this.state.user.role === null} onClick={this.createProfile} >Submit</Form.Button>
-              </Form>
-            </Segment>
-
-          </Grid.Column>
-        </Grid>
-      </div>
-    );
-
+  savePictureToState(userPicture) {
+    this.setState({ acceptedPicture: userPicture });
   }
 
+  render() {
+    const maxSize = 5048576;
+
+    if (this.state.createdProfile === true && this.state.user.role === 'guest') {
+      return <Redirect to='/guest-dashboard' />
+    }
+    else if (this.state.createdProfile === true && this.state.user.role === 'host') {
+      return <Redirect to='/host-dashboard' />
+    }
+    else {
+      return (
+        <div>
+          <Container>
+            <br />
+            <Grid>
+              <Grid.Column width={6}>
+                <h1> Create Profile </h1>
+                <br />
+                <Dropzone onDrop={acceptedFiles => {
+                  this.savePictureToState(acceptedFiles);
+                }} multiple={false} accept='image/*' minSize={0}
+                  maxSize={maxSize}>
+                  {({ getRootProps, getInputProps, isDragActive, isDragReject, rejectedFiles }) => {
+                    const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
+                    return (
+                      <section className="container">
+                        <div {...getRootProps({ className: 'dropzone' })}>
+                          <input {...getInputProps()} />
+                          {!isDragActive && <div>
+                            <Icon name='upload' size='huge' />
+                            <Header content="Drop 'n' Drop Image Here, or click to select files" />
+                          </div>}
+                          {isDragActive && !isDragReject && <p className='dropzone--isActive'>you are good to go</p>}
+                          {isDragReject && "File type not accepted, sorry!"}
+                          {isFileTooLarge && (
+                            <div>
+                              File is too large.
+                             </div>
+                          )}
+                        </div>
+                      </section>
+                    )
+                  }
+                  }
+                </Dropzone>
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <br />
+                <Segment>
+                  <Form>
+                    <Form.Group widths='equal'>
+                      {this.state.firstNameValid}
+                      <Form.Input fluid name='firstName' type="text" onChange={this.updateInputs} value={this.state.user.firstName} label='First name' placeholder='First name' required />
+                      {this.state.lastNameValid}
+                      <Form.Input fluid name='lastName' type="text" onChange={this.updateInputs} value={this.state.user.lastName} label='Last name' placeholder='Last name' required />
+                    </Form.Group>
+
+                    <Form.Group inline>
+                      <label>User Role</label>
+                      <Form.Radio
+                        label='Host'
+                        value='host'
+                        name='role'
+                        type="radio"
+                        id="host"
+                        checked={this.state.user.role === 'host'}
+                        onChange={(e) => {// copy state, modify copy, set state to modified copy
+                          var state = this.state; state.user.role = e.target.value; this.setState(state)
+                        }}
+                      ></Form.Radio>
+                      <Form.Radio
+                        label='Guest'
+                        value='guest'
+                        name='role'
+                        type="radio"
+                        id="guest"
+                        checked={this.state.user.role === 'guest'}
+                        onChange={(e) => { var state = this.state; state.user.role = e.target.value; this.setState(state) }}
+                      ></Form.Radio>
+                    </Form.Group>
+
+                    <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
+
+                    <Form.Button type="submit" disabled={this.state.user.firstName === '' || this.state.user.lastName === '' || this.state.user.lng === null || this.state.user.lat === null || this.state.user.role === null} onClick={this.createProfile} >Submit</Form.Button>
+                  </Form>
+                </Segment>
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </div>
+      );
+    }
+  }
 }
 
-
-
 export default CreateProfile;
-
-

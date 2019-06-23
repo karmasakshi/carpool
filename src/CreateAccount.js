@@ -17,7 +17,6 @@ class CreateAccount extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props);
     if (prevProps !== this.props) {
       this.setState({ isUserAvailable: true });
     }
@@ -54,7 +53,6 @@ class CreateAccount extends Component {
   }
 
   render() {
-    console.log(this.props);
     if (this.props.authUser) {
       return <Redirect to='/create-profile' />
     }
@@ -63,7 +61,7 @@ class CreateAccount extends Component {
       return (
         <Container>
           <Form>
-
+            <br />
             <Header as='h2'>Sign Up</Header>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
@@ -83,13 +81,8 @@ class CreateAccount extends Component {
           </Form>
         </Container>
       );
-
     }
   }
 }
-
-
-
-
 
 export default CreateAccount;

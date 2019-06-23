@@ -60,6 +60,7 @@ class SignIn extends Component {
         <Container>
 
           <Form>
+            <br />
             <Header as='h2'>Sign In</Header>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
