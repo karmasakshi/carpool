@@ -1,8 +1,7 @@
-import firebase from 'firebase'
+//import firebase from 'firebase'
+importScripts('https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/5.10.0/firebase-messaging.js');  
 
-//<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-
-// Initialize Firebase web app -- refer to the web app with the name 'config'
 const config = {
   apiKey: "AIzaSyBnE0owuEH598Qd_bvJ6xTLHVY-EqXKs4M",
   authDomain: "carpool-d3255.firebaseapp.com",
@@ -13,19 +12,23 @@ const config = {
 };
 
 const fire = firebase.initializeApp(config);
+const messaging=fire.messaging();
 
-let messaging;
-
+/*let messaging;
 // we need to check if messaging is supported by the browser
 if (firebase.messaging.isSupported()) {
-  messaging = fire.messaging();
+  messaging = firebase.messaging();
 }
 
-export const auth = firebase.auth();  //This exports the auth module of Firebase
-export const database = fire.database(); //This exports the database module of Firebase
+
 export {
   messaging
 };
-export default fire;
+*/
+//export const inicializarFirebase = () => {
+  //  firebase.initializeApp({
+    //  messagingSenderId: '13033149059'
+    //});
+  //} 
 
-
+  

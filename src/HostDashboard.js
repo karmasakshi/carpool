@@ -5,7 +5,6 @@ import fire from './config/fire';
 import 'firebase'
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
-let admin = require("firebase-admin");
 
 class HostDashboard extends Component {
 
@@ -17,8 +16,7 @@ class HostDashboard extends Component {
       isUsersRequestsRetrieved: false,
       acceptedRequests: [],
       isUserAvailable: false,
-      date: moment().add(1, "day"),
-      deleteOldRequests: false
+      date: moment().add(1, "day")
     };
   }
 
@@ -28,7 +26,6 @@ class HostDashboard extends Component {
     fire.database().ref('Requests/').orderByChild('dateOfJourney').endAt(date).once("value").then((snapshot) => {
       snapshot.forEach(function (child) {
         child.ref.remove();
-        console.log("Removed!");
       })
 
       this.retrieveRequests();
@@ -118,6 +115,28 @@ class HostDashboard extends Component {
           this.setState({ isUsersRequestsRetrieved: true, usersRequests: usersRequests, acceptedRequests: acceptedRequests });
       })
     }
+
+    let messaging = fire.messaging();
+    let token;
+
+    fire.messaging().requestPermission().then(() => {
+       console.log("Have Permission");
+       token = messaging.getToken();
+       console.log('i am token', token);
+       return messaging.getToken();
+     }).then(token => {
+       console.log("FCM Token:", token);
+       //you probably want to send your new found FCM token to the
+       //application server so that they can send any push
+       //notification to you.
+     }).catch(error => {
+       if (error.code === "messaging/permission-blocked") {
+          console.log("Please Unblock Notification Request Manually");
+       } 
+       else {
+          console.log("Error Occurred", error);
+       }
+      });
   }
 
   componentWillUnmount() {
@@ -138,7 +157,7 @@ class HostDashboard extends Component {
                       <Item>
                         <Item.Image size='tiny' src='/images/wireframe/image.png' />
                         <Item.Content>
-                          <Item.Header as='a'>{requester.guestName} </Item.Header>
+                          <Item.Header>{requester.guestName} </Item.Header>
                           <Item.Description>
                             <Image src='/images/wireframe/short-paragraph.png' />
                           </Item.Description>
