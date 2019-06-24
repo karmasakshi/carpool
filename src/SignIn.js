@@ -25,9 +25,7 @@ class SignIn extends Component {
         this.setState({ errors: error.message, isLoading: false });
 
       });
-
     }
-
   }
 
   updateInputs = (event) => {
@@ -67,12 +65,12 @@ class SignIn extends Component {
 
             <Form.Field>
               <label htmlFor="email">email</label>
-              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} disabled={this.state.isLoading}  />
             </Form.Field>
 
             <Form.Field>
               <label htmlFor="password">password</label>
-              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} disabled={this.state.isLoading} />
             </Form.Field>
 
             <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.signInUserWithEmailAndPassword}>Login</button>

@@ -68,12 +68,12 @@ class CreateAccount extends Component {
 
             <Form.Field>
               <label htmlFor="email">email</label>
-              <input type="email" name='email' id="email" value={this.state.user.email} onChange={this.updateInputs} />
+              <input disabled={this.state.isLoading} id="email" name='email' onChange={this.updateInputs} type="email" value={this.state.user.email}  />
             </Form.Field>
 
             <Form.Field>
               <label htmlFor="password">password</label>
-              <input type="password" name='password' id="password" value={this.state.user.password} onChange={this.updateInputs} />
+              <input disabled={this.state.isLoading} id="password" name='password' onChange={this.updateInputs} type="password" value={this.state.user.password}  />
             </Form.Field>
 
             <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.createUserWithEmailAndPassword}>Create Account</button>
