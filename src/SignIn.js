@@ -55,11 +55,11 @@ class SignIn extends Component {
     }
     else {
       return (
-        <Container>
-
-          <Form>
-            <br />
-            <Header as='h2'>Sign In</Header>
+        <Form>
+          <br />
+          <div className="jumbotron">
+            <Header as='h2' className="login">SIGN IN</Header>
+          </div>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
 
@@ -74,10 +74,7 @@ class SignIn extends Component {
             </Form.Field>
 
             <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.signInUserWithEmailAndPassword}>Login</button>
-
-          </Form>
-
-        </Container>
+        </Form>
       )
     }
   }
