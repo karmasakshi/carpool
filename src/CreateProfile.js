@@ -36,12 +36,12 @@ class CreateProfile extends Component {
 
     this.props.getAppUserAfterRegistration(this.state.user);
 
-    var storageRef = fire.storage().ref();
-    var userRef = storageRef.child(this.props.authUser.uid);
+    //var storageRef = fire.storage().ref();
+    //var userRef = storageRef.child(this.props.authUser.uid);
 
-    userRef.put(this.state.acceptedPicture[0]).then(function (snapshot) {
-      console.log('Uploaded a blob or file!');
-    });
+    // userRef.put(this.state.acceptedPicture[0]).then(function (snapshot) {
+    //   console.log('Uploaded a blob or file!');
+    // });
   }
 
   updateInputs = (event) => {

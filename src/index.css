@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import './login.css';
 
 #tagline{
   font-family: 'Pacifico', cursive;
@@ -95,35 +96,4 @@ margin: auto auto;
       font-weight: bolder;
     }
 
-    .ui.header{
-      text-align: center;
-    }
-
-    .jumbotron{
-      background-image: url('./rideshare.jpg');
-      height: 100px;
-      background-position: center right;
-      background-repeat: no-repeat;
-    }
-
-    .ui.form{
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        background: white;
-        width: 50%;
-        min-width: 400px;
-        min-height: 100%;
-        margin: 0 auto;
-        padding-bottom: 30px;
-        position: relative;
-        box-sizing: border-box;
-    }
-  
-    #email{
-      width: 95.5%
-    }
-
-    #password{
-      width: 95.5%
-    }
+    

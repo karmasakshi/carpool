@@ -57,8 +57,9 @@ class SignIn extends Component {
       return (
         <Form>
           <br />
+          <br />
           <div className="jumbotron">
-            <Header as='h2' className="login">SIGN IN</Header>
+            <Header as='h2' className="login">Sign In</Header>
           </div>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}

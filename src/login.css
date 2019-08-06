@@ -1,0 +1,25 @@
+.ui.header{
+    text-align: center;
+  }
+
+  .ui.form{
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      background: white;
+      width: 50%;
+      min-width: 400px;
+      min-height: 100%;
+      margin: 0 auto;
+      padding-bottom: 30px;
+      position: relative;
+      box-sizing: border-box;
+  }
+
+  #email{
+    width: 95.5%
+  }
+
+  #password{
+    width: 95.5%
+  }
