@@ -9,7 +9,6 @@ import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import { Icon } from 'semantic-ui-react'
 import moment from 'moment';
-import { askForPermissioToReceiveNotifications } from './push-notification';
 
 class GuestDashboard extends Component {
 
@@ -181,7 +180,7 @@ class GuestDashboard extends Component {
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />
-                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id, host.firstName, host.lastName); {askForPermissioToReceiveNotifications()};}}>Request a ride</Button>
+                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id, host.firstName, host.lastName);}}>Request a ride</Button>
                     <br />
                     <br />
                     {this.searchForRequests(host.id) ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
