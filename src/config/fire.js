@@ -21,6 +21,11 @@ if (firebase.messaging.isSupported()) {
   messaging = fire.messaging();
 }
 
+messaging.usePublicVapidKey(
+  // Project Settings => Cloud Messaging => Web Push certificates
+  "BH5Gjuahju79-ITrvvJ3cMTSLyBep3VhERmAdLdGvf8rPZjgIfM40Pemd6PkM1GsE_07ZmzqUU2Mape9q3-S9Fk"
+);
+
 export const auth = firebase.auth();  //This exports the auth module of Firebase
 export const database = fire.database(); //This exports the database module of Firebase
 export {

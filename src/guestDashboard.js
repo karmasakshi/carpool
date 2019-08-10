@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
 import { Grid, Image, Card, Button } from 'semantic-ui-react'
-import fire from './config/fire'
+import fire, { messaging } from './config/fire'
 import { Form, Container } from 'semantic-ui-react';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import { Icon } from 'semantic-ui-react'
 import moment from 'moment';
-import { askForPermissioToReceiveNotifications } from './push-notification';
 
 class GuestDashboard extends Component {
 
@@ -21,12 +20,39 @@ class GuestDashboard extends Component {
       requests: [],
       date: moment().add(1, "day"),
       focused: null,
-      isUserAvailable: false
+      isUserAvailable: false,
+      fcmToken: null
     };
   }
 
-  componentDidMount() {
-    this.findAvailableHostsByDate(this.state.date)
+  async componentDidMount() {
+    this.findAvailableHostsByDate(this.state.date);
+
+    messaging.requestPermission()
+      .then(async function () {
+        await messaging.getToken().then((currentToken) => {
+          console.log("i am token", currentToken);
+          fetch("https://fcm.googleapis.com/fcm/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "key=AAAAAwjWEoM:APA91bHg5x1OCh0gR7e1q5wSaGczdS0E3veJN-u6ur6oDwSRrrZVqzM3FMvL4K7HdLpAyA3wEOC3zroN2U5ifLIMCe8XTRcTRjiJQu3I9z40YROWaSEyV95rZb-4Q_iOVghJad32DXXT" },
+            data: {
+              "message": "Firebase Notification"
+            },
+            to: currentToken
+          });
+        })
+          .catch(function (err) {
+            console.log("Unable to get permission to notify.", err);
+          });
+      });
+
+    navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
+
+    // fire.database().ref('/users/'+this.props.appUser.id).set({
+    //   fcmToken: token
+    // }).then(console.log("success")).catch(function(err){
+    //   console.log(err);
+    // });
   }
 
   componentDidUpdate() {
@@ -90,7 +116,7 @@ class GuestDashboard extends Component {
         })
       }
     }).catch((error) => {
-       console.log(error)
+      console.log(error)
     })
   }
 
@@ -181,7 +207,7 @@ class GuestDashboard extends Component {
                   <Card.Content>
                     <Card.Header>{host.firstName} {host.lastName}</Card.Header>
                     <br />
-                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id, host.firstName, host.lastName); {askForPermissioToReceiveNotifications()};}}>Request a ride</Button>
+                    <Button className='styling' color='green' disabled={this.searchForRequests(host.id)} onClick={() => { this.sendRequest(host.id, host.firstName, host.lastName); }}>Request a ride</Button>
                     <br />
                     <br />
                     {this.searchForRequests(host.id) ? <p className='req'><i className="check icon"></i>Your request has been sent</p> : null}
