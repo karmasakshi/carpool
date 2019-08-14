@@ -11,7 +11,7 @@ class Options extends Component {
                         <Grid.Row>
                             <Grid.Column>
                                 <Icon name='taxi' size="massive" />
-                                <a href='#'><h2> Taxi Share <Icon name='arrow right' /></h2></a>
+                                <a href='/taxi-share/plan-my-week'><h2> Taxi Share <Icon name='arrow right' /></h2></a>
                             </Grid.Column>
                             <Grid.Column>
                                 <Icon name='car' size="massive" />
