@@ -5,6 +5,7 @@ import fire from './config/fire';
 import 'firebase'
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
+// import { messaging } from "./config/fire";
 
 class HostDashboard extends Component {
 
@@ -35,8 +36,16 @@ class HostDashboard extends Component {
 
   }
 
-  componentDidMount() {
+  componentDidMount() {   //async componentDidMount() should be used with messaging
     this.retrieveRequests();
+
+    // messaging.requestPermission().then(async function () {
+    //   const token = await messaging.getToken();
+    //   console.log("i am token", token);
+    // }).catch(function (err) {
+    //   console.log("Unable to get permission to notify.", err);
+    // });
+    // navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
   }
 
 
@@ -116,27 +125,27 @@ class HostDashboard extends Component {
       })
     }
 
-    let messaging = fire.messaging();
-    let token;
+    //   let messaging = fire.messaging();
+    //   let token;
 
-    fire.messaging().requestPermission().then(() => {
-       console.log("Have Permission");
-       token = messaging.getToken();
-       console.log('i am token', token);
-       return messaging.getToken();
-     }).then(token => {
-       console.log("FCM Token:", token);
-       //you probably want to send your new found FCM token to the
-       //application server so that they can send any push
-       //notification to you.
-     }).catch(error => {
-       if (error.code === "messaging/permission-blocked") {
-          console.log("Please Unblock Notification Request Manually");
-       } 
-       else {
-          console.log("Error Occurred", error);
-       }
-      });
+    //   fire.messaging().requestPermission().then(() => {
+    //     console.log("Have Permission");
+    //     token = messaging.getToken();
+    //     console.log('i am token', token);
+    //     return messaging.getToken();
+    //   }).then(token => {
+    //     console.log("FCM Token:", token);
+    //     //you probably want to send your new found FCM token to the
+    //     //application server so that they can send any push
+    //     //notification to you.
+    //   }).catch(error => {
+    //     if (error.code === "messaging/permission-blocked") {
+    //       console.log("Please Unblock Notification Request Manually");
+    //     }
+    //     else {
+    //       console.log("Error Occurred", error);
+    //     }
+    //   });
   }
 
   componentWillUnmount() {
@@ -163,7 +172,7 @@ class HostDashboard extends Component {
                           </Item.Description>
                           <Item.Extra>{new Date(requester.dateOfJourney).toDateString()}</Item.Extra>
                           <Button className='styling' color='green' disabled={this.state.acceptedRequests.indexOf(requester.requestId) !== -1}
-                            onClick={() => { this.acceptRequest(requester.requestId) }}>Accept Request</Button>
+                            onClick={() => { this.acceptRequest(requester.requestId); }}>Accept Request</Button>
                           <Button className='styling' color='red' disabled={this.state.acceptedRequests.indexOf(requester.requestId) !== -1} onClick={() => { this.declineRequest(requester.requestId) }}>Decline Request</Button>
                           {this.state.acceptedRequests.indexOf(requester.requestId) !== -1 ? <p className='req'><i className="check icon"></i>Your accept has been sent</p> : null}
                         </Item.Content>

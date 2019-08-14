@@ -59,27 +59,28 @@ class CreateAccount extends Component {
     else {
 
       return (
-        <Container>
-          <Form>
-            <br />
-            <Header as='h2'>Sign Up</Header>
+        <Form>
+          <br />
+          <br />
+          <div className="jumbotron">
+            <Header as='h2' className="login">Sign Up</Header>
+          </div>
 
-            {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
+          {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}
 
-            <Form.Field>
-              <label htmlFor="email">email</label>
-              <input disabled={this.state.isLoading} id="email" name='email' onChange={this.updateInputs} type="email" value={this.state.user.email}  />
-            </Form.Field>
+          <Form.Field>
+            <label htmlFor="email">email</label>
+            <input disabled={this.state.isLoading} id="email" name='email' onChange={this.updateInputs} type="email" value={this.state.user.email} />
+          </Form.Field>
 
-            <Form.Field>
-              <label htmlFor="password">password</label>
-              <input disabled={this.state.isLoading} id="password" name='password' onChange={this.updateInputs} type="password" value={this.state.user.password}  />
-            </Form.Field>
+          <Form.Field>
+            <label htmlFor="password">password</label>
+            <input disabled={this.state.isLoading} id="password" name='password' onChange={this.updateInputs} type="password" value={this.state.user.password} />
+          </Form.Field>
 
-            <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.createUserWithEmailAndPassword}>Create Account</button>
+          <button className={'ui primary button ' + (this.state.isLoading ? 'loading disabled' : '')} onClick={this.createUserWithEmailAndPassword}>Create Account</button>
 
-          </Form>
-        </Container>
+        </Form>
       );
     }
   }

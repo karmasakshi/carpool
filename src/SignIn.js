@@ -48,10 +48,10 @@ class SignIn extends Component {
         return <Redirect to='/create-profile' />
 
       else if (this.props.appUser.role === 'guest')
-        return <Redirect to='/guest-dashboard' />
+        return <Redirect to='/options' />
 
       else if (this.props.appUser.role === 'host')
-        return <Redirect to='/host-dashboard' />
+        return <Redirect to='/options' />
     }
     else {
       return (
