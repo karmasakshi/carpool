@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import './login.css';
-
+@import "./options.css";
+@import "./planner.css";
 #tagline{
   font-family: 'Pacifico', cursive;
   font-size: 1.5em;

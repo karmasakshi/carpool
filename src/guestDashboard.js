@@ -20,33 +20,32 @@ class GuestDashboard extends Component {
       requests: [],
       date: moment().add(1, "day"),
       focused: null,
-      isUserAvailable: false,
-      fcmToken: null
+      isUserAvailable: false
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {   //should be async componentDidMount() in case of messaging
     this.findAvailableHostsByDate(this.state.date);
 
-    messaging.requestPermission()
-      .then(async function () {
-        await messaging.getToken().then((currentToken) => {
-          console.log("i am token", currentToken);
-          fetch("https://fcm.googleapis.com/fcm/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": "key=AAAAAwjWEoM:APA91bHg5x1OCh0gR7e1q5wSaGczdS0E3veJN-u6ur6oDwSRrrZVqzM3FMvL4K7HdLpAyA3wEOC3zroN2U5ifLIMCe8XTRcTRjiJQu3I9z40YROWaSEyV95rZb-4Q_iOVghJad32DXXT" },
-            data: {
-              "message": "Firebase Notification"
-            },
-            to: currentToken
-          });
-        })
-          .catch(function (err) {
-            console.log("Unable to get permission to notify.", err);
-          });
-      });
+    // messaging.requestPermission()
+    //   .then(async function () {
+    //     await messaging.getToken().then((currentToken) => {
+    //       console.log("i am token", currentToken);
+    //       fetch("https://fcm.googleapis.com/fcm/send", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json", "Authorization": "key=AAAAAwjWEoM:APA91bHg5x1OCh0gR7e1q5wSaGczdS0E3veJN-u6ur6oDwSRrrZVqzM3FMvL4K7HdLpAyA3wEOC3zroN2U5ifLIMCe8XTRcTRjiJQu3I9z40YROWaSEyV95rZb-4Q_iOVghJad32DXXT" },
+    //         data: {
+    //           "message": "Firebase Notification"
+    //         },
+    //         to: currentToken
+    //       });
+    //     })
+    //       .catch(function (err) {
+    //         console.log("Unable to get permission to notify.", err);
+    //       });
+    //   });
 
-    navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
+    // navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
 
     // fire.database().ref('/users/'+this.props.appUser.id).set({
     //   fcmToken: token
@@ -61,6 +60,7 @@ class GuestDashboard extends Component {
     }
   }
 
+//Distance measured between points is Haversine's Formula, which calculates the distance between two points on a sphere as the crow flies
   isCloseby(xLat, xLong, yLat, yLong, delta) {
 
     var R = 6371;

@@ -4,6 +4,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "gcm_sending_id": "13033149059"
+  "background_color": "#ffffff"
 }

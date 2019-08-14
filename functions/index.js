@@ -1,6 +1,6 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-admin.initializeApp(); //functions.config().firebase - was inside brackets
+// const functions = require('firebase-functions');
+// const admin = require('firebase-admin');
+// admin.initializeApp(); //functions.config().firebase - was inside brackets
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -9,21 +9,21 @@ admin.initializeApp(); //functions.config().firebase - was inside brackets
 //  response.send("Hello from Firebase!");
 //  });
 
-exports.sendMessage = functions.database.ref("Requests").onCreate(event => {
+// exports.sendMessage = functions.database.ref("Requests").onCreate(event => {
   	
-    const sender = "shivani";
+//     const sender = "shivani";
 
-    console.log("requestId", requestId);
-    console.log("hello from me");
+//     console.log("requestId", requestId);
+//     console.log("hello from me");
 
-    const payload = {
-        data: {
-            title: `New ride request from ${sender}`,
-            body: "hey u have a new request"
-        },
-        topic: "will work"
-    };
+//     const payload = {
+//         data: {
+//             title: `New ride request from ${sender}`,
+//             body: "hey u have a new request"
+//         },
+//         topic: "will work"
+//     };
 
-    return admin.messaging().send(topicname,payload);
+//     return admin.messaging().send(topicname,payload);
     
-});
+// });

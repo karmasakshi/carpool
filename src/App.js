@@ -10,7 +10,9 @@ import '../node_modules/semantic-ui-css/semantic.min.css';
 import fire from './config/fire';
 import GuestDashboard from './guestDashboard';
 import HostDashboard from './HostDashboard';
-import Notifications from './Notifications'
+import Notifications from './Notifications';
+import Options from './Options';
+import PlanYourWeek from './PlanYourWeek.js';
 
 function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }) {
   return (
@@ -77,6 +79,8 @@ class App extends Component {
             <Route exact path='/guest-dashboard/notifications' render={() => <Notifications appUser={this.state.appUser} />} />
             <Route exact path='/sign-up' render={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} getAppUserAfterRegistration={this.getAppUser.bind(this)} />} />
+            <AuthenticatedRoute exact path='/options' component={Options} appUser={this.state.appUser} authUser={this.state.authUser} />} />
+            <Route exact path='/taxi-share/plan-my-week' component={PlanYourWeek} />
             <Route render={() => <h1>Page not found</h1>} />
           </Switch>
         </div>

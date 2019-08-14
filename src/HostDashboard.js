@@ -5,7 +5,7 @@ import fire from './config/fire';
 import 'firebase'
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';
-import { messaging } from "./config/fire";
+// import { messaging } from "./config/fire";
 
 class HostDashboard extends Component {
 
@@ -36,16 +36,16 @@ class HostDashboard extends Component {
 
   }
 
-  async componentDidMount() {
+  componentDidMount() {   //async componentDidMount() should be used with messaging
     this.retrieveRequests();
 
-    messaging.requestPermission().then(async function () {
-      const token = await messaging.getToken();
-      console.log("i am token", token);
-    }).catch(function (err) {
-      console.log("Unable to get permission to notify.", err);
-    });
-    navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
+    // messaging.requestPermission().then(async function () {
+    //   const token = await messaging.getToken();
+    //   console.log("i am token", token);
+    // }).catch(function (err) {
+    //   console.log("Unable to get permission to notify.", err);
+    // });
+    // navigator.serviceWorker.addEventListener("message", (message) => console.log(message));
   }
 
 

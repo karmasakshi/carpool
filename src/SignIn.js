@@ -48,10 +48,10 @@ class SignIn extends Component {
         return <Redirect to='/create-profile' />
 
       else if (this.props.appUser.role === 'guest')
-        return <Redirect to='/guest-dashboard' />
+        return <Redirect to='/options' />
 
       else if (this.props.appUser.role === 'host')
-        return <Redirect to='/host-dashboard' />
+        return <Redirect to='/options' />
     }
     else {
       return (
@@ -59,7 +59,7 @@ class SignIn extends Component {
           <br />
           <br />
           <div className="jumbotron">
-            <Header as='h2' className="login">Sign In</Header>
+            <Header as='h2' className="login">Log In</Header>
           </div>
 
             {this.state.errors !== '' ? <p id='error'>Error: {this.state.errors}</p> : ''}

@@ -13,7 +13,8 @@ class CreateProfile extends Component {
       lastName: '',
       role: null,
       lat: null,
-      lng: null
+      lng: null,
+      taxiUser: null
     },
     createdProfile: false,
     acceptedPicture: null
@@ -31,6 +32,7 @@ class CreateProfile extends Component {
       role: this.state.user.role,
       lat: this.state.user.lat,
       lng: this.state.user.lng,
+      taxiUser: this.state.user.taxiUser,
       id: this.props.authUser.uid
     })
 
@@ -86,10 +88,10 @@ class CreateProfile extends Component {
     const maxSize = 5048576;
 
     if (this.state.createdProfile === true && this.state.user.role === 'guest') {
-      return <Redirect to='/guest-dashboard' />
+      return <Redirect to='/options' />
     }
     else if (this.state.createdProfile === true && this.state.user.role === 'host') {
-      return <Redirect to='/host-dashboard' />
+      return <Redirect to='/options' />
     }
     else {
       return (
@@ -160,6 +162,30 @@ class CreateProfile extends Component {
                         id="guest"
                         checked={this.state.user.role === 'guest'}
                         onChange={(e) => { var state = this.state; state.user.role = e.target.value; this.setState(state) }}
+                      ></Form.Radio>
+                    </Form.Group>
+
+                    <Form.Group inline>
+                      <label>Do you use taxi for office purposes</label>
+                      <Form.Radio
+                        label='Yes'
+                        value='Yes'
+                        name='taxiUser'
+                        type="radio"
+                        id="taxiUser"
+                        checked={this.state.user.taxiUser === 'Yes'}
+                        onChange={(e) => {// copy state, modify copy, set state to modified copy
+                          var state = this.state; state.user.taxiUser = e.target.value; this.setState(state)
+                        }}
+                      ></Form.Radio>
+                      <Form.Radio
+                        label='No'
+                        value='No'
+                        name='taxiUser'
+                        type="radio"
+                        id="notTaxiUser"
+                        checked={this.state.user.taxiUser === 'No'}
+                        onChange={(e) => { var state = this.state; state.user.taxiUser = e.target.value; this.setState(state) }}
                       ></Form.Radio>
                     </Form.Group>
 

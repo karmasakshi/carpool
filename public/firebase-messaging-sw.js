@@ -12,33 +12,33 @@ const config = {
 };
 
 const fire = firebase.initializeApp(config);
-const messaging=firebase.messaging();
+//const messaging=firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(payload) {
-  const promiseChain = clients
-    .matchAll({
-      type: "window",
-      includeUncontrolled: true
-    })
-    .then(windowClients => {
-      for (let i = 0; i < windowClients.length; i++) {
-        const windowClient = windowClients[i];
-        windowClient.postMessage(payload);
-      }
-    })
-    .then(() => {
-      return registration.showNotification("my notification title");
-    });
-  return promiseChain;
-});
-self.addEventListener('notificationclick', function(event) {
-  // do what you want
-  // ...
-  return admin.messaging().send(payload);
-});
+// messaging.setBackgroundMessageHandler(function(payload) {
+//   const promiseChain = clients
+//     .matchAll({
+//       type: "window",
+//       includeUncontrolled: true
+//     })
+//     .then(windowClients => {
+//       for (let i = 0; i < windowClients.length; i++) {
+//         const windowClient = windowClients[i];
+//         windowClient.postMessage(payload);
+//       }
+//     })
+//     .then(() => {
+//       return registration.showNotification("my notification title");
+//     });
+//   return promiseChain;
+// });
+// self.addEventListener('notificationclick', function(event) {
+//   // do what you want
+//   // ...
+//   return admin.messaging().send(payload);
+// });
 
-/*let messaging;
-// we need to check if messaging is supported by the browser
+
+ //we need to check if messaging is supported by the browser
 if (firebase.messaging.isSupported()) {
   messaging = firebase.messaging();
 }
@@ -47,7 +47,7 @@ if (firebase.messaging.isSupported()) {
 export {
   messaging
 };
-*/
+
 //export const inicializarFirebase = () => {
   //  firebase.initializeApp({
     //  messagingSenderId: '13033149059'
