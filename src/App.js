@@ -80,7 +80,7 @@ class App extends Component {
             <Route exact path='/sign-up' render={() => <CreateAccount authUser={this.state.authUser} />} />
             <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} getAppUserAfterRegistration={this.getAppUser.bind(this)} />} />
             <AuthenticatedRoute exact path='/options' component={Options} appUser={this.state.appUser} authUser={this.state.authUser} />} />
-            <Route exact path='/taxi-share/plan-my-week' component={PlanYourWeek} />
+            <Route exact path='/taxi-share/plan-my-week' render={() => <PlanYourWeek appUser={this.state.appUser} />} />
             <Route render={() => <h1>Page not found</h1>} />
           </Switch>
         </div>

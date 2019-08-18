@@ -3,6 +3,7 @@
 @import './login.css';
 @import "./options.css";
 @import "./planner.css";
+
 #tagline{
   font-family: 'Pacifico', cursive;
   font-size: 1.5em;

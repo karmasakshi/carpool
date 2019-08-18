@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import "./index.css"
 import fire from './config/fire'
 import { Redirect } from 'react-router';
-import { Container, Form, Header } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
 
 class CreateAccount extends Component {
 

@@ -36,6 +36,18 @@ class CreateProfile extends Component {
       id: this.props.authUser.uid
     })
 
+    if(this.state.user.taxiUser === "Yes"){
+      fire.database().ref('/Taxi-Users/' + this.props.authUser.uid).set({
+        firstName: this.state.user.firstName,
+        lastName: this.state.user.lastName,
+        Sunday: null,
+        Monday: null, 
+        Tuesday: null,
+        Wednesday: null, 
+        Thursday: null
+      });
+    }
+
     this.props.getAppUserAfterRegistration(this.state.user);
 
     //var storageRef = fire.storage().ref();

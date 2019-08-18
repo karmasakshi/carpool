@@ -1,39 +1,35 @@
 .planner{
-    padding: 4em 4em 4em 4em;
     display: grid;
-    grid-gap: 1em 0;
     grid-template-columns: 1fr 1fr; 
+    grid-gap: 1em 0;
     grid-template-areas: "sunday ."
                          "monday ."
                          "tuesday ."
                          "wednesday ."
-                         "thursday ."
-}
-
-.planner div:nth-child(odd){
-    border: 2px solid green
-}
-
-.planner div:nth-child(even){
-    border: 2px solid pink
+                         "thursday ."    
 }
 
 .sunday{
- grid-area: "sunday"
+ grid-area: "sunday";
+ align-self: center;
 }
 
 .monday{
-grid-area: "monday"
+grid-area: "monday";
+align-self: center;
 }
 
 .tuesday{
-grid-area: "tuesday"
+grid-area: "tuesday";
+align-self: center;
 }
 
 .wednesday{
-grid-area: "wednesday"
+grid-area: "wednesday";
+align-self: center;
 }
 
 .thursday{
-grid-area: "thursday"
+grid-area: "thursday";
+align-self: center;
 }
