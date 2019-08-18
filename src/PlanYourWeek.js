@@ -1,62 +1,136 @@
 import React, { Component } from "react";
 import './index.css'
 import '../node_modules/semantic-ui-css/semantic.min.css';
-import { Dropdown } from 'semantic-ui-react';
-import 'react-dates/initialize';
-import 'react-dates/lib/css/_datepicker.css';
+import { Dropdown, Container, Button } from 'semantic-ui-react';
+import fire from './config/fire';
+import { Redirect } from 'react-router-dom';
 
 class PlanYourWeek extends Component {
 
-  render() {
-    const countryOptions = [
-      { key: 'af', value: 'af', flag: 'af', text: 'Afghanistan' },
-      { key: 'ax', value: 'ax', flag: 'ax', text: 'Aland Islands' },
-      { key: 'al', value: 'al', flag: 'al', text: 'Albania' },
-      { key: 'dz', value: 'dz', flag: 'dz', text: 'Algeria' },
-      { key: 'as', value: 'as', flag: 'as', text: 'American Samoa' },
-      { key: 'ad', value: 'ad', flag: 'ad', text: 'Andorra' },
-      { key: 'ao', value: 'ao', flag: 'ao', text: 'Angola' },
-      { key: 'ai', value: 'ai', flag: 'ai', text: 'Anguilla' },
-      { key: 'ag', value: 'ag', flag: 'ag', text: 'Antigua' },
-      { key: 'ar', value: 'ar', flag: 'ar', text: 'Argentina' },
-      { key: 'am', value: 'am', flag: 'am', text: 'Armenia' },
-      { key: 'aw', value: 'aw', flag: 'aw', text: 'Aruba' },
-      { key: 'au', value: 'au', flag: 'au', text: 'Australia' },
-      { key: 'at', value: 'at', flag: 'at', text: 'Austria' },
-      { key: 'az', value: 'az', flag: 'az', text: 'Azerbaijan' },
-      { key: 'bs', value: 'bs', flag: 'bs', text: 'Bahamas' },
-      { key: 'bh', value: 'bh', flag: 'bh', text: 'Bahrain' },
-      { key: 'bd', value: 'bd', flag: 'bd', text: 'Bangladesh' },
-      { key: 'bb', value: 'bb', flag: 'bb', text: 'Barbados' },
-      { key: 'by', value: 'by', flag: 'by', text: 'Belarus' },
-      { key: 'be', value: 'be', flag: 'be', text: 'Belgium' },
-      { key: 'bz', value: 'bz', flag: 'bz', text: 'Belize' },
-      { key: 'bj', value: 'bj', flag: 'bj', text: 'Benin' },
-    ]
+  constructor(props) {
+    super(props);
 
-    return (
-      <React.Fragment>
-        <h1> Plan My Week</h1>
-        <div className="planner">
-          <div><h1 className="sunday"> Sunday </h1></div>
-          <div><Dropdown
-            placeholder='Select Country'
-            fluid
-            search
-            selection
-            options={countryOptions}
-          /></div>
-          <div><h1 className="monday"> Monday </h1></div>
-          <div>Location</div>
-          <div><h1 className="tuesday"> Tuesday </h1></div>
-          <div>Location</div>
-          <div><h1 className="wednesday"> Wednesday </h1></div>
-          <div>Location</div>
-          <div><h1 className="thursday"> Thursday </h1></div>
-          <div>Location</div>
-        </div>
-      </React.Fragment>
+    this.state = {
+      Sunday: '',
+      Monday: '',
+      Tuesday: '',
+      Wednesday: '',
+      Thursday: '',
+      days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      destinationOptions: [],
+      createdPlanner: false
+    };
+  }
+
+  componentDidMount() {
+    let destinationOptions = [];
+
+    fire.database().ref('destinations').once('value').then((snapshot) => {
+      let destinations = Object.keys(snapshot.val());
+
+      for (var i = 0; i < destinations.length; i++) {
+        destinationOptions.push({                          //order in which semantic ui react dropdown uses values
+          value: Object.keys(snapshot.val())[i],
+          text: Object.keys(snapshot.val())[i]
+        });
+      }
+
+      this.setState({
+        destinationOptions: destinationOptions
+      });
+    })
+  }
+
+  handleChange = (e, { value }, day) => {
+    let obj = {};
+
+    obj[day] = e.target.innerText;
+    obj[value] = e.target.innerText;
+
+    this.setState(obj);
+  }
+
+  submitPlanner() {
+    fire.database().ref('/Taxi-Users/' + this.props.appUser.id).update({
+      Sunday: this.state.Sunday,
+      Monday: this.state.Monday,
+      Tuesday: this.state.Tuesday,
+      Wednesday: this.state.Wednesday,
+      Thursday: this.state.Thursday
+    }).then(
+      this.setState({
+        createdPlanner: true
+      })
     )
+  }
+
+  render() {
+    var today = new Date();
+    var dd, ddEnd;
+    var mm = String(today.getMonth() + 1); //January is 0!
+    var yyyy = today.getFullYear();
+    var dayOfTheWeek = today.getDay();
+
+    let days = {
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6
+    }
+
+    if (dayOfTheWeek <= 4) {
+      dd = String(today.getDate() - dayOfTheWeek);
+      ddEnd = String(today.getDate() - dayOfTheWeek + 4);
+    }
+    else {
+      dd = String(today.getDate() - dayOfTheWeek + 7);
+      ddEnd = String(today.getDate() - dayOfTheWeek + 12);    //will not work when it approaches month end -- sort it out 
+    }
+
+    if (this.state.createdPlanner)
+      return <Redirect to="/options" />
+    else {
+      return (
+
+        <div>
+          <Container>
+            <h1> Plan My Week</h1>
+            <h1>Time Period: {dd + "/" + mm + "/" + yyyy} to {ddEnd + "/" + mm + "/" + yyyy}</h1>
+
+            {this.state.days.map((day) => (
+              <div key={day} className="planner">
+                <div><h2 className={day}>{day}</h2></div>
+                {days[day] >= dayOfTheWeek ?
+                  <Dropdown
+                    placeholder='Destination'
+                    fluid
+                    search
+                    selection
+                    clearable
+                    options={this.state.destinationOptions}
+                    onChange={(e) => this.handleChange(e, day)}
+                  /> :
+                  <Dropdown
+                    placeholder='Destination'
+                    fluid
+                    search
+                    selection
+                    clearable
+                    disabled
+                    options={this.state.destinationOptions}
+                    onChange={(e) => this.handleChange(e, day)}
+                  />
+                }
+              </div>
+            ))}
+            <Button primary type="submit" onClick={() => this.submitPlanner()}>Submit</Button>
+          </Container>
+        </div>
+      )
+    }
   }
 }
 
