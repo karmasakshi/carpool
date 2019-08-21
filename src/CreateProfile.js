@@ -1,23 +1,35 @@
 import React, { Component } from 'react';
-import { Segment, Grid, Form, Container, Icon, Header } from 'semantic-ui-react';
+import { Segment, Search, Grid, Form, Container, Icon, Header } from 'semantic-ui-react';
 import fire from './config/fire';
 import { Redirect } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
+import _ from 'lodash'
 import ReactCrop, { makeAspectCrop } from 'react-image-crop'
+
+/*global google*/
+var service = new google.maps.places.AutocompleteService();
 
 class CreateProfile extends Component {
 
-  state = {
-    user: {
-      firstName: '',
-      lastName: '',
-      role: null,
-      lat: null,
-      lng: null,
-      taxiUser: null
-    },
-    createdProfile: false,
-    acceptedPicture: null
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: {
+        firstName: '',
+        lastName: '',
+        role: null,
+        lat: null,
+        lng: null,
+        taxiUser: null,
+        location: null,
+        city: ""
+      },
+      isLoading: false,
+      results: [],
+      createdProfile: false,
+      acceptedPicture: null
+    }
   }
 
   createProfile = (event) => {
@@ -36,15 +48,16 @@ class CreateProfile extends Component {
       id: this.props.authUser.uid
     })
 
-    if(this.state.user.taxiUser === "Yes"){
+    if (this.state.user.taxiUser === "Yes") {
       fire.database().ref('/Taxi-Users/' + this.props.authUser.uid).set({
         firstName: this.state.user.firstName,
         lastName: this.state.user.lastName,
         Sunday: null,
-        Monday: null, 
+        Monday: null,
         Tuesday: null,
-        Wednesday: null, 
-        Thursday: null
+        Wednesday: null,
+        Thursday: null,
+        week: null
       });
     }
 
@@ -67,7 +80,39 @@ class CreateProfile extends Component {
     this.setState({
       user: stateUserCopy
     });
+  }
 
+  handleResultSelect = (e, { result }) => {
+    this.setState(
+      prevState => ({
+        user: {                   // object that we want to update
+          ...prevState.user,    // keep all other key-value pairs
+          city: result.description       // update the value of specific key
+        }, value: result.description, isLoading: false
+      })
+    )
+    console.log(this.state.user.city);
+  }
+
+  handleSearchChange = (e, { value }) => {
+    var vm = this;
+    this.setState({ isLoading: true, value: value });
+    var request = { input: value };
+    if (!value.length > 0) {
+      vm.setState({ isLoading: false, results: [] });
+      return;
+    }
+    if (this.state.isLoading) {
+      return;
+    }
+
+    service.getQueryPredictions(request, function (results, status) {
+      console.log(status);
+      console.log(results);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        vm.setState({ isLoading: false, results: results });
+      }
+    });
   }
 
   getLocation = () => {
@@ -203,7 +248,19 @@ class CreateProfile extends Component {
 
                     <Form.Button onClick={this.getLocation}>Get My Location</Form.Button>
 
-                    <Form.Button type="submit" disabled={this.state.user.firstName === '' || this.state.user.lastName === '' || this.state.user.lng === null || this.state.user.lat === null || this.state.user.role === null} onClick={this.createProfile} >Submit</Form.Button>
+                    <p>Your city</p>
+                    <Search
+                      loading={this.state.isLoading}
+                      onResultSelect={this.handleResultSelect}
+                      onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                        leading: true,
+                      })}
+                      results={this.state.results}
+                      value={this.state.value}
+                      {...this.props}
+                    />
+
+                    <Form.Button type="submit" disabled={this.state.user.firstName === '' || this.state.user.lastName === '' || this.state.user.lng === null || this.state.user.lat === null || this.state.user.role === null || this.state.user.city === ''} onClick={this.createProfile} >Submit</Form.Button>
                   </Form>
                 </Segment>
               </Grid.Column>
