@@ -14,7 +14,7 @@ class SignIn extends Component {
   }
 
 
-  signInUserWithEmailAndPassword = (event) => {
+  signInUserWithEmailAndPassword = () => {
 
     if (!this.state.isLoading) {
 
