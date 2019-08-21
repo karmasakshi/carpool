@@ -11,6 +11,7 @@ class PlanYourWeek extends Component {
     super(props);
 
     this.state = {
+      value: '',
       Sunday: '',
       Monday: '',
       Tuesday: '',
@@ -18,12 +19,17 @@ class PlanYourWeek extends Component {
       Thursday: '',
       days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
       destinationOptions: [],
+      week: null,
       createdPlanner: false
     };
+
+    this.submitPlanner = this.submitPlanner.bind(this);
   }
 
   componentDidMount() {
     let destinationOptions = [];
+
+    let week = this.calculateWeek();
 
     fire.database().ref('destinations').once('value').then((snapshot) => {
       let destinations = Object.keys(snapshot.val());
@@ -36,16 +42,39 @@ class PlanYourWeek extends Component {
       }
 
       this.setState({
-        destinationOptions: destinationOptions
+        destinationOptions: destinationOptions,
+        week: week
       });
     })
+  }
+
+  calculateWeek = () => {
+    var today = new Date();
+    var dd, ddEnd;
+    var mm = String(today.getMonth() + 1); //January is 0!
+    var yyyy = today.getFullYear();
+    var dayOfTheWeek = today.getDay();
+    var week;
+
+    if (dayOfTheWeek <= 4) {
+      dd = String(today.getDate() - dayOfTheWeek);
+      ddEnd = String(today.getDate() - dayOfTheWeek + 4);
+    }
+    else {
+      dd = String(today.getDate() - dayOfTheWeek + 7);
+      ddEnd = String(today.getDate() - dayOfTheWeek + 12);    //will not work when it approaches month end -- sort it out 
+    }
+
+    week = dd + "/" + mm + "/" + yyyy + " to " + ddEnd + "/" + mm + "/" + yyyy;
+
+    return week;
   }
 
   handleChange = (e, { value }, day) => {
     let obj = {};
 
     obj[day] = e.target.innerText;
-    obj[value] = e.target.innerText;
+    obj[value] = e.target.innerText;   //value is used by code of semantic ui react dropdown 
 
     this.setState(obj);
   }
@@ -56,20 +85,17 @@ class PlanYourWeek extends Component {
       Monday: this.state.Monday,
       Tuesday: this.state.Tuesday,
       Wednesday: this.state.Wednesday,
-      Thursday: this.state.Thursday
+      Thursday: this.state.Thursday,
+      week: this.state.week
     }).then(
       this.setState({
-        createdPlanner: true
+        createdPlanner: this.state.week
       })
     )
   }
 
   render() {
-    var today = new Date();
-    var dd, ddEnd;
-    var mm = String(today.getMonth() + 1); //January is 0!
-    var yyyy = today.getFullYear();
-    var dayOfTheWeek = today.getDay();
+    let { value } = this.state;
 
     let days = {
       Sunday: 0,
@@ -81,24 +107,16 @@ class PlanYourWeek extends Component {
       Saturday: 6
     }
 
-    if (dayOfTheWeek <= 4) {
-      dd = String(today.getDate() - dayOfTheWeek);
-      ddEnd = String(today.getDate() - dayOfTheWeek + 4);
-    }
-    else {
-      dd = String(today.getDate() - dayOfTheWeek + 7);
-      ddEnd = String(today.getDate() - dayOfTheWeek + 12);    //will not work when it approaches month end -- sort it out 
-    }
+    let dayOfTheWeek = new Date().getDay();
 
-    if (this.state.createdPlanner)
-      return <Redirect to="/options" />
+    if (this.state.createdPlanner === this.state.week)
+      return <Redirect to="/taxi-share" />
     else {
       return (
-
         <div>
           <Container>
             <h1> Plan My Week</h1>
-            <h1>Time Period: {dd + "/" + mm + "/" + yyyy} to {ddEnd + "/" + mm + "/" + yyyy}</h1>
+            <h1>Time Period: {this.state.week}</h1>
 
             {this.state.days.map((day) => (
               <div key={day} className="planner">
@@ -111,7 +129,7 @@ class PlanYourWeek extends Component {
                     selection
                     clearable
                     options={this.state.destinationOptions}
-                    onChange={(e) => this.handleChange(e, day)}
+                    onChange={(e) => this.handleChange(e, { value }, day)}
                   /> :
                   <Dropdown
                     placeholder='Destination'
@@ -121,12 +139,12 @@ class PlanYourWeek extends Component {
                     clearable
                     disabled
                     options={this.state.destinationOptions}
-                    onChange={(e) => this.handleChange(e, day)}
+                    onChange={(e) => this.handleChange(e, { value }, day)}
                   />
                 }
               </div>
             ))}
-            <Button primary type="submit" onClick={() => this.submitPlanner()}>Submit</Button>
+            <Button primary type="submit" onClick={this.submitPlanner}>Submit</Button>
           </Container>
         </div>
       )

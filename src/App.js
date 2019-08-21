@@ -13,6 +13,7 @@ import HostDashboard from './HostDashboard';
 import Notifications from './Notifications';
 import Options from './Options';
 import PlanYourWeek from './PlanYourWeek.js';
+import TaxiShare from './TaxiShare';
 
 function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }) {
   return (
@@ -25,11 +26,17 @@ function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    authUser: null,
-    appUser: null
-  };
+    this.state = {
+      authUser: null,
+      appUser: null
+    };
+
+    this.getAppUser = this.getAppUser.bind(this);
+  }
+
 
   getAppUser(user) {
     this.setState({
@@ -78,9 +85,10 @@ class App extends Component {
             <AuthenticatedRoute exact path='/host-dashboard' component={HostDashboard} appUser={this.state.appUser} authUser={this.state.authUser} />} />
             <Route exact path='/guest-dashboard/notifications' render={() => <Notifications appUser={this.state.appUser} />} />
             <Route exact path='/sign-up' render={() => <CreateAccount authUser={this.state.authUser} />} />
-            <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} getAppUserAfterRegistration={this.getAppUser.bind(this)} />} />
+            <Route exact path='/create-profile' render={() => <CreateProfile authUser={this.state.authUser} appUser={this.state.appUser} getAppUserAfterRegistration={this.getAppUser} />} />
             <AuthenticatedRoute exact path='/options' component={Options} appUser={this.state.appUser} authUser={this.state.authUser} />} />
             <Route exact path='/taxi-share/plan-my-week' render={() => <PlanYourWeek appUser={this.state.appUser} />} />
+            <Route exact path="/taxi-share" render={() => <TaxiShare appUser={this.state.appUser} />} />
             <Route render={() => <h1>Page not found</h1>} />
           </Switch>
         </div>
