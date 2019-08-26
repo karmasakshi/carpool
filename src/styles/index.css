@@ -67,7 +67,7 @@ margin: auto auto;
 }
  
     #home{
-    background-image: url("./images/homepage.jpg");    
+    background-image: url("../images/homepage.jpg");    
     background-position: center;
     height: 100vh;
     width: 100vw;

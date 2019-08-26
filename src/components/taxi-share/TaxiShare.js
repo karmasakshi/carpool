@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import './index.css'
-import '../node_modules/semantic-ui-css/semantic.min.css';
+import '../../styles/index.css'
 import { Container } from 'semantic-ui-react';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import { Icon } from 'semantic-ui-react'
 import moment from 'moment';
-import fire from "./config/fire";
+import fire from "../../config/fire";
 
 class TaxiShare extends Component {
 

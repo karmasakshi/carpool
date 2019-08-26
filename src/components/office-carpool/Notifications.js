@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import '../node_modules/semantic-ui-css/semantic.min.css';
 import { Grid, Image, Item, Segment } from 'semantic-ui-react'
-import fire from './config/fire'
+import fire from '../../config/fire'
 
 class Notifications extends Component {
     constructor(props) {

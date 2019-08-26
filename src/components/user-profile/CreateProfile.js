@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Search, Grid, Form, Container, Icon, Header } from 'semantic-ui-react';
-import fire from './config/fire';
+import fire from '../../config/fire';
 import { Redirect } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import _ from 'lodash'

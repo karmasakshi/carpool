@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
-import fire from './config/fire'
+import fire from '../config/fire'
 
 class Navbar extends Component {
 

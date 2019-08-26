@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import './index.css'
-import '../node_modules/semantic-ui-css/semantic.min.css';
+import '../../styles/index.css'
 import { Dropdown, Container, Button } from 'semantic-ui-react';
-import fire from './config/fire';
+import fire from '../../config/fire';
 import { Redirect } from 'react-router-dom';
 
 class PlanYourWeek extends Component {

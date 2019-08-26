@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import './index.css'
-import '../node_modules/semantic-ui-css/semantic.min.css';
+import '../../styles/index.css'
 import { Grid, Image, Card, Button } from 'semantic-ui-react'
-import fire, { messaging } from './config/fire'
+import fire, { messaging } from '../../config/fire'
 import { Form, Container } from 'semantic-ui-react';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';

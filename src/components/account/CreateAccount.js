@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import "./index.css"
-import fire from './config/fire'
+import "../../styles/index.css"
+import fire from '../../config/fire'
 import { Redirect } from 'react-router';
 import { Form, Header } from 'semantic-ui-react';
 

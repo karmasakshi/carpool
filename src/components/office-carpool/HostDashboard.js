@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import './index.css'
-import '../node_modules/semantic-ui-css/semantic.min.css';
-import fire from './config/fire';
+import '../../styles/index.css'
+import fire from '../../config/fire';
 import 'firebase'
 import { Grid, Image, Button, Item, Segment } from 'semantic-ui-react'
 import moment from 'moment';

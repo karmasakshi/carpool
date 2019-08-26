@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import Home from './Home'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-import SignIn from './SignIn'
-import CreateAccount from './CreateAccount'
+import SignIn from './account/SignIn'
+import CreateAccount from './account/CreateAccount'
 import Navbar from './Navigation'
-import './index.css'
-import CreateProfile from './CreateProfile';
-import '../node_modules/semantic-ui-css/semantic.min.css';
-import fire from './config/fire';
-import GuestDashboard from './guestDashboard';
-import HostDashboard from './HostDashboard';
-import Notifications from './Notifications';
-import Options from './Options';
-import PlanYourWeek from './PlanYourWeek.js';
-import TaxiShare from './TaxiShare';
+import '../styles/index.css'
+import CreateProfile from './user-profile/CreateProfile';
+import fire from '../config/fire';
+import GuestDashboard from './office-carpool/guestDashboard';
+import HostDashboard from './office-carpool/HostDashboard';
+import Notifications from './office-carpool/Notifications';
+import Options from './taxi-share/Options';
+import PlanYourWeek from './taxi-share/PlanYourWeek.js';
+import TaxiShare from './taxi-share/TaxiShare';
 
 function AuthenticatedRoute({ component: Component, appUser, authUser, ...rest }) {
   return (
